@@ -1,2 +1,2 @@
-# android_sunxi_bsp
-Android BSP for Sunxi
+# android_allwinner_bsp
+Android BSP for Allwinner
