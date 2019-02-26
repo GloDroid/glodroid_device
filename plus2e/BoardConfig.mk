@@ -16,15 +16,15 @@
 
 # The generic product target doesn't have any hardware-specific pieces.
 TARGET_NO_BOOTLOADER := true
-TARGET_NO_KERNEL := false
+TARGET_NO_KERNEL := true
 TARGET_ARCH := arm
 
 TARGET_ARCH_VARIANT := armv7-a
-TARGET_CPU_VARIANT := allwinner
+TARGET_CPU_VARIANT := cortex-a7
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 
-TARGET_BOARD_INFO_FILE := board-info.txt
+TARGET_BOARD_INFO_FILE := device/allwinner/plus2e/board-info.txt
 
 SMALLER_FONT_FOOTPRINT := true
 MINIMAL_FONT_FOOTPRINT := true
