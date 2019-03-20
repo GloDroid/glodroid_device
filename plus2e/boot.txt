@@ -8,6 +8,16 @@ rootdev=mmcblk1p3
 fi
 
 setenv bootargs console=${console} root=/dev/${rootdev} rootwait panic=10 init=/init androidboot.selinux=permissive androidboot.hardware=orangepi ${extra}
+
+# load base fdt
 load mmc 0:1 ${fdt_addr_r} ${fdtfile}
+
+# apply fdt overlay
+fdt addr ${fdt_addr_r}
+fdt resize 2048
+setexpr fdtovaddr ${fdt_addr_r} + F000
+load mmc 0:1 ${fdtovaddr} fstab-android-sdcard.dtb && fdt apply ${fdtovaddr}
+
+# load kernel and boot
 load mmc 0:1 ${kernel_addr_r} uImage
 bootm ${kernel_addr_r} - ${fdt_addr_r}

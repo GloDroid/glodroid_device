@@ -1,0 +1,35 @@
+/dts-v1/;
+/plugin/;
+
+/{
+  fragment_root {
+    target-path = "/";
+    __overlay__ {
+	firmware {
+	    android {
+		compatible = "android,firmware";
+
+		fstab {
+			compatible = "android,fstab";
+
+			vendor {
+				compatible = "android,vendor";
+				dev = "/dev/block/platform/soc/1c0f000.mmc/by-name/vendor";
+				type = "ext4";
+				mnt_flags = "ro,barrier=1";
+				fsmgr_flags = "wait";
+			};
+			data {
+				compatible = "android,data";
+				dev = "/dev/block/platform/soc/1c0f000.mmc/by-name/userdata";
+				type = "ext4";
+				mnt_flags = "noatime,nosuid,nodev,nomblk_io_submit,errors=panic";
+				mnt_point = "/data";
+				fsmgr_flags = "wait,check,quota";
+			};
+		};
+	    };
+	};
+    };
+  };
+};
