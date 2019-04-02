@@ -18,3 +18,7 @@ $(call inherit-product, device/allwinner/plus2e/modules.mk)
 # default is nosdcard, S/W button enabled in resource
 DEVICE_PACKAGE_OVERLAYS := device/generic/armv7-a-neon/overlay
 PRODUCT_CHARACTERISTICS := nosdcard
+
+# bootloaders in srec format
+PRODUCT_PACKAGES += \
+    u-boot-sunxi-with-spl.bin \
