@@ -15,7 +15,10 @@
 #
 
 # The generic product target doesn't have any hardware-specific pieces.
+TARGET_COPY_OUT_VENDOR := vendor
+
 TARGET_NO_BOOTLOADER := true
+TARGET_NO_RECOVERY := true
 TARGET_NO_KERNEL := true
 TARGET_ARCH := arm
 
