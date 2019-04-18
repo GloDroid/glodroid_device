@@ -42,12 +42,12 @@ BOARD_KERNEL_CMDLINE := console=ttySC0,115200 init=/init androidboot.console=tty
 TARGET_KERNEL_CONFIG := rcar3_android_defconfig
 
 # Some framework code requires this to enable BT
-BOARD_HAVE_BLUETOOTH := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
+#BOARD_HAVE_BLUETOOTH := true
+#BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
 
 BOARD_USES_GENERIC_AUDIO := true
 
-USE_CAMERA_STUB := true
+#USE_CAMERA_STUB := true
 
 BUILD_EMULATOR_OPENGL := true
 USE_OPENGL_RENDERER := true
