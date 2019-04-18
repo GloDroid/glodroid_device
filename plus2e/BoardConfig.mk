@@ -37,11 +37,6 @@ TARGET_COPY_OUT_RECOVERY := recovery
 SMALLER_FONT_FOOTPRINT := true
 MINIMAL_FONT_FOOTPRINT := true
 
-# Kernel build rules
-BOARD_KERNEL_CMDLINE := console=ttySC0,115200 init=/init androidboot.console=ttySC0 androidboot.hardware=orangepi_plus2e androidboot.selinux=permissive
-TARGET_KERNEL_SOURCE := kernel/allwinner
-TARGET_KERNEL_CONFIG := orangepi_plus2e_defconfig android-base.config android-recommended.config
-
 # Some framework code requires this to enable BT
 #BOARD_HAVE_BLUETOOTH := true
 #BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
@@ -80,8 +75,12 @@ BOARD_DTBOIMG_PARTITION_SIZE := 524288
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 
 # Kernel build rules
-BOARD_KERNEL_BASE := 0x40008000
-BOARD_MKBOOTIMG_ARGS := --second_offset 0x800 --kernel_offset 0x80000 --ramdisk_offset 0x2180000
+BOARD_KERNEL_BASE     := 0x40008000
+BOARD_KERNEL_PAGESIZE := 4096
+BOARD_MKBOOTIMG_ARGS  := --second_offset 0x800 --kernel_offset 0x80000 --ramdisk_offset 0x2180000
+BOARD_KERNEL_CMDLINE  := console=ttySC0,115200 init=/init androidboot.console=ttySC0 androidboot.hardware=orangepi_plus2e androidboot.selinux=permissive
+TARGET_KERNEL_SOURCE  := kernel/allwinner
+TARGET_KERNEL_CONFIG  := orangepi_plus2e_defconfig android-base.config android-recommended.config
 
 # SELinux support
 BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
