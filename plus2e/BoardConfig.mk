@@ -34,22 +34,6 @@ TARGET_COPY_OUT_VENDOR := vendor
 TARGET_COPY_OUT_ROOT := root
 TARGET_COPY_OUT_RECOVERY := recovery
 
-SMALLER_FONT_FOOTPRINT := true
-MINIMAL_FONT_FOOTPRINT := true
-
-# Some framework code requires this to enable BT
-#BOARD_HAVE_BLUETOOTH := true
-#BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
-
-BOARD_USES_GENERIC_AUDIO := true
-
-#USE_CAMERA_STUB := true
-
-BUILD_EMULATOR_OPENGL := true
-USE_OPENGL_RENDERER := true
-
-BOARD_USE_LEGACY_UI := true
-
 # Android images
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 576716800
@@ -86,3 +70,16 @@ TARGET_KERNEL_CONFIG  := orangepi_plus2e_defconfig android-base.config android-r
 BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
 
 BOARD_VNDK_VERSION := current
+
+SMALLER_FONT_FOOTPRINT := true
+MINIMAL_FONT_FOOTPRINT := true
+
+# Some framework code requires this to enable BT
+#BOARD_HAVE_BLUETOOTH := true
+#BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
+
+BOARD_USES_GENERIC_AUDIO := true
+#USE_CAMERA_STUB := true
+BUILD_EMULATOR_OPENGL := true
+USE_OPENGL_RENDERER := true
+BOARD_USE_LEGACY_UI := true
