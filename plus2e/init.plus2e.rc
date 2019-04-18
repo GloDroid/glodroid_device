@@ -1,4 +1,4 @@
-# Copyright (C) 2019 The Android Open Source Project
+# Copyright 2019 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,18 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-$(call inherit-product, device/allwinner/plus2e/modules.mk)
+on early-init
+    mount debugfs debugfs /sys/kernel/debug
 
-# default is nosdcard, S/W button enabled in resource
-DEVICE_PACKAGE_OVERLAYS := device/generic/armv7-a-neon/overlay
-PRODUCT_CHARACTERISTICS := nosdcard
+on fs
+    mount_all /vendor/etc/fstab.kingfisher --early
 
-# bootloaders in srec format
-PRODUCT_PACKAGES += \
-    u-boot-sunxi-with-spl.bin
+on late-fs
+    mount_all /vendor/etc/fstab.kingfisher --late
 
-# Init RC files
-PRODUCT_COPY_FILES += \
-    device/allwinner/plus2e/init.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.plus2e.rc
+on post-fs-data
+    # Set indication (checked by vold) that we have finished this action
+    setprop vold.post_fs_data_done 1

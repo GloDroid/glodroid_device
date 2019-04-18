@@ -16,9 +16,10 @@
 
 # The generic product target doesn't have any hardware-specific pieces.
 TARGET_NO_BOOTLOADER := true
+TARGET_NO_RECOVERY := true
 TARGET_NO_KERNEL := true
-TARGET_ARCH := arm
 
+TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a
 #TARGET_CPU_VARIANT := cortex-a7
 TARGET_CPU_VARIANT := generic
@@ -26,6 +27,12 @@ TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 
 TARGET_BOARD_INFO_FILE := device/allwinner/plus2e/board-info.txt
+
+TARGET_COPY_OUT_SYSTEM := system
+TARGET_COPY_OUT_DATA := data
+TARGET_COPY_OUT_VENDOR := vendor
+TARGET_COPY_OUT_ROOT := root
+TARGET_COPY_OUT_RECOVERY := recovery
 
 SMALLER_FONT_FOOTPRINT := true
 MINIMAL_FONT_FOOTPRINT := true
@@ -35,12 +42,12 @@ BOARD_KERNEL_CMDLINE := console=ttySC0,115200 init=/init androidboot.console=tty
 TARGET_KERNEL_CONFIG := rcar3_android_defconfig
 
 # Some framework code requires this to enable BT
-BOARD_HAVE_BLUETOOTH := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
+#BOARD_HAVE_BLUETOOTH := true
+#BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
 
 BOARD_USES_GENERIC_AUDIO := true
 
-USE_CAMERA_STUB := true
+#USE_CAMERA_STUB := true
 
 BUILD_EMULATOR_OPENGL := true
 USE_OPENGL_RENDERER := true
@@ -56,5 +63,14 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 512
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
 
+# Vendor image
+BOARD_USES_VENDORIMAGE := true
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_VENDORIMAGE_PARTITION_SIZE := 268435456
+#BOARD_VENDOR_SEPOLICY_DIRS       += device/renesas/common/sepolicy/vendor
+#BOARD_VENDOR_SEPOLICY_DIRS       += device/renesas/$(TARGET_PRODUCT)/sepolicy/vendor
+
 # SELinux support
 BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
+
+BOARD_VNDK_VERSION := current
