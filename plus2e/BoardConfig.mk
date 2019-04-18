@@ -63,5 +63,12 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 512
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
 
+# Vendor image
+BOARD_USES_VENDORIMAGE := true
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_VENDORIMAGE_PARTITION_SIZE := 268435456
+#BOARD_VENDOR_SEPOLICY_DIRS       += device/renesas/common/sepolicy/vendor
+#BOARD_VENDOR_SEPOLICY_DIRS       += device/renesas/$(TARGET_PRODUCT)/sepolicy/vendor
+
 # SELinux support
 BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
