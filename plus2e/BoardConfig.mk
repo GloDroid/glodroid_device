@@ -72,3 +72,5 @@ BOARD_VENDORIMAGE_PARTITION_SIZE := 268435456
 
 # SELinux support
 BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
+
+BOARD_VNDK_VERSION := current
