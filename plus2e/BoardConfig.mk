@@ -15,8 +15,6 @@
 #
 
 # The generic product target doesn't have any hardware-specific pieces.
-TARGET_COPY_OUT_VENDOR := vendor
-
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RECOVERY := true
 TARGET_NO_KERNEL := true
@@ -29,6 +27,12 @@ TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 
 TARGET_BOARD_INFO_FILE := device/allwinner/plus2e/board-info.txt
+
+TARGET_COPY_OUT_SYSTEM := system
+TARGET_COPY_OUT_DATA := data
+TARGET_COPY_OUT_VENDOR := vendor
+TARGET_COPY_OUT_ROOT := root
+TARGET_COPY_OUT_RECOVERY := recovery
 
 SMALLER_FONT_FOOTPRINT := true
 MINIMAL_FONT_FOOTPRINT := true
