@@ -32,7 +32,6 @@ TARGET_COPY_OUT_SYSTEM := system
 TARGET_COPY_OUT_DATA := data
 TARGET_COPY_OUT_VENDOR := vendor
 TARGET_COPY_OUT_ROOT := root
-TARGET_COPY_OUT_RECOVERY := recovery
 
 # Android images
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -57,6 +56,9 @@ BOARD_DTBOIMG_PARTITION_SIZE := 524288
 
 # Root image
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+
+# Recovery image
+TARGET_COPY_OUT_RECOVERY := recovery
 
 # Kernel build rules
 BOARD_KERNEL_BASE     := 0x40008000
