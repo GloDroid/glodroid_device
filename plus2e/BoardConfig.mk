@@ -39,7 +39,8 @@ MINIMAL_FONT_FOOTPRINT := true
 
 # Kernel build rules
 BOARD_KERNEL_CMDLINE := console=ttySC0,115200 init=/init androidboot.console=ttySC0 androidboot.hardware=orangepi_plus2e androidboot.selinux=permissive
-TARGET_KERNEL_CONFIG := rcar3_android_defconfig
+TARGET_KERNEL_SOURCE := kernel/allwinner
+TARGET_KERNEL_CONFIG := orangepi_plus2e_defconfig android-base.config android-recommended.config
 
 # Some framework code requires this to enable BT
 #BOARD_HAVE_BLUETOOTH := true
