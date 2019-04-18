@@ -71,6 +71,11 @@ BOARD_VENDORIMAGE_PARTITION_SIZE := 268435456
 #BOARD_VENDOR_SEPOLICY_DIRS       += device/renesas/common/sepolicy/vendor
 #BOARD_VENDOR_SEPOLICY_DIRS       += device/renesas/$(TARGET_PRODUCT)/sepolicy/vendor
 
+# Boot image
+BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
+BOARD_DTBIMAGE_PARTITION_SIZE := 1048576
+BOARD_DTBOIMG_PARTITION_SIZE := 524288
+
 # SELinux support
 BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
 
