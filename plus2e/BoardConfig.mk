@@ -17,7 +17,7 @@
 # The generic product target doesn't have any hardware-specific pieces.
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RECOVERY := true
-TARGET_NO_KERNEL := true
+TARGET_NO_KERNEL := false
 
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a
@@ -78,6 +78,10 @@ BOARD_DTBOIMG_PARTITION_SIZE := 524288
 
 # Root image
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+
+# Kernel build rules
+BOARD_KERNEL_BASE := 0x40008000
+BOARD_MKBOOTIMG_ARGS := --second_offset 0x800 --kernel_offset 0x80000 --ramdisk_offset 0x2180000
 
 # SELinux support
 BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
