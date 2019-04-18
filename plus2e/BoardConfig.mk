@@ -14,11 +14,11 @@
 # limitations under the License.
 #
 
-# The generic product target doesn't have any hardware-specific pieces.
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RECOVERY := true
 TARGET_NO_KERNEL := false
 
+# Architecture
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a
 #TARGET_CPU_VARIANT := cortex-a7
@@ -75,7 +75,7 @@ TARGET_KERNEL_SOURCE  := kernel/allwinner
 TARGET_KERNEL_CONFIG  := orangepi_plus2e_defconfig android-base.config android-recommended.config
 
 # SELinux support
-BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
+#BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
 
 BOARD_VNDK_VERSION := current
 
