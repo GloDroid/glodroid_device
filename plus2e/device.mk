@@ -28,7 +28,8 @@ PRODUCT_PACKAGES += \
 
 # Init RC files
 PRODUCT_COPY_FILES += \
-    device/allwinner/plus2e/init.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.plus2e.rc
+    device/allwinner/plus2e/init.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.plus2e.rc \
+    device/allwinner/plus2e/ueventd.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
 
 # Generic memtrack module
 PRODUCT_PACKAGES += \
