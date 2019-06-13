@@ -1,7 +1,7 @@
 # Android makefile to build kernel as a part of Android build
 
 #-------------------------------------------------------------------------------
-LOCAL_PATH := $(call my-dir)
+LOCAL_PATH := kernel/allwinner
 KERNEL_CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 
 #-------------------------------------------------------------------------------
