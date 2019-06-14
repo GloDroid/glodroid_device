@@ -37,11 +37,11 @@ add_part() {
 	pn=$(( $pn+1 ))
 }
 
-# Create raw disk image
+echo "===> Create raw disk image"
 dd if=/dev/zero of=${SDIMG} bs=4096 count=$(( (PART_START + GPT_SIZE * 2) / 4096 ))
 sgdisk -Z ${SDIMG}
 
-# Reduce GPT to have 56 partitions max (LBA 2-15, u-boot is located starting from LBA 16)
+echo "===> Reduce GPT to have 56 partitions max (LBA 2-15, u-boot is located starting from LBA 16)"
 gdisk ${SDIMG}<<EOF
 x
 s
@@ -50,27 +50,30 @@ w
 Y
 EOF
 
+echo "===> Create directory for generated files"
 mkdir -p generated
 
-# Compiling boot script
+echo "===> Compiling boot script"
 mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d boot.txt generated/boot.scr
 
-# Create boot.img
+echo "===> Create boot.img"
 rm generated/boot.img
 mkfs.vfat -n "orange-pi" -S 512 -C generated/boot.img $(( 1024 * 32 ))
 
+echo "===> Add system info to the boot.img"
 dtc -@ -I dts -O dtb -o generated/fstab-android-sdcard.dtb fstab-android-sdcard.dts
 mcopy -i generated/boot.img -s zImage ::zImage
 mcopy -i generated/boot.img -s generated/fstab-android-sdcard.dtb ::fstab-android-sdcard.dtb
 mcopy -i generated/boot.img -s generated/boot.scr ::boot.scr
 mcopy -i generated/boot.img -s ${DTB_NAME} ::${DTB_NAME}
 
-# Add partitions
+echo "===> Add partitions"
 add_part generated/boot.img boot
 add_part vendor.img vendor
 add_part system.img system
 #add_part vbmeta.img vbmeta
 add_part userdata.img userdata
 
-# Put u-boot with spl to image
+echo "===> Put u-boot with spl to image"
 dd if=u-boot-sunxi-with-spl.bin of=${SDIMG} bs=1024 seek=8 conv=notrunc
+
