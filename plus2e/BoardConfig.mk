@@ -26,6 +26,11 @@ TARGET_CPU_VARIANT := generic
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 
+TARGET_USES_32_BIT_BINDER :=true
+TARGET_USES_64_BIT_BINDER := false
+TARGET_SUPPORTS_32_BIT_APPS := true
+TARGET_SUPPORTS_64_BIT_APPS := false
+
 TARGET_BOARD_INFO_FILE := device/allwinner/plus2e/board-info.txt
 
 # --- Android images ---
