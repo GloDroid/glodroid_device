@@ -7,7 +7,7 @@ echo "U-boot loaded from eMMC or secondary SD"
 rootdev=mmcblk1p3
 fi
 
-setenv bootargs console=${console} root=/dev/${rootdev} rootwait panic=10 init=/init androidboot.selinux=permissive androidboot.hardware=orangepi ${extra}
+setenv bootargs console=${console} root=/dev/${rootdev} rootwait panic=10 init=/init androidboot.selinux=permissive androidboot.hardware=plus2e ${extra}
 
 # load base fdt
 load mmc 0:1 ${fdt_addr_r} ${fdtfile}

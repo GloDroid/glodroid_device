@@ -39,8 +39,10 @@ BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 576716800
 
 # System image
-TARGET_COPY_OUT_SYSTEM := system
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 576716800
+#TARGET_COPY_OUT_SYSTEM := system
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2357198848
+# Disable Jack build system due deprecated status (https://source.android.com/source/jack)
+ANDROID_COMPILE_WITH_JACK ?= false
 
 # Cache image
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -71,7 +73,7 @@ KERNEL_CONFIGS_DIR:= ../configs/p/android-4.14
 BOARD_KERNEL_BASE     := 0x40008000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_MKBOOTIMG_ARGS  := --second_offset 0x800 --kernel_offset 0x80000 --ramdisk_offset 0x2180000
-BOARD_KERNEL_CMDLINE  := console=ttySC0,115200 init=/init androidboot.console=ttySC0 androidboot.hardware=orangepi_plus2e androidboot.selinux=permissive
+#BOARD_KERNEL_CMDLINE  := console=ttySC0,115200 init=/init androidboot.console=ttySC0 androidboot.hardware=orangepi_plus2e androidboot.selinux=permissive
 TARGET_KERNEL_SOURCE  := kernel/allwinner
 #TARGET_KERNEL_CONFIG  := orangepi_plus2e_defconfig ${KERNEL_CONFIGS_DIR}/android-base.cfg ${KERNEL_CONFIGS_DIR}/android-base-arm.cfg ${KERNEL_CONFIGS_DIR}/android-recommended.cfg
 TARGET_KERNEL_CONFIG  := orangepi_plus2e_defconfig android-base.config android-recommended.config
