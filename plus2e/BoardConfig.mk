@@ -26,6 +26,11 @@ TARGET_CPU_VARIANT := generic
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 
+TARGET_USES_32_BIT_BINDER :=true
+TARGET_USES_64_BIT_BINDER := false
+TARGET_SUPPORTS_32_BIT_APPS := true
+TARGET_SUPPORTS_64_BIT_APPS := false
+
 TARGET_BOARD_INFO_FILE := device/allwinner/plus2e/board-info.txt
 
 # --- Android images ---
@@ -36,28 +41,30 @@ TARGET_COPY_OUT_DATA := data
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 576716800
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 1073741824 # 1GB
 
 # System image
-TARGET_COPY_OUT_SYSTEM := system
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 576716800
+#TARGET_COPY_OUT_SYSTEM := system
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2684354560 # 2.5GB
+# Disable Jack build system due deprecated status (https://source.android.com/source/jack)
+ANDROID_COMPILE_WITH_JACK ?= false
 
 # Cache image
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_CACHEIMAGE_PARTITION_SIZE := 69206016
+BOARD_CACHEIMAGE_PARTITION_SIZE := 69206016 # 66MB
 
 # Vendor image
 TARGET_COPY_OUT_VENDOR := vendor
 BOARD_USES_VENDORIMAGE := true
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_VENDORIMAGE_PARTITION_SIZE := 268435456
+BOARD_VENDORIMAGE_PARTITION_SIZE := 268435456 # 256MB
 #BOARD_VENDOR_SEPOLICY_DIRS       += device/renesas/common/sepolicy/vendor
 #BOARD_VENDOR_SEPOLICY_DIRS       += device/renesas/$(TARGET_PRODUCT)/sepolicy/vendor
 
 # Boot image
-BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
-BOARD_DTBIMAGE_PARTITION_SIZE := 1048576
-BOARD_DTBOIMG_PARTITION_SIZE := 524288
+#BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
+#BOARD_DTBIMAGE_PARTITION_SIZE := 1048576
+#BOARD_DTBOIMG_PARTITION_SIZE := 524288
 
 # Root image
 TARGET_COPY_OUT_ROOT := root
@@ -67,11 +74,13 @@ BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 TARGET_COPY_OUT_RECOVERY := recovery
 
 # Kernel build rules
+KERNEL_CONFIGS_DIR:= ../configs/p/android-4.14
 BOARD_KERNEL_BASE     := 0x40008000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_MKBOOTIMG_ARGS  := --second_offset 0x800 --kernel_offset 0x80000 --ramdisk_offset 0x2180000
-BOARD_KERNEL_CMDLINE  := console=ttySC0,115200 init=/init androidboot.console=ttySC0 androidboot.hardware=orangepi_plus2e androidboot.selinux=permissive
+#BOARD_KERNEL_CMDLINE  := console=ttySC0,115200 init=/init androidboot.console=ttySC0 androidboot.hardware=orangepi_plus2e androidboot.selinux=permissive
 TARGET_KERNEL_SOURCE  := kernel/allwinner
+#TARGET_KERNEL_CONFIG  := orangepi_plus2e_defconfig ${KERNEL_CONFIGS_DIR}/android-base.cfg ${KERNEL_CONFIGS_DIR}/android-base-arm.cfg ${KERNEL_CONFIGS_DIR}/android-recommended.cfg
 TARGET_KERNEL_CONFIG  := orangepi_plus2e_defconfig android-base.config android-recommended.config
 
 # SELinux support
