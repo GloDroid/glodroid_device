@@ -57,7 +57,8 @@ echo "===> Compiling boot script"
 mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d boot.txt generated/boot.scr
 
 echo "===> Create boot.img"
-rm generated/boot.img
+rm -f generated/boot.img
+sync
 mkfs.vfat -n "orange-pi" -S 512 -C generated/boot.img $(( 1024 * 32 ))
 
 echo "===> Add system info to the boot.img"
