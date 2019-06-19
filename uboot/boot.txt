@@ -1,23 +1,83 @@
-# Default to (primary) SD
-rootdev=mmcblk0p3
+# Configuration, Source should be one of the: sdcard, emmc or network
 
-if itest.b *0x28 == 0x02 ; then
-# U-Boot loaded from eMMC or secondary SD so use it for rootfs too
-echo "U-boot loaded from eMMC or secondary SD"
-rootdev=mmcblk1p3
-fi
+setenv source network
+setenv netboot_ip 172.28.184.24
+setenv dtb_id 0
 
-setenv bootargs console=${console} root=/dev/${rootdev} rootwait panic=10 init=/init androidboot.selinux=permissive androidboot.hardware=plus2e ${extra}
+#
 
-# load base fdt
-load mmc 0:1 ${fdt_addr_r} ${fdtfile}
+setenv knladdr 0x40008000
+setenv dtbaddr ${fdt_addr_r}
+setenv loadaddr ${kernel_addr_r}
 
-# apply fdt overlay
-fdt addr ${fdt_addr_r}
-fdt resize 2048
-setexpr fdtovaddr ${fdt_addr_r} + F000
-load mmc 0:1 ${fdtovaddr} fstab-android-sdcard.dtb && fdt apply ${fdtovaddr}
+setenv bootargs "
+ init=/init rootwait ro androidboot.boottime=223.708 androidboot.selinux=permissive
+ androidboot.revision=2.0 androidboot.board_id=0x1234567 init_time=1552948124 androidboot.serialno=0585
+ skip_initramfs androidboot.slot_suffix=_a firmware_class.path=/vendor/etc/firmware
+"
 
-# load kernel and boot
-load mmc 0:1 ${kernel_addr_r} zImage
-bootz ${kernel_addr_r} - ${fdt_addr_r}
+setenv bootcmd_bcb '
+ bcb load $mmc_index misc ;
+ bcb test command = bootonce-bootloader && bcb clear command && bcb store && fastboot udp ;
+ bcb clear command ;
+ bcb store ;
+'
+
+setenv bootcmd_prepare_env '
+ setenv mmc_index 0 ;
+ setenv bootdevice_path \"platform/soc/1c0f000.mmc\";
+ if test \"${source}\" = \"emmc\";
+ then
+  setenv mmc_index 1;
+  setenv bootdevice_path \"platform/soc/<TODO put path here>\";
+ fi;
+ if test \"${source}\" = \"network\";
+ then
+  setenv bootdevice_path \"virtual/block/nbd0\";
+  setenv bootargs \"\$bootargs nbdroot=\${netboot_ip}:9000/ ip=dhcp root=/dev/nbd0p8 rootdelay=3\";
+ fi;
+ setenv bootargs \"\$bootargs androidboot.bootdevice=\${bootdevice_path}\" ;
+'
+
+setenv bootcmd_start '
+ dtimg start \$knladdr \$dtb_id dtb_start &&
+ dtimg size \$knladdr \$dtb_id dtb_size &&
+ cp.b \$dtb_start \$dtbaddr \$dtb_size &&
+ fdt addr \$dtbaddr &&
+ dtimg start \$knladdr 1 dtb_start &&
+ fdt resize 8192 &&
+ fdt apply \$dtb_start &&
+ fdt set /firmware/android/fstab/vendor/ dev "/dev/block/\${bootdevice_path}/by-name/vendor" &&
+ bootm \$loadaddr
+'
+
+setenv bootcmd_block '
+ run bootcmd_bcb &&
+ part number mmc \$mmc_index system_a system_a_index &&
+ part uuid mmc \$mmc_index:\${system_a_index} system_a_uuid &&
+ setenv bootargs \"\$bootargs root=PARTUUID=\${system_a_uuid}\" &&
+ part start mmc \$mmc_index dtb_a dtb_start &&
+ part size mmc \$mmc_index dtb_a dtb_size &&
+ mmc dev \$mmc_index &&
+ mmc read \$knladdr \$dtb_start \$dtb_size &&
+ mmc read \$loadaddr \$boot_start \$boot_size
+'
+
+setenv bootcmd_network '
+ setenv ethaddr 98:4F:EE:0C:C8:0C &&
+ dhcp \$knladdr \$netboot_ip:dtb.img &&
+ dhcp \$loadaddr \$netboot_ip:boot.img
+'
+
+setenv bootcmd '
+ run bootcmd_prepare_env ;
+ if test \"${source}\" = \"network\" ;
+ then
+  run bootcmd_network ;
+ else
+  run bootcmd_block ;
+ fi;
+ run bootcmd_start ;
+'
+
+run bootcmd
