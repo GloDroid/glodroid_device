@@ -32,6 +32,10 @@ PRODUCT_COPY_FILES += \
     device/allwinner/plus2e/init.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.plus2e.rc \
     device/allwinner/plus2e/ueventd.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
 
+# fstab
+PRODUCT_COPY_FILES += \
+    device/allwinner/plus2e/fstab:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(TARGET_PRODUCT)
+
 # Generic memtrack module
 PRODUCT_PACKAGES += \
     android.hardware.memtrack@1.0-impl \
