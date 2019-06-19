@@ -36,6 +36,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/allwinner/plus2e/fstab:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(TARGET_PRODUCT)
 
+# tools
+PRODUCT_COPY_FILES += \
+    device/allwinner/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
+
 # Generic memtrack module
 PRODUCT_PACKAGES += \
     android.hardware.memtrack@1.0-impl \
