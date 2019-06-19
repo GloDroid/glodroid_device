@@ -1,14 +1,5 @@
 #!/bin/sh -e
 
-# It is possible to use the first parameter for setting a dtb-file name, eg:
-# ./gensdimg.sh sun8i-h3-orangepi-one.dtb
-
-DTB_NAME=sun8i-h3-orangepi-one.dtb
-
-if [ $1 ]
-then DTB_NAME=$1
-fi
-
 SDIMG=generated/sdcard.img
 
 PART_START=$(( 2048 * 1024 ))
@@ -53,28 +44,20 @@ EOF
 echo "===> Create directory for generated files"
 mkdir -p generated
 
-echo "===> Compiling boot script"
-mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d boot.txt generated/boot.scr
-
-echo "===> Create boot.img"
-rm -f generated/boot.img
+echo "===> Create env.img"
+rm -f generated/env.img
 sync
-mkfs.vfat -n "orange-pi" -S 512 -C generated/boot.img $(( 1024 * 32 ))
-
-echo "===> Add system info to the boot.img"
-dtc -@ -I dts -O dtb -o generated/fstab-android-sdcard.dtb fstab-android-sdcard.dts
-mcopy -i generated/boot.img -s zImage ::zImage
-mcopy -i generated/boot.img -s generated/fstab-android-sdcard.dtb ::fstab-android-sdcard.dtb
-mcopy -i generated/boot.img -s generated/boot.scr ::boot.scr
-mcopy -i generated/boot.img -s ${DTB_NAME} ::${DTB_NAME}
+mkfs.vfat -n "orange-pi" -S 512 -C generated/env.img $(( 1024 * 32 ))
+mcopy -i generated/env.img -s boot.scr ::boot.scr
 
 echo "===> Add partitions"
-add_part generated/boot.img boot
-add_part vendor.img vendor
-add_part system.img system
+add_part env.img env
+add_part boot.img boot_a
+add_part dtb.img dtb_a
+add_part vendor.img vendor_a
+add_part system.img system_a
 #add_part vbmeta.img vbmeta
 add_part userdata.img userdata
 
 echo "===> Put u-boot with spl to image"
 dd if=u-boot-sunxi-with-spl.bin of=${SDIMG} bs=1024 seek=8 conv=notrunc
-
