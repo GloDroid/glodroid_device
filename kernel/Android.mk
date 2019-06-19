@@ -18,7 +18,7 @@ KERNEL_BOOT_DIR		:= arch/$(TARGET_ARCH)/boot
 DTB_IMG			:= $(PRODUCT_OUT)/dtb.img
 KERNEL_DTS_DIR		:= $(KERNEL_BOOT_DIR)/dts
 KERNEL_DTB_OUT		:= $(KERNEL_OUT)/$(KERNEL_DTS_DIR)
-DTB_IMG_CONFIG		:= $(KERNEL_SRC)/$(KERNEL_DTS_DIR)/sunxi.dtbimg.cfg
+DTB_IMG_CONFIG		:= $(LOCAL_PATH)/dtbimg.cfg
 
 #-------------------------------------------------------------------------------
 ifeq ($(KERNEL_CROSS_COMPILE),)
