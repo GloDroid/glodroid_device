@@ -17,7 +17,7 @@
 				dev = "/dev/block/platform/soc/1c0f000.mmc/by-name/vendor";
 				type = "ext4";
 				mnt_flags = "ro,barrier=1";
-				fsmgr_flags = "wait";
+				fsmgr_flags = "wait,slotselect";
 			};
 			data {
 				compatible = "android,data";
@@ -25,7 +25,7 @@
 				type = "ext4";
 				mnt_flags = "noatime,nosuid,nodev,nomblk_io_submit,errors=panic";
 				mnt_point = "/data";
-				fsmgr_flags = "wait,check,quota";
+				fsmgr_flags = "wait,slotselect,check,quota";
 			};
 		};
 	    };
