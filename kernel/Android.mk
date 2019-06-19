@@ -9,7 +9,12 @@ ifeq ($(TARGET_PREBUILT_KERNEL),)
 
 #-------------------------------------------------------------------------------
 KERNEL_SRC		:= kernel/allwinner
-KERNEL_DEFCONFIG	:= $(TARGET_KERNEL_CONFIG)
+KERNEL_DEFCONFIG	:= sunxi_defconfig
+AOSP_CONFIGS		:= kernel/configs/p/android-4.14
+KERNEL_FRAGMENTS	:= $(AOSP_CONFIGS)/android-base.cfg \
+			   $(AOSP_CONFIGS)/android-base-arm.cfg \
+			   $(AOSP_CONFIGS)/android-recommended.cfg \
+			   $(LOCAL_PATH)/android-sunxi.config
 KERNEL_OUT		:= $(PRODUCT_OUT)/obj/KERNEL_OBJ
 KERNEL_MODULES_OUT 	:= $(PRODUCT_OUT)/obj/KERNEL_MODULES
 KERNEL_BINARY		:= Image
@@ -43,8 +48,11 @@ ifeq ($(TARGET_KERNEL_EXT_MODULES),)
 endif
 
 #-------------------------------------------------------------------------------
-$(KERNEL_OUT)/.config:
+$(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS)
 	$(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) ARCH=$(TARGET_ARCH) $(KERNEL_DEFCONFIG)
+	$(KERNEL_SRC)/scripts/kconfig/merge_config.sh -m -O $(KERNEL_OUT)/ $(KERNEL_OUT)/.config $(KERNEL_FRAGMENTS)
+	$(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) ARCH=$(TARGET_ARCH) olddefconfig
+
 
 .PHONY: $(KERNEL_BINARY) $(KERNEL_COMPRESSED) KERNEL_MODULES clean-kernel
 
