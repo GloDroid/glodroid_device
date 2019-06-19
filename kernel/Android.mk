@@ -19,6 +19,8 @@ DTB_IMG			:= $(PRODUCT_OUT)/dtb.img
 KERNEL_DTS_DIR		:= $(KERNEL_BOOT_DIR)/dts
 KERNEL_DTB_OUT		:= $(KERNEL_OUT)/$(KERNEL_DTS_DIR)
 DTB_IMG_CONFIG		:= $(LOCAL_PATH)/dtbimg.cfg
+ANDROID_DTS_OVERLAY	:= $(LOCAL_PATH)/fstab-android-sdcard.dts
+ANDROID_DTBO		:= $(KERNEL_DTB_OUT)/fstab-android-sdcard.dtbo
 
 #-------------------------------------------------------------------------------
 ifeq ($(KERNEL_CROSS_COMPILE),)
@@ -62,7 +64,11 @@ clean-kernel:
 	rm -rf $(KERNEL_OUT) $(KERNEL_MODULES_OUT)
 
 #-------------------------------------------------------------------------------
-$(DTB_IMG): mkdtimg $(DTB_IMG_CONFIG) $(KERNEL_BINARY)
+$(ANDROID_DTBO): $(ANDROID_DTS_OVERLAY)
+	rm -f $@
+	dtc -@ -I dts -O dtb -o $@ $<
+
+$(DTB_IMG): mkdtimg $(DTB_IMG_CONFIG) $(KERNEL_BINARY) $(ANDROID_DTBO)
 	$(call pretty,"Target dtb image: $@")
 	mkdtimg cfg_create $@ $(DTB_IMG_CONFIG) --dtb-dir=$(KERNEL_DTB_OUT)
 
