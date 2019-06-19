@@ -1,14 +1,14 @@
 # Android makefile to build kernel as a part of Android build
 
 #-------------------------------------------------------------------------------
-LOCAL_PATH := kernel/allwinner
+LOCAL_PATH := $(call my-dir)
 KERNEL_CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 
 #-------------------------------------------------------------------------------
 ifeq ($(TARGET_PREBUILT_KERNEL),)
 
 #-------------------------------------------------------------------------------
-KERNEL_SRC		:= $(LOCAL_PATH)
+KERNEL_SRC		:= kernel/allwinner
 KERNEL_DEFCONFIG	:= $(TARGET_KERNEL_CONFIG)
 KERNEL_OUT		:= $(PRODUCT_OUT)/obj/KERNEL_OBJ
 KERNEL_MODULES_OUT 	:= $(PRODUCT_OUT)/obj/KERNEL_MODULES

@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 #-------------------------------------------------------------------------------
-LOCAL_PATH := external/uboot
+LOCAL_PATH := $(call my-dir)
 UBOOT_CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 
 UBOOT_CLEAN_BUILD ?=
@@ -24,7 +24,7 @@ ifeq ($(UBOOT_CROSS_COMPILE),)
 $(error UBOOT_CROSS_COMPILE is not set)
 endif
 
-UBOOT_SRC_PATH := $(LOCAL_PATH)
+UBOOT_SRC_PATH := external/uboot
 UBOOT_OUT_PATH := $(PRODUCT_OUT)/obj/UBOOT_OBJ
 
 UBOOT_KCFLAGS = \
