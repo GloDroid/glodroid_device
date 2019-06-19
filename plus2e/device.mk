@@ -24,6 +24,7 @@ PRODUCT_RUNTIMES := runtime_libart_default
 
 # bootloaders in srec format
 PRODUCT_PACKAGES += \
+    boot.scr \
     u-boot-sunxi-with-spl.bin
 
 # Init RC files

@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 #-------------------------------------------------------------------------------
-LOCAL_PATH := $(call my-dir)
+BSP_UBOOT_PATH := $(call my-dir)
 UBOOT_CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 
 UBOOT_CLEAN_BUILD ?=
@@ -47,6 +47,9 @@ clean-uboot: $(UBOOT_OUT)
 	@echo "Cleaning U-Boot"
 	$(hide) CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC_PATH) O=$$(readlink -f $(UBOOT_OUT_PATH)) mrproper
 
+boot_script: uboot
+	$(UBOOT_OUT_PATH)/tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $(BSP_UBOOT_PATH)/boot.txt $(UBOOT_OUT_PATH)/boot.scr
+
 .PHONY: uboot clean-uboot
 
 ifneq (,$(UBOOT_CLEAN_BUILD))
@@ -72,6 +75,17 @@ LOCAL_MODULE := u-boot-sunxi-with-spl.bin
 LOCAL_MODULE_PATH := $(PRODUCT_OUT)
 LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT_PATH)/$(LOCAL_MODULE)
 $(LOCAL_PREBUILT_MODULE_FILE): uboot
+
+include $(BUILD_EXECUTABLE)
+
+#-------------------------------------------------------------------------------
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := boot.scr
+
+LOCAL_MODULE_PATH := $(PRODUCT_OUT)
+LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT_PATH)/$(LOCAL_MODULE)
+$(LOCAL_PREBUILT_MODULE_FILE): boot_script
 
 include $(BUILD_EXECUTABLE)
 
