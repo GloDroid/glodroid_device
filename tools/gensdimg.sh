@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-SDIMG=generated/sdcard.img
+SDIMG=sdcard.img
 
 PART_START=$(( 2048 * 1024 ))
 ALIGN=1048576
@@ -41,14 +41,11 @@ w
 Y
 EOF
 
-echo "===> Create directory for generated files"
-mkdir -p generated
-
 echo "===> Create env.img"
-rm -f generated/env.img
+rm -f env.img
 sync
-mkfs.vfat -n "orange-pi" -S 512 -C generated/env.img $(( 1024 * 32 ))
-mcopy -i generated/env.img -s boot.scr ::boot.scr
+mkfs.vfat -n "orange-pi" -S 512 -C env.img $(( 1024 * 32 ))
+mcopy -i env.img -s boot.scr ::boot.scr
 
 echo "===> Add partitions"
 add_part env.img env
