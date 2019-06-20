@@ -16,10 +16,12 @@ on early-init
     mount debugfs debugfs /sys/kernel/debug
 
 on fs
-#    mount_all /vendor/etc/fstab.kingfisher --early
+    wait /dev/block/${ro.boot.bootdevice}
+    symlink /dev/block/${ro.boot.bootdevice} /dev/block/bootdevice
+    mount_all /vendor/etc/fstab.plus2e --early
 
 on late-fs
-#    mount_all /vendor/etc/fstab.kingfisher --late
+    mount_all /vendor/etc/fstab.plus2e --late
 
 on post-fs-data
     # Set indication (checked by vold) that we have finished this action

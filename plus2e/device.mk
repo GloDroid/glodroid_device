@@ -24,12 +24,21 @@ PRODUCT_RUNTIMES := runtime_libart_default
 
 # bootloaders in srec format
 PRODUCT_PACKAGES += \
+    boot.scr \
     u-boot-sunxi-with-spl.bin
 
 # Init RC files
 PRODUCT_COPY_FILES += \
     device/allwinner/plus2e/init.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.plus2e.rc \
     device/allwinner/plus2e/ueventd.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
+
+# fstab
+PRODUCT_COPY_FILES += \
+    device/allwinner/plus2e/fstab:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(TARGET_PRODUCT)
+
+# tools
+PRODUCT_COPY_FILES += \
+    device/allwinner/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
 
 # Generic memtrack module
 PRODUCT_PACKAGES += \
