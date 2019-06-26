@@ -41,6 +41,8 @@ uboot: $(UBOOT_OUT)
 	@echo "Building U-Boot"
 	@echo "TARGET_PRODUCT = " $(TARGET_PRODUCT)
 	$(hide) CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC) O=$$(readlink -f $(UBOOT_OUT)) $(UBOOT_DEFCONFIG)
+	$(KERNEL_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $(BSP_UBOOT_PATH)/android.config
+	$(hide) CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC) O=$$(readlink -f $(UBOOT_OUT)) olddefconfig
 	$(hide) CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC) O=$$(readlink -f $(UBOOT_OUT)) KCFLAGS="$(UBOOT_KCFLAGS)"
 
 clean-uboot: $(UBOOT_OUT)
