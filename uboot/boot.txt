@@ -58,6 +58,8 @@ setenv bootcmd_block '
  setenv bootargs \"\$bootargs root=PARTUUID=\${system_a_uuid}\" &&
  part start mmc \$mmc_index dtb_a dtb_start &&
  part size mmc \$mmc_index dtb_a dtb_size &&
+ part start mmc \$mmc_index boot_a boot_start &&
+ part size mmc \$mmc_index boot_a boot_size &&
  mmc dev \$mmc_index &&
  mmc read \$knladdr \$dtb_start \$dtb_size &&
  mmc read \$loadaddr \$boot_start \$boot_size
