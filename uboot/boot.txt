@@ -1,6 +1,6 @@
 # Configuration, Source should be one of the: sdcard, emmc or network
 
-setenv source network
+setenv source sdcard
 setenv netboot_ip 172.28.184.24
 setenv dtb_id 0
 
