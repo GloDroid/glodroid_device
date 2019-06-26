@@ -56,8 +56,7 @@ setenv bootcmd_start '
 
 setenv bootcmd_block '
  run bootcmd_bcb &&
- part number mmc \$mmc_index system_a system_a_index &&
- part uuid mmc \$mmc_index:\${system_a_index} system_a_uuid &&
+ part uuid mmc \$mmc_index:6 system_a_uuid &&
  setenv bootargs \"\$bootargs root=PARTUUID=\${system_a_uuid}\" &&
  part start mmc \$mmc_index dtb_a dtb_start &&
  part size mmc \$mmc_index dtb_a dtb_size &&
