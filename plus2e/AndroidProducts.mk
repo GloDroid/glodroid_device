@@ -16,3 +16,6 @@
 
 PRODUCT_MAKEFILES := \
     $(LOCAL_DIR)/orangepi_plus2e.mk
+
+COMMON_LUNCH_CHOICES := \
+    orangepi_plus2e-userdebug
