@@ -15,9 +15,10 @@ KERNEL_FRAGMENTS	:= $(AOSP_CONFIGS)/android-base-arm.cfg \
 			   $(LOCAL_PATH)/android-sunxi.config
 KERNEL_OUT		:= $(PRODUCT_OUT)/obj/KERNEL_OBJ
 KERNEL_MODULES_OUT 	:= $(PRODUCT_OUT)/obj/KERNEL_MODULES
-KERNEL_BINARY		:= Image
-KERNEL_COMPRESSED	:= Image.lz4
 KERNEL_BOOT_DIR		:= arch/$(TARGET_ARCH)/boot
+KERNEL_TARGET		:= Image
+KERNEL_BINARY		:= $(KERNEL_OUT)/$(KERNEL_BOOT_DIR)/$(KERNEL_TARGET)
+KERNEL_COMPRESSED	:= $(KERNEL_OUT)/$(KERNEL_BOOT_DIR)/Image.lz4
 DTB_IMG			:= $(PRODUCT_OUT)/dtb.img
 KERNEL_DTS_DIR		:= $(KERNEL_BOOT_DIR)/dts
 KERNEL_DTB_OUT		:= $(KERNEL_OUT)/$(KERNEL_DTS_DIR)
@@ -46,46 +47,35 @@ ifeq ($(TARGET_KERNEL_EXT_MODULES),)
 endif
 
 #-------------------------------------------------------------------------------
-$(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS)
+$(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS) $(sort $(shell find -L -n "*config" $(KERNEL_SRC)))
 	$(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) ARCH=$(TARGET_ARCH) $(KERNEL_DEFCONFIG)
 	$(KERNEL_SRC)/scripts/kconfig/merge_config.sh -m -O $(KERNEL_OUT)/ $(KERNEL_OUT)/.config $(KERNEL_FRAGMENTS)
 	$(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) ARCH=$(TARGET_ARCH) olddefconfig
 
+$(KERNEL_BINARY): $(sort $(shell find -L $(KERNEL_SRC))) $(KERNEL_OUT)/.config
+	$(MAKE) -C $(KERNEL_OUT) ARCH=$(TARGET_ARCH) CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE)) $(KERNEL_TARGET) dtbs modules
 
-.PHONY: $(KERNEL_BINARY) $(KERNEL_COMPRESSED) KERNEL_MODULES clean-kernel
+$(KERNEL_COMPRESSED): $(KERNEL_BINARY)
+	rm -f $@
+	lz4c -c1 $< $@
 
-$(KERNEL_BINARY): $(KERNEL_OUT)/.config
-	$(MAKE) -C $(KERNEL_OUT) ARCH=$(TARGET_ARCH) CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE)) $@ dtbs modules
-
-Image.lz4: $(KERNEL_BINARY)
-	rm -f $(KERNEL_OUT)/$(KERNEL_BOOT_DIR)/$@
-	lz4c -c1 $(KERNEL_OUT)/$(KERNEL_BOOT_DIR)/Image $(KERNEL_OUT)/$(KERNEL_BOOT_DIR)/$@
-
-TARGET_KERNEL_MODULES: $(KERNEL_BINARY)
+$(KERNEL_MODULES_OUT): $(KERNEL_BINARY)
 	rm -rf $(KERNEL_MODULES_OUT)
 	$(MAKE) -C $(KERNEL_OUT) ARCH=$(TARGET_ARCH) INSTALL_MOD_PATH=$$(readlink -f $(KERNEL_MODULES_OUT)) modules_install
 	find $(KERNEL_MODULES_OUT) -mindepth 2 -type f -name '*.ko' | xargs -I{} cp {} $(KERNEL_MODULES_OUT)
-
-clean-kernel:
-	rm -rf $(KERNEL_OUT) $(KERNEL_MODULES_OUT)
 
 #-------------------------------------------------------------------------------
 $(ANDROID_DTBO): $(ANDROID_DTS_OVERLAY)
 	rm -f $@
 	dtc -@ -I dts -O dtb -o $@ $<
 
-$(DTB_IMG): mkdtimg $(DTB_IMG_CONFIG) $(KERNEL_BINARY) $(ANDROID_DTBO)
+$(DTB_IMG): $(DTB_IMG_CONFIG) mkdtimg $(KERNEL_BINARY) $(ANDROID_DTBO)
 	$(call pretty,"Target dtb image: $@")
-	mkdtimg cfg_create $@ $(DTB_IMG_CONFIG) --dtb-dir=$(KERNEL_DTB_OUT)
-
-#$(TARGET_KERNEL_EXT_MODULES) : TARGET_KERNEL_MODULES
-
-#$(DTB_IMG): $(TARGET_KERNEL_EXT_MODULES) mkdtimg
-#	mkdtimg create $(PRODUCT_OUT)/dtb.img --page_size=4096 $(DTB_BLOBS)
+	mkdtimg cfg_create $@ $< --dtb-dir=$(KERNEL_DTB_OUT)
 
 #-------------------------------------------------------------------------------
-$(PRODUCT_OUT)/kernel: $(KERNEL_COMPRESSED) KERNEL_MODULES $(DTB_IMG)
-	cp -v $(KERNEL_OUT)/$(KERNEL_BOOT_DIR)/$< $@
+$(PRODUCT_OUT)/kernel: $(KERNEL_BINARY)
+	cp -v $< $@
 
 #-------------------------------------------------------------------------------
 endif # TARGET_PREBUILT_KERNEL
