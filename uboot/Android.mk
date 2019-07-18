@@ -37,7 +37,7 @@ $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin: $(BSP_UBOOT_PATH)/android.config $(sort 
 	CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC) O=$$(readlink -f $(UBOOT_OUT)) olddefconfig
 	CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC) O=$$(readlink -f $(UBOOT_OUT)) KCFLAGS="$(UBOOT_KCFLAGS)"
 
-$(UBOOT_OUT)/boot.scr: $(BSP_UBOOT_PATH)/boot.txt
+$(UBOOT_OUT)/boot.scr: $(BSP_UBOOT_PATH)/boot.txt $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
 	$(UBOOT_OUT)/tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $< $@
 
 #-------------------------------------------------------------------------------
