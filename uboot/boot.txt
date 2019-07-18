@@ -9,6 +9,7 @@ setenv dtb_id 0
 setenv knladdr 0x40008000
 setenv dtbaddr ${fdt_addr_r}
 setenv loadaddr ${kernel_addr_r}
+setenv dtboaddr 0x52008000
 
 setenv bootargs "
  init=/init rootwait ro androidboot.boottime=223.708 androidboot.selinux=permissive
@@ -45,8 +46,10 @@ setenv bootcmd_start '
  cp.b \$dtb_start \$dtbaddr \$dtb_size &&
  fdt addr \$dtbaddr &&
  dtimg start \$knladdr 1 dtb_start &&
+ dtimg size \$knladdr 1 dtb_size &&
+ cp.b \$dtb_start \$dtboaddr \$dtb_size &&
  fdt resize 8192 &&
- fdt apply \$dtb_start &&
+ fdt apply \$dtboaddr &&
  fdt set /firmware/android/fstab/vendor/ dev "/dev/block/\${bootdevice_path}/by-name/vendor" &&
  bootm \$loadaddr
 '
