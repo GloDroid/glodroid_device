@@ -47,7 +47,7 @@ ifeq ($(TARGET_KERNEL_EXT_MODULES),)
 endif
 
 #-------------------------------------------------------------------------------
-$(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS) $(sort $(shell find -L -n "*config" $(KERNEL_SRC)))
+$(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS) $(sort $(shell find -L -name "*config" $(KERNEL_SRC)))
 	$(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) ARCH=$(TARGET_ARCH) $(KERNEL_DEFCONFIG)
 	$(KERNEL_SRC)/scripts/kconfig/merge_config.sh -m -O $(KERNEL_OUT)/ $(KERNEL_OUT)/.config $(KERNEL_FRAGMENTS)
 	$(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) ARCH=$(TARGET_ARCH) olddefconfig
