@@ -26,8 +26,9 @@ TARGET_CPU_VARIANT := generic
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 
-TARGET_USES_32_BIT_BINDER :=true
-TARGET_USES_64_BIT_BINDER := false
+# Binder interface should be 64bit even on 32bit SoC
+TARGET_USES_64_BIT_BINDER := true
+
 TARGET_SUPPORTS_32_BIT_APPS := true
 TARGET_SUPPORTS_64_BIT_APPS := false
 
