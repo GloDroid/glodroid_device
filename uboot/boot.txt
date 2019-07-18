@@ -1,6 +1,6 @@
 # Configuration, Source should be one of the: sdcard, emmc or network
 
-setenv source network
+setenv source sdcard
 setenv netboot_ip 172.28.184.24
 setenv dtb_id 0
 
@@ -9,6 +9,7 @@ setenv dtb_id 0
 setenv knladdr 0x40008000
 setenv dtbaddr ${fdt_addr_r}
 setenv loadaddr ${kernel_addr_r}
+setenv dtboaddr 0x52008000
 
 setenv bootargs "
  init=/init rootwait ro androidboot.boottime=223.708 androidboot.selinux=permissive
@@ -45,19 +46,22 @@ setenv bootcmd_start '
  cp.b \$dtb_start \$dtbaddr \$dtb_size &&
  fdt addr \$dtbaddr &&
  dtimg start \$knladdr 1 dtb_start &&
+ dtimg size \$knladdr 1 dtb_size &&
+ cp.b \$dtb_start \$dtboaddr \$dtb_size &&
  fdt resize 8192 &&
- fdt apply \$dtb_start &&
+ fdt apply \$dtboaddr &&
  fdt set /firmware/android/fstab/vendor/ dev "/dev/block/\${bootdevice_path}/by-name/vendor" &&
  bootm \$loadaddr
 '
 
 setenv bootcmd_block '
  run bootcmd_bcb &&
- part number mmc \$mmc_index system_a system_a_index &&
- part uuid mmc \$mmc_index:\${system_a_index} system_a_uuid &&
+ part uuid mmc \$mmc_index:6 system_a_uuid &&
  setenv bootargs \"\$bootargs root=PARTUUID=\${system_a_uuid}\" &&
  part start mmc \$mmc_index dtb_a dtb_start &&
  part size mmc \$mmc_index dtb_a dtb_size &&
+ part start mmc \$mmc_index boot_a boot_start &&
+ part size mmc \$mmc_index boot_a boot_size &&
  mmc dev \$mmc_index &&
  mmc read \$knladdr \$dtb_start \$dtb_size &&
  mmc read \$loadaddr \$boot_start \$boot_size

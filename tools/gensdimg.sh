@@ -43,12 +43,14 @@ EOF
 
 echo "===> Create env.img"
 rm -f env.img
-sync
 mkfs.vfat -n "orange-pi" -S 512 -C env.img $(( 1024 * 32 ))
 mcopy -i env.img -s boot.scr ::boot.scr
 
+dd if=/dev/zero of=misc.img bs=4096 count=$(( (1024 * 512) / 4096 ))
+
 echo "===> Add partitions"
 add_part env.img env
+add_part misc.img misc
 add_part boot.img boot_a
 add_part dtb.img dtb_a
 add_part vendor.img vendor_a

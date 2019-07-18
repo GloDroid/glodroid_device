@@ -18,14 +18,8 @@
 BSP_UBOOT_PATH := $(call my-dir)
 UBOOT_CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 
-UBOOT_CLEAN_BUILD ?=
-
-ifeq ($(UBOOT_CROSS_COMPILE),)
-$(error UBOOT_CROSS_COMPILE is not set)
-endif
-
-UBOOT_SRC_PATH := external/uboot
-UBOOT_OUT_PATH := $(PRODUCT_OUT)/obj/UBOOT_OBJ
+UBOOT_SRC := external/uboot
+UBOOT_OUT := $(PRODUCT_OUT)/obj/UBOOT_OBJ
 
 UBOOT_KCFLAGS = \
     -fgnu89-inline \
@@ -34,38 +28,17 @@ UBOOT_KCFLAGS = \
 UBOOT_DEFCONFIG := $(TARGET_PRODUCT)_defconfig
 
 #-------------------------------------------------------------------------------
-$(UBOOT_OUT):
-	$(hide) mkdir -p $(UBOOT_OUT_PATH)
+$(UBOOT_OUT)/u-boot-sunxi-with-spl.bin: $(sort $(shell find -L $(UBOOT_SRC)))
+	@echo "Building U-Boot: "
+	@echo "TARGET_PRODUCT = " $(TARGET_PRODUCT):
+	mkdir -p $(UBOOT_OUT)
+	CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC) O=$$(readlink -f $(UBOOT_OUT)) $(UBOOT_DEFCONFIG)
+	$(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $(BSP_UBOOT_PATH)/android.config
+	CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC) O=$$(readlink -f $(UBOOT_OUT)) olddefconfig
+	CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC) O=$$(readlink -f $(UBOOT_OUT)) KCFLAGS="$(UBOOT_KCFLAGS)"
 
-uboot: $(UBOOT_OUT)
-	@echo "Building U-Boot"
-	@echo "TARGET_PRODUCT = " $(TARGET_PRODUCT)
-	$(hide) CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC_PATH) O=$$(readlink -f $(UBOOT_OUT_PATH)) $(UBOOT_DEFCONFIG)
-	$(hide) CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC_PATH) O=$$(readlink -f $(UBOOT_OUT_PATH)) KCFLAGS="$(UBOOT_KCFLAGS)"
-
-clean-uboot: $(UBOOT_OUT)
-	@echo "Cleaning U-Boot"
-	$(hide) CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC_PATH) O=$$(readlink -f $(UBOOT_OUT_PATH)) mrproper
-
-boot_script: uboot
-	$(UBOOT_OUT_PATH)/tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $(BSP_UBOOT_PATH)/boot.txt $(UBOOT_OUT_PATH)/boot.scr
-
-.PHONY: uboot clean-uboot
-
-ifneq (,$(UBOOT_CLEAN_BUILD))
-uboot: clean-uboot
-endif
-
-#-------------------------------------------------------------------------------
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := u-boot.bin
-
-LOCAL_MODULE_PATH := $(PRODUCT_OUT)
-LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT_PATH)/$(LOCAL_MODULE)
-$(LOCAL_PREBUILT_MODULE_FILE): uboot
-
-include $(BUILD_EXECUTABLE)
+$(UBOOT_OUT)/boot.scr: $(BSP_UBOOT_PATH)/boot.txt
+	$(UBOOT_OUT)/tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $< $@
 
 #-------------------------------------------------------------------------------
 include $(CLEAR_VARS)
@@ -73,8 +46,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := u-boot-sunxi-with-spl.bin
 
 LOCAL_MODULE_PATH := $(PRODUCT_OUT)
-LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT_PATH)/$(LOCAL_MODULE)
-$(LOCAL_PREBUILT_MODULE_FILE): uboot
+LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT)/$(LOCAL_MODULE)
 
 include $(BUILD_EXECUTABLE)
 
@@ -84,8 +56,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := boot.scr
 
 LOCAL_MODULE_PATH := $(PRODUCT_OUT)
-LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT_PATH)/$(LOCAL_MODULE)
-$(LOCAL_PREBUILT_MODULE_FILE): boot_script
+LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT)/$(LOCAL_MODULE)
 
 include $(BUILD_EXECUTABLE)
 
