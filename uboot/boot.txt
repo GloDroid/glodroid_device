@@ -12,7 +12,7 @@ setenv loadaddr ${kernel_addr_r}
 setenv dtboaddr 0x52008000
 
 setenv bootargs "
- init=/init rootwait ro androidboot.boottime=223.708 androidboot.selinux=permissive
+ init=/init rootwait ro androidboot.boottime=223.708 androidboot.selinux=permissive androidboot.hardware=plus2e
  androidboot.revision=2.0 androidboot.board_id=0x1234567 init_time=1552948124 androidboot.serialno=0585
  skip_initramfs androidboot.slot_suffix=_a firmware_class.path=/vendor/etc/firmware
 "
