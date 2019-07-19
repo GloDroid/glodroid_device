@@ -28,16 +28,16 @@ UBOOT_KCFLAGS = \
 UBOOT_DEFCONFIG := $(TARGET_PRODUCT)_defconfig
 
 #-------------------------------------------------------------------------------
-$(UBOOT_OUT)/u-boot-sunxi-with-spl.bin: $(sort $(shell find -L $(UBOOT_SRC)))
+$(UBOOT_OUT)/u-boot-sunxi-with-spl.bin: $(BSP_UBOOT_PATH)/android.config $(sort $(shell find -L $(UBOOT_SRC)))
 	@echo "Building U-Boot: "
 	@echo "TARGET_PRODUCT = " $(TARGET_PRODUCT):
 	mkdir -p $(UBOOT_OUT)
 	CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC) O=$$(readlink -f $(UBOOT_OUT)) $(UBOOT_DEFCONFIG)
-	$(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $(BSP_UBOOT_PATH)/android.config
+	$(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $<
 	CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC) O=$$(readlink -f $(UBOOT_OUT)) olddefconfig
 	CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) ARCH=$(TARGET_ARCH) make -C $(UBOOT_SRC) O=$$(readlink -f $(UBOOT_OUT)) KCFLAGS="$(UBOOT_KCFLAGS)"
 
-$(UBOOT_OUT)/boot.scr: $(BSP_UBOOT_PATH)/boot.txt
+$(UBOOT_OUT)/boot.scr: $(BSP_UBOOT_PATH)/boot.txt $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
 	$(UBOOT_OUT)/tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $< $@
 
 #-------------------------------------------------------------------------------
