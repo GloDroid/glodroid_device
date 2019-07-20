@@ -60,3 +60,5 @@ add_part userdata.img userdata
 
 echo "===> Put u-boot with spl to image"
 dd if=u-boot-sunxi-with-spl.bin of=${SDIMG} bs=1024 seek=8 conv=notrunc
+
+lz4c -f ${SDIMG} ${SDIMG}.lz4
