@@ -10,9 +10,7 @@ ifeq ($(TARGET_PREBUILT_KERNEL),)
 #-------------------------------------------------------------------------------
 KERNEL_SRC		:= kernel/allwinner
 KERNEL_DEFCONFIG	:= sunxi_defconfig android-base.config android-recommended.config
-AOSP_CONFIGS		:= kernel/configs/p/android-4.14
-KERNEL_FRAGMENTS	:= $(AOSP_CONFIGS)/android-base-arm.cfg \
-			   $(LOCAL_PATH)/android-sunxi.config
+KERNEL_FRAGMENTS	:= $(LOCAL_PATH)/android-sunxi.config
 KERNEL_OUT		:= $(PRODUCT_OUT)/obj/KERNEL_OBJ
 KERNEL_MODULES_OUT 	:= $(PRODUCT_OUT)/obj/KERNEL_MODULES
 KERNEL_BOOT_DIR		:= arch/$(TARGET_ARCH)/boot
