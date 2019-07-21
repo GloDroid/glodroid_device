@@ -1,0 +1,6 @@
+
+allow hal_memtrack_default debugfs_pvr:dir { open read search };
+allow hal_memtrack_default debugfs_ion:dir { open read search };
+
+allow hal_memtrack_default debugfs_pvr:file { getattr open read };
+allow hal_memtrack_default debugfs_ion:file { getattr open read };

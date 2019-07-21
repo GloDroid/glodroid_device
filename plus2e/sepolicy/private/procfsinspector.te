@@ -1,0 +1,11 @@
+type procfsinspector, domain, coredomain;
+type procfsinspector_exec, exec_type, file_type;
+
+init_daemon_domain(procfsinspector)
+
+add_service(procfsinspector, procfsinspector_service)
+binder_use(procfsinspector)
+
+allow carservice_app procfsinspector:binder call;
+
+dontaudit procfsinspector domain:dir getattr;

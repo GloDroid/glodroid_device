@@ -1,0 +1,79 @@
+# Block devices
+/dev/block/mmcblk0                                                              u:object_r:root_block_device:s0
+/dev/block/platform/soc/ee140000.sd/by-name/boot_a                              u:object_r:boot_block_device:s0
+/dev/block/platform/soc/ee140000.sd/by-name/boot_b                              u:object_r:boot_block_device:s0
+/dev/block/platform/soc/ee140000.sd/by-name/metadata                            u:object_r:metadata_block_device:s0
+/dev/block/platform/soc/ee140000.sd/by-name/misc                                u:object_r:misc_block_device:s0
+/dev/block/platform/soc/ee140000.sd/by-name/system_a                            u:object_r:system_block_device:s0
+/dev/block/platform/soc/ee140000.sd/by-name/system_b                            u:object_r:system_block_device:s0
+/dev/block/platform/soc/ee140000.sd/by-name/userdata                            u:object_r:userdata_block_device:s0
+/dev/block/platform/soc/ee140000.sd/by-name/pst                                 u:object_r:frp_block_device:s0
+
+# TTY devices
+/dev/ttySC0                                                                     u:object_r:tty_device:s0
+/dev/ttySC1                                                                     u:object_r:tty_device:s0
+
+# tee
+/sbin/tee-supp                                                                  u:object_r:tee_exec:s0
+/mnt/tee                                                                        u:object_r:tee_storage:s0
+
+# sync drivers
+/dev/pvr_sync                                                                   u:object_r:gpu_device:s0
+/dev/sw_sync                                                                    u:object_r:gpu_device:s0
+
+# drm device nodes
+/dev/dri/card0                                                                  u:object_r:gpu_device:s0
+/dev/dri/card1                                                                  u:object_r:gpu_device:s0
+/dev/dri/controlD64                                                             u:object_r:gpu_device:s0
+/dev/dri/controlD65                                                             u:object_r:gpu_device:s0
+/dev/dri/renderD128                                                             u:object_r:gpu_device:s0
+
+# Video devices
+/dev/video0                                                                     u:object_r:video_device:s0
+/dev/video1                                                                     u:object_r:video_device:s0
+/dev/video2                                                                     u:object_r:video_device:s0
+/dev/video3                                                                     u:object_r:video_device:s0
+/dev/video4                                                                     u:object_r:video_device:s0
+/dev/video5                                                                     u:object_r:video_device:s0
+/dev/video6                                                                     u:object_r:video_device:s0
+/dev/video7                                                                     u:object_r:video_device:s0
+/dev/video8                                                                     u:object_r:video_device:s0
+/dev/video9                                                                     u:object_r:video_device:s0
+/dev/video10                                                                    u:object_r:video_device:s0
+/dev/video11                                                                    u:object_r:video_device:s0
+/dev/video12                                                                    u:object_r:video_device:s0
+/dev/video13                                                                    u:object_r:video_device:s0
+/dev/video14                                                                    u:object_r:video_device:s0
+/dev/video15                                                                    u:object_r:video_device:s0
+
+# Memory manager devices
+/dev/rgnmm                                                                      u:object_r:mmngr_device:s0
+/dev/rgnmmbuf                                                                   u:object_r:mmngr_device:s0
+
+# UVCS
+/dev/uvcs                                                                       u:object_r:uvcs_device:s0
+
+# VSPM
+/dev/vspm_if                                                                    u:object_r:vspm_device:s0
+
+# OPTee
+/dev/tee0                                                                       u:object_r:tee_device:s0
+/dev/teepriv0                                                                   u:object_r:tee_device:s0
+
+# pvrsrvctl
+/vendor/bin/pvrsrvctl                                                           u:object_r:pvrsrvctl_exec:s0
+
+#
+/system/bin/com\.android\.car\.procfsinspector                                  u:object_r:procfsinspector_exec:s0
+
+# HALs
+/vendor/bin/hw/android.hardware.memtrack@1.0-service                            u:object_r:hal_memtrack_default_exec:s0
+/vendor/bin/hw/android.hardware.automotive.vehicle@2.0-service                  u:object_r:hal_vehicle_default_exec:s0
+/vendor/bin/hw/android.hardware.graphics.composer@2.1-service                   u:object_r:hal_graphics_composer_default_exec:s0
+/vendor/bin/hw/android.hardware.keymaster@3.0-service                           u:object_r:hal_keymaster_default_exec:s0
+/vendor/bin/hw/android.hardware.gatekeeper@1.0-service                          u:object_r:hal_gatekeeper_default_exec:s0
+/vendor/bin/hw/android.hardware.dumpstate@1.0-service                           u:object_r:hal_dumpstate_default_exec:s0
+/vendor/bin/hw/android.hardware.drm@1.0-service                                 u:object_r:hal_drm_default_exec:s0
+/vendor/bin/hw/android.hardware.configstore@1.1-service         	        u:object_r:hal_configstore_default_exec:s0
+/vendor/bin/hw/android.hardware.contexthub@1.0-service       	                u:object_r:hal_contexthub_default_exec:s0
+

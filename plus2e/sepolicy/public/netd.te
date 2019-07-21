@@ -1,0 +1,10 @@
+
+dontaudit netd self:capability sys_module;
+
+allow netd self:capability sys_admin;
+
+allow netd kernel:system module_request;
+
+allow netd system_file:dir { add_name };
+
+allow netd untrusted_app:icmp_socket { read write getopt setopt };

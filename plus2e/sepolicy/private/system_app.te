@@ -1,0 +1,5 @@
+
+allow system_app fs_bpf:dir search;
+
+allow system_app system_server_tmpfs:file read;
+allow system_app proc_pagetypeinfo:file read;

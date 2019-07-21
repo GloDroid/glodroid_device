@@ -1,0 +1,7 @@
+
+allow recovery tee_device:chr_file { ioctl open read write };
+allow recovery gpu_device:chr_file { ioctl open read write };
+
+allow recovery configfs:dir mounton;
+allow recovery functionfs:dir mounton;
+allow recovery tmpfs:dir mounton;

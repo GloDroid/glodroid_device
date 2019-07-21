@@ -1,0 +1,3 @@
+type debugfs_sync, fs_type, debugfs_type;
+
+allow debugfs_type { debugfs debugfs_sync }:filesystem associate;

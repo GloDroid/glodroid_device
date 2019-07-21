@@ -1,0 +1,24 @@
+# This type for lifetime_write_kbytes files which resides in
+# /sys/fs/<filesystem>/<partition>/lifetime_writes_kbytes
+# Vendors are supposed to extend genfs_contexts with the
+# partition names for their devices.
+
+# sysfs
+type sysfs_fs_lifetime_write, sysfs_type, fs_type;
+type sysfs_fs_lifetime, sysfs_type, fs_type;
+type sysfs_scsi_devices_0000, sysfs_type, fs_type;
+type sysfs_scsi_devices_other, sysfs_type, fs_type;
+type sysfs_devices_block, sysfs_type, fs_type;
+type sysfs_rmtfs, sysfs_type, fs_type;
+
+# debugfs
+type debugfs_ion, debugfs_type, fs_type;
+type debugfs_pvr, debugfs_type, fs_type;
+
+# procfs
+type proc_slabinfo, proc_type, fs_type;
+
+#
+type persist_file, file_type;
+type smlog_dump_file, file_type, data_file_type, core_data_file_type;
+type netmgr_data_file, file_type, data_file_type, core_data_file_type;

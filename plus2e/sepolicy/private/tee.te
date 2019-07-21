@@ -1,0 +1,8 @@
+type tee_storage, file_type;
+
+allow tee tee_device:chr_file { getattr ioctl open read write };
+allow tee tee_storage:dir getattr;
+
+allow tee rootfs:file { entrypoint execute map read };
+
+set_prop(tee, tee_prop)

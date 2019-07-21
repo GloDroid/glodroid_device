@@ -105,3 +105,10 @@ DEX_PREOPT_DEFAULT := nostripping
 WITH_DEXPREOPT := true
 ART_USE_HSPACE_COMPACT := true
 PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD := false
+
+DEVICE_MANIFEST_FILE := device/allwinner/plus2e/manifest.xml
+
+# SELinux support
+BOARD_PLAT_PUBLIC_SEPOLICY_DIR   += device/allwinner/plus2e/sepolicy/public
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR  += device/allwinner/plus2e/sepolicy/private
+BOARD_VENDOR_SEPOLICY_DIRS       += device/allwinner/plus2e/sepolicy/vendor
