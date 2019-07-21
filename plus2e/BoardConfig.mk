@@ -104,7 +104,6 @@ BOARD_USE_LEGACY_UI := true
 DEX_PREOPT_DEFAULT := nostripping
 WITH_DEXPREOPT := true
 ART_USE_HSPACE_COMPACT := true
-PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD := false
 
 DEVICE_MANIFEST_FILE := device/allwinner/plus2e/manifest.xml
 
