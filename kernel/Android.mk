@@ -78,7 +78,7 @@ $(DTB_IMG): $(DTB_IMG_CONFIG) mkdtimg $(KERNEL_BINARY) $(ANDROID_DTBO)
 	mkdtimg cfg_create $@ $< --dtb-dir=$(KERNEL_DTB_OUT)
 
 #-------------------------------------------------------------------------------
-$(PRODUCT_OUT)/kernel: $(KERNEL_BINARY)
+$(PRODUCT_OUT)/kernel: $(KERNEL_BINARY) $(DTB_IMG) $(KERNEL_MODULES_OUT)
 	cp -v $< $@
 
 #-------------------------------------------------------------------------------
