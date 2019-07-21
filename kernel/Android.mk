@@ -44,14 +44,19 @@ ifeq ($(TARGET_KERNEL_EXT_MODULES),)
     TARGET_KERNEL_EXT_MODULES := no-external-modules
 endif
 
+KMAKE := \
+    $(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
+    ARCH=$(TARGET_ARCH) \
+    CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE))
+
 #-------------------------------------------------------------------------------
 $(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS) $(sort $(shell find -L -name "*config" $(KERNEL_SRC)))
-	$(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) ARCH=$(TARGET_ARCH) $(KERNEL_DEFCONFIG)
+	$(KMAKE) $(KERNEL_DEFCONFIG)
 	$(KERNEL_SRC)/scripts/kconfig/merge_config.sh -m -O $(KERNEL_OUT)/ $(KERNEL_OUT)/.config $(KERNEL_FRAGMENTS)
-	$(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) ARCH=$(TARGET_ARCH) olddefconfig
+	$(KMAKE) olddefconfig
 
 $(KERNEL_BINARY): $(sort $(shell find -L $(KERNEL_SRC))) $(KERNEL_OUT)/.config
-	$(MAKE) -C $(KERNEL_OUT) ARCH=$(TARGET_ARCH) CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE)) $(KERNEL_TARGET) dtbs modules
+	$(KMAKE) $(KERNEL_TARGET) dtbs modules
 
 $(KERNEL_COMPRESSED): $(KERNEL_BINARY)
 	rm -f $@
@@ -59,7 +64,7 @@ $(KERNEL_COMPRESSED): $(KERNEL_BINARY)
 
 $(KERNEL_MODULES_OUT): $(KERNEL_BINARY)
 	rm -rf $(KERNEL_MODULES_OUT)
-	$(MAKE) -C $(KERNEL_OUT) ARCH=$(TARGET_ARCH) INSTALL_MOD_PATH=$$(readlink -f $(KERNEL_MODULES_OUT)) modules_install
+	$(KMAKE) INSTALL_MOD_PATH=$$(readlink -f $(KERNEL_MODULES_OUT)) modules_install
 	find $(KERNEL_MODULES_OUT) -mindepth 2 -type f -name '*.ko' | xargs -I{} cp {} $(KERNEL_MODULES_OUT)
 
 #-------------------------------------------------------------------------------
