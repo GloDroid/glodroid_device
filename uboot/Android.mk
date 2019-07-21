@@ -28,6 +28,7 @@ UBOOT_KCFLAGS = \
 UBOOT_DEFCONFIG := $(TARGET_PRODUCT)_defconfig
 
 UMAKE := \
+    PATH=/usr/bin:$$PATH \
     CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) \
     ARCH=$(TARGET_ARCH) $(MAKE) \
     -C $(UBOOT_SRC) \
