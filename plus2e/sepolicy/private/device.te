@@ -1,0 +1,10 @@
+# Custom device types
+
+# Memory manager devices
+type mmngr_device, dev_type;
+
+# UVCS device
+type uvcs_device, dev_type;
+
+# VSPM device
+type vspm_device, dev_type;

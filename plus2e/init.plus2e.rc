@@ -18,10 +18,10 @@ on early-init
 on fs
     wait /dev/block/${ro.boot.bootdevice}
     symlink /dev/block/${ro.boot.bootdevice} /dev/block/bootdevice
-    mount_all /vendor/etc/fstab.plus2e --early
+    mount_all /vendor/etc/fstab.orangepi_plus2e --early
 
 on late-fs
-    mount_all /vendor/etc/fstab.plus2e --late
+    mount_all /vendor/etc/fstab.orangepi_plus2e --late
 
 on post-fs-data
     # Set indication (checked by vold) that we have finished this action

@@ -20,7 +20,7 @@ TARGET_NO_KERNEL := false
 
 # Architecture
 TARGET_ARCH := arm
-TARGET_ARCH_VARIANT := armv7-a
+TARGET_ARCH_VARIANT := armv7-a-neon
 #TARGET_CPU_VARIANT := cortex-a7
 TARGET_CPU_VARIANT := generic
 TARGET_CPU_ABI := armeabi-v7a
@@ -42,11 +42,11 @@ TARGET_COPY_OUT_DATA := data
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 1073741824 # 1GB
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 300000000
 
 # System image
 #TARGET_COPY_OUT_SYSTEM := system
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2684354560 # 2.5GB
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 600000000
 # Disable Jack build system due deprecated status (https://source.android.com/source/jack)
 ANDROID_COMPILE_WITH_JACK ?= false
 
@@ -104,4 +104,10 @@ BOARD_USE_LEGACY_UI := true
 DEX_PREOPT_DEFAULT := nostripping
 WITH_DEXPREOPT := true
 ART_USE_HSPACE_COMPACT := true
-PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD := false
+
+DEVICE_MANIFEST_FILE := device/allwinner/plus2e/manifest.xml
+
+# SELinux support
+BOARD_PLAT_PUBLIC_SEPOLICY_DIR   += device/allwinner/plus2e/sepolicy/public
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR  += device/allwinner/plus2e/sepolicy/private
+BOARD_VENDOR_SEPOLICY_DIRS       += device/allwinner/plus2e/sepolicy/vendor

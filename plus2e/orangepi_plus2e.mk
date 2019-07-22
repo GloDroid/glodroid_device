@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$(call inherit-product, device/allwinner/orangepi.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_minimal.mk)
 
 PRODUCT_BOARD_PLATFORM ?= H3_Quad-core_Cortex-A7
 PRODUCT_NAME := orangepi_plus2e

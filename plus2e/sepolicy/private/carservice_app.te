@@ -1,0 +1,51 @@
+# Domain to run Car Service (com.android.car)
+app_domain(carservice_app);
+
+# Allow Car Service to be the client of Vehicle and Audio Control HALs
+hal_client_domain(carservice_app, hal_audiocontrol)
+hal_client_domain(carservice_app, hal_vehicle)
+
+# Allow to set boot.car_service_created property
+set_prop(carservice_app, system_prop)
+
+# Allow Car Service to register itself with ServiceManager
+allow carservice_app carservice_service:service_manager add;
+
+# Allow Car Service to access certain system services.
+# Keep alphabetically sorted.
+allow carservice_app {
+    accessibility_service
+    activity_service
+    audio_service
+    audioserver_service
+    autofill_service
+    bluetooth_manager_service
+    connectivity_service
+    content_service
+    deviceidle_service
+    display_service
+    graphicsstats_service
+    input_method_service
+    input_service
+    location_service
+    network_management_service
+    power_service
+    procfsinspector_service
+    sensorservice_service
+    surfaceflinger_service
+    uimode_service
+}:service_manager find;
+
+# Read and write /data/data subdirectory.
+allow carservice_app system_app_data_file:dir create_dir_perms;
+allow carservice_app system_app_data_file:{ file lnk_file } create_file_perms;
+
+# For I/O stats tracker
+allow carservice_app proc_uid_io_stats:file { read open getattr };
+
+allow carservice_app procfsinspector:binder call;
+
+allow carservice_app sysfs_fs_lifetime_write:file { getattr open read };
+allow carservice_app sysfs_fs_lifetime:file { getattr open read };
+
+allow carservice_app runtime_event_log_tags_file:file map;

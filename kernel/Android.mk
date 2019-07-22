@@ -10,9 +10,7 @@ ifeq ($(TARGET_PREBUILT_KERNEL),)
 #-------------------------------------------------------------------------------
 KERNEL_SRC		:= kernel/allwinner
 KERNEL_DEFCONFIG	:= sunxi_defconfig android-base.config android-recommended.config
-AOSP_CONFIGS		:= kernel/configs/p/android-4.14
-KERNEL_FRAGMENTS	:= $(AOSP_CONFIGS)/android-base-arm.cfg \
-			   $(LOCAL_PATH)/android-sunxi.config
+KERNEL_FRAGMENTS	:= $(LOCAL_PATH)/android-sunxi.config
 KERNEL_OUT		:= $(PRODUCT_OUT)/obj/KERNEL_OBJ
 KERNEL_MODULES_OUT 	:= $(PRODUCT_OUT)/obj/KERNEL_MODULES
 KERNEL_BOOT_DIR		:= arch/$(TARGET_ARCH)/boot
@@ -46,14 +44,20 @@ ifeq ($(TARGET_KERNEL_EXT_MODULES),)
     TARGET_KERNEL_EXT_MODULES := no-external-modules
 endif
 
+KMAKE := \
+    PATH=/usr/bin:$$PATH \
+    $(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
+    ARCH=$(TARGET_ARCH) \
+    CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE))
+
 #-------------------------------------------------------------------------------
 $(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS) $(sort $(shell find -L -name "*config" $(KERNEL_SRC)))
-	$(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) ARCH=$(TARGET_ARCH) $(KERNEL_DEFCONFIG)
+	$(KMAKE) $(KERNEL_DEFCONFIG)
 	$(KERNEL_SRC)/scripts/kconfig/merge_config.sh -m -O $(KERNEL_OUT)/ $(KERNEL_OUT)/.config $(KERNEL_FRAGMENTS)
-	$(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) ARCH=$(TARGET_ARCH) olddefconfig
+	$(KMAKE) olddefconfig
 
 $(KERNEL_BINARY): $(sort $(shell find -L $(KERNEL_SRC))) $(KERNEL_OUT)/.config
-	$(MAKE) -C $(KERNEL_OUT) ARCH=$(TARGET_ARCH) CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE)) $(KERNEL_TARGET) dtbs modules
+	$(KMAKE) $(KERNEL_TARGET) dtbs modules
 
 $(KERNEL_COMPRESSED): $(KERNEL_BINARY)
 	rm -f $@
@@ -61,7 +65,7 @@ $(KERNEL_COMPRESSED): $(KERNEL_BINARY)
 
 $(KERNEL_MODULES_OUT): $(KERNEL_BINARY)
 	rm -rf $(KERNEL_MODULES_OUT)
-	$(MAKE) -C $(KERNEL_OUT) ARCH=$(TARGET_ARCH) INSTALL_MOD_PATH=$$(readlink -f $(KERNEL_MODULES_OUT)) modules_install
+	$(KMAKE) INSTALL_MOD_PATH=$$(readlink -f $(KERNEL_MODULES_OUT)) modules_install
 	find $(KERNEL_MODULES_OUT) -mindepth 2 -type f -name '*.ko' | xargs -I{} cp {} $(KERNEL_MODULES_OUT)
 
 #-------------------------------------------------------------------------------
@@ -74,7 +78,7 @@ $(DTB_IMG): $(DTB_IMG_CONFIG) mkdtimg $(KERNEL_BINARY) $(ANDROID_DTBO)
 	mkdtimg cfg_create $@ $< --dtb-dir=$(KERNEL_DTB_OUT)
 
 #-------------------------------------------------------------------------------
-$(PRODUCT_OUT)/kernel: $(KERNEL_BINARY)
+$(PRODUCT_OUT)/kernel: $(KERNEL_BINARY) $(DTB_IMG) $(KERNEL_MODULES_OUT)
 	cp -v $< $@
 
 #-------------------------------------------------------------------------------

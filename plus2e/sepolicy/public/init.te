@@ -1,0 +1,13 @@
+allow init kernel:system module_request;
+
+# allow init to create /sdcard symlinks
+allow init tmpfs:lnk_file create_file_perms;
+
+allow init proc:file setattr;
+# allow access to boot block device for mounting vendor partition with AVB
+allow init boot_block_device:lnk_file relabelto;
+
+allow init vendor_configs_file:file map;
+
+allow init nativetest_data_file:dir { getattr open read search };
+allow init nativetest_data_file:file getattr;

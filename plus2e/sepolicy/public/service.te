@@ -1,0 +1,2 @@
+type carservice_service, service_manager_type;
+type procfsinspector_service, service_manager_type;

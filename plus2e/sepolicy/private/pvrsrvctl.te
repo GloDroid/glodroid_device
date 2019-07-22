@@ -1,0 +1,30 @@
+type pvrsrvctl, domain;
+type pvrsrvctl_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(pvrsrvctl)
+
+allow pvrsrvctl vendor_file:system module_load;
+
+allow pvrsrvctl self:capability { sys_admin sys_module sys_nice };
+allow pvrsrvctl kernel:process setsched;
+
+# allow access to the device nodes (pvrsrvkm, pvr_sync, sw_sync)
+allow pvrsrvctl gpu_device:chr_file rw_file_perms;
+
+# allow access to /proc directory
+allow pvrsrvctl proc:file { read getattr open };
+
+# allow access to /proc/modules directory
+allow pvrsrvctl proc_modules:file { getattr open read };
+
+# Surfaceflinger requires to read /dev to find adf device nodes (for composerhal)
+allow surfaceflinger device:dir { read open };
+allow surfaceflinger gpu_device:chr_file { read write };
+
+# enable pipe communication between appdomain processes and
+# surfaceflinger for gralloc subchannel feature (dynamic fbc)
+allow bootanim surfaceflinger:fifo_file rw_file_perms;
+allow system_server surfaceflinger:fifo_file rw_file_perms;
+allow appdomain surfaceflinger:fifo_file rw_file_perms;
+allow mediaserver surfaceflinger:fifo_file rw_file_perms;
+
+allow pvrsrvctl debugfs_pvr:dir { read open search };

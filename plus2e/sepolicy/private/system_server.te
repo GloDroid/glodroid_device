@@ -1,0 +1,5 @@
+
+allow system_server opengles_prop:file { getattr map open read };
+
+allow system_server shell_data_file:file map;
+allow system_server vendor_configs_file:file map;
