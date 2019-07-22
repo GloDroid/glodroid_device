@@ -43,7 +43,7 @@ EOF
 
 echo "===> Create env.img"
 rm -f env.img
-mkfs.vfat -n "orange-pi" -S 512 -C env.img $(( 1024 * 32 ))
+mkfs.vfat -n "orange-pi" -S 512 -C env.img $(( 256 ))
 mcopy -i env.img -s boot.scr ::boot.scr
 
 dd if=/dev/zero of=misc.img bs=4096 count=$(( (1024 * 512) / 4096 ))
