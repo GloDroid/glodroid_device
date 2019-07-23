@@ -13,15 +13,6 @@
 # limitations under the License.
 #
 
-$(call inherit-product, device/allwinner/plus2e/modules.mk)
-
-# default is nosdcard, S/W button enabled in resource
-DEVICE_PACKAGE_OVERLAYS := device/generic/armv7-a-neon/overlay
-PRODUCT_CHARACTERISTICS := nosdcard
-
-# Build and run only ART
-PRODUCT_RUNTIMES := runtime_libart_default
-
 # bootloaders in srec format
 PRODUCT_PACKAGES += \
     boot.scr \
@@ -40,31 +31,70 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/allwinner/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
 
-# Generic memtrack module
-PRODUCT_PACKAGES += \
-    android.hardware.memtrack@1.0-impl \
-    android.hardware.memtrack@1.0-service
-
 # Keymaster HAL
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-impl \
     android.hardware.keymaster@3.0-service
 
-# Gatekeeper HAL
-PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper@1.0-impl \
-    android.hardware.gatekeeper@1.0-service
+# Set custom settings
+DEVICE_PACKAGE_OVERLAYS += device/linaro/hikey/overlay
 
-# USB HAL
-PRODUCT_PACKAGES += \
-    android.hardware.usb@1.0-service
+# Add openssh support for remote debugging and job submission
+PRODUCT_PACKAGES += ssh sftp scp sshd ssh-keygen sshd_config start-ssh
 
-# Configstore HAL
-PRODUCT_PACKAGES += \
-    android.hardware.configstore@1.1-service
+# Add wifi-related packages
+PRODUCT_PACKAGES += libwpa_client wpa_supplicant hostapd wificond wifilogd
+PRODUCT_PROPERTY_OVERRIDES += wifi.interface=wlan0 \
+                              wifi.supplicant_scan_interval=15
 
-# Graphics
-TARGET_USES_HWC2 := true
+# Build and run only ART
+PRODUCT_RUNTIMES := runtime_libart_default
+
+# Build default bluetooth a2dp and usb audio HALs
+PRODUCT_PACKAGES += audio.a2dp.default \
+		    audio.usb.default \
+		    audio.r_submix.default \
+		    tinyplay
+
+PRODUCT_PACKAGES += \
+    android.hardware.audio@2.0-impl \
+    android.hardware.audio.effect@2.0-impl \
+    android.hardware.broadcastradio@1.0-impl \
+    android.hardware.soundtrigger@2.0-impl
+
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.0-impl \
+
+# Graphics HAL
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.composer@2.1-impl \
+    android.hardware.graphics.mapper@2.0-impl
+
+# Memtrack
+PRODUCT_PACKAGES += \
+    memtrack.default \
+    android.hardware.memtrack@1.0-service \
+    android.hardware.memtrack@1.0-impl
+
+PRODUCT_PACKAGES += android.hardware.bluetooth@1.0-service.btlinux
+
+# PowerHAL
+PRODUCT_PACKAGES += android.hardware.power@1.0-impl
+
+#GNSS HAL
+PRODUCT_PACKAGES += \
+    android.hardware.gnss@1.0-impl
+
+# Audio HAL
+PRODUCT_PACKAGES += \
+    android.hardware.audio@4.0-impl \
+    android.hardware.audio@2.0-service \
+    android.hardware.audio.effect@2.0-impl \
+    android.hardware.audio.common@4.0-util \
+    android.hardware.audio.effect@4.0-impl \
+    android.hardware.audio.effect@all-versions-impl \
+    android.hardware.bluetooth.a2dp@1.0-impl
 
 PRODUCT_PACKAGES += \
     libEGL_swiftshader \
