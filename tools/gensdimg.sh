@@ -18,9 +18,9 @@ add_part() {
 
 	dd if=/dev/null of=$SDIMG bs=1 count=1 seek=$(( $PTR + $SIZE + $GPT_SIZE ))
 
-	sgdisk -e $SDIMG
+	sgdisk --move-second-header $SDIMG
 
-	sgdisk -n $pn:$(( PTR / 512 )):$(( ($PTR + $SIZE - 1) / 512 )) -c=$pn:"$2" ${SDIMG}
+	sgdisk --new $pn:$(( PTR / 512 )):$(( ($PTR + $SIZE - 1) / 512 )) --change-name=$pn:"$2" ${SDIMG}
 
 	dd if=$1 of=$SDIMG bs=4096 count=$(( SIZE/4096 )) seek=$(( $PTR / 4096 )) conv=notrunc && sync
 
@@ -30,7 +30,7 @@ add_part() {
 
 echo "===> Create raw disk image"
 dd if=/dev/zero of=${SDIMG} bs=4096 count=$(( (PART_START + GPT_SIZE * 2) / 4096 ))
-sgdisk -Z ${SDIMG}
+sgdisk --zap-all ${SDIMG}
 
 echo "===> Reduce GPT to have 56 partitions max (LBA 2-15, u-boot is located starting from LBA 16)"
 gdisk ${SDIMG}<<EOF
@@ -43,7 +43,7 @@ EOF
 
 echo "===> Create env.img"
 rm -f env.img
-mkfs.vfat -n "orange-pi" -S 512 -C env.img $(( 1024 * 32 ))
+mkfs.vfat -n "orange-pi" -S 512 -C env.img $(( 256 ))
 mcopy -i env.img -s boot.scr ::boot.scr
 
 dd if=/dev/zero of=misc.img bs=4096 count=$(( (1024 * 512) / 4096 ))

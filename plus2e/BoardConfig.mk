@@ -46,7 +46,7 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 300000000
 
 # System image
 #TARGET_COPY_OUT_SYSTEM := system
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 600000000
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 900000000
 # Disable Jack build system due deprecated status (https://source.android.com/source/jack)
 ANDROID_COMPILE_WITH_JACK ?= false
 
@@ -86,9 +86,6 @@ TARGET_KERNEL_SOURCE  := kernel/allwinner
 #BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
 
 BOARD_VNDK_VERSION := current
-
-SMALLER_FONT_FOOTPRINT := true
-MINIMAL_FONT_FOOTPRINT := true
 
 # Some framework code requires this to enable BT
 #BOARD_HAVE_BLUETOOTH := true

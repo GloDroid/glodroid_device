@@ -23,6 +23,10 @@ on fs
 on late-fs
     mount_all /vendor/etc/fstab.orangepi_plus2e --late
 
+on post-fs
+    # set RLIMIT_MEMLOCK to 8MB
+    setrlimit 8 8388608 8388608
+
 on post-fs-data
     # Set indication (checked by vold) that we have finished this action
     setprop vold.post_fs_data_done 1
