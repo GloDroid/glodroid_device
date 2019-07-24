@@ -28,12 +28,14 @@ add_part() {
 	pn=$(( $pn+1 ))
 }
 
-echo "===> Create raw disk image"
-dd if=/dev/zero of=${SDIMG} bs=4096 count=$(( (PART_START + GPT_SIZE * 2) / 4096 ))
-sgdisk --zap-all ${SDIMG}
+prepare_disk() {
+    echo "===> Create raw disk image"
+    rm -f $1
+    dd if=/dev/zero of=$1 bs=4096 count=$(( (PART_START + GPT_SIZE * 2) / 4096 ))
+    sgdisk --zap-all $1
 
-echo "===> Reduce GPT to have 56 partitions max (LBA 2-15, u-boot is located starting from LBA 16)"
-gdisk ${SDIMG}<<EOF
+    echo "===> Reduce GPT to have 56 partitions max (LBA 2-15, u-boot is located starting from LBA 16)"
+    gdisk $1<<EOF
 x
 s
 56
@@ -41,10 +43,21 @@ w
 Y
 EOF
 
+    echo "===> Put u-boot with spl to image"
+    dd if=u-boot-sunxi-with-spl.bin of=$1 bs=1024 seek=8 conv=notrunc
+}
+
+prepare_disk ${SDIMG}
+prepare_disk sdcard_net.img
+
 echo "===> Create env.img"
 rm -f env.img
 mkfs.vfat -n "orange-pi" -S 512 -C env.img $(( 256 ))
 mcopy -i env.img -s boot.scr ::boot.scr
+
+rm -f env_net.img
+mkfs.vfat -n "orange-pi" -S 512 -C env_net.img $(( 256 ))
+mcopy -i env_net.img -s boot_net.scr ::boot.scr
 
 dd if=/dev/zero of=misc.img bs=4096 count=$(( (1024 * 512) / 4096 ))
 
@@ -58,7 +71,11 @@ add_part system.img system_a
 #add_part vbmeta.img vbmeta
 add_part userdata.img userdata
 
-echo "===> Put u-boot with spl to image"
-dd if=u-boot-sunxi-with-spl.bin of=${SDIMG} bs=1024 seek=8 conv=notrunc
-
+chmod a+w ${SDIMG} # nbd-server runs from root and needs write access
 lz4c -f ${SDIMG} ${SDIMG}.lz4
+
+echo "===> Add partition wil bootscript for netboot sdcard image"
+SDIMG=sdcard_net.img
+PTR=$PART_START
+pn=1
+add_part env_net.img env
