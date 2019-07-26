@@ -61,6 +61,8 @@ mcopy -i env_net.img -s boot_net.scr ::boot.scr
 
 dd if=/dev/zero of=misc.img bs=4096 count=$(( (1024 * 512) / 4096 ))
 
+dd if=/dev/zero of=metadata.img bs=4k count=$(( (1024 * 1024 * 16) / 4096 ))
+
 echo "===> Add partitions"
 add_part env.img env
 add_part misc.img misc
@@ -70,6 +72,7 @@ add_part vendor.img vendor_a
 add_part system.img system_a
 #add_part vbmeta.img vbmeta
 add_part userdata.img userdata
+add_part metadata.img metadata
 
 chmod a+w ${SDIMG} # nbd-server runs from root and needs write access
 lz4c -f ${SDIMG} ${SDIMG}.lz4
