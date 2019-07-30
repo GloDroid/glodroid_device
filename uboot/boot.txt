@@ -1,7 +1,10 @@
 # Configuration, Source should be one of the: sdcard, emmc or network
 
-setenv source sdcard
-setenv netboot_ip 172.28.184.24
+if test \"${source}\" != \"network\";
+then
+    setenv source sdcard
+fi;
+
 setenv dtb_id 0
 
 #
@@ -35,7 +38,7 @@ setenv bootcmd_prepare_env '
  if test \"${source}\" = \"network\";
  then
   setenv bootdevice_path \"virtual/block/nbd0\";
-  setenv bootargs \"\$bootargs nbdroot=\${netboot_ip}:9000/ ip=dhcp root=/dev/nbd0p8 rootdelay=3\";
+  setenv bootargs \"\$bootargs nbdroot=\${netboot_ip}:9000/ ip=dhcp root=/dev/nbd0p6 rootdelay=3\";
  fi;
  setenv bootargs \"\$bootargs androidboot.bootdevice=\${bootdevice_path}\" ;
 '

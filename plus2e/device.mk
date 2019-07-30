@@ -16,6 +16,7 @@
 # bootloaders in srec format
 PRODUCT_PACKAGES += \
     boot.scr \
+    boot_net.scr \
     u-boot-sunxi-with-spl.bin
 
 # Init RC files
