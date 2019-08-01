@@ -28,7 +28,7 @@ UBOOT_KCFLAGS = \
 UBOOT_DEFCONFIG := $(TARGET_PRODUCT)_defconfig
 
 UMAKE := \
-    PATH=/usr/bin:$$PATH \
+    PATH=/usr/bin:/bin:$$PATH \
     CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) \
     ARCH=$(TARGET_ARCH) $(MAKE) \
     -C $(UBOOT_SRC) \
@@ -40,7 +40,7 @@ $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin: $(BSP_UBOOT_PATH)/android.config $(sort 
 	@echo "TARGET_PRODUCT = " $(TARGET_PRODUCT):
 	mkdir -p $(UBOOT_OUT)
 	$(UMAKE) $(UBOOT_DEFCONFIG)
-	$(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $<
+	PATH=/usr/bin:/bin $(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $<
 	$(UMAKE) olddefconfig
 	$(UMAKE) KCFLAGS="$(UBOOT_KCFLAGS)"
 
