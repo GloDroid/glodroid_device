@@ -48,11 +48,13 @@ ifeq ($(TARGET_KERNEL_EXT_MODULES),)
     TARGET_KERNEL_EXT_MODULES := no-external-modules
 endif
 
-KMAKE := \
-    PATH=/usr/bin:$$PATH \
-    $(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
+KMAKEENV := \
     ARCH=$(TARGET_ARCH) \
-    CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE))
+    CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE)) \
+
+KMAKE := \
+    $(KMAKEENV) PATH=/usr/bin:/bin:$$PATH \
+    $(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
 
 #-------------------------------------------------------------------------------
 $(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS) $(sort $(shell find -L $(KERNEL_SRC)))
@@ -86,4 +88,7 @@ $(PRODUCT_OUT)/kernel: $(KERNEL_BINARY) $(DTB_IMG) $(KERNEL_MODULES_OUT)
 	cp -v $< $@
 
 #-------------------------------------------------------------------------------
+
+include $(LOCAL_PATH)/sunxi-mali.mk
+
 endif # TARGET_PREBUILT_KERNEL
