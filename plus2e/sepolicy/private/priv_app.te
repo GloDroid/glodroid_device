@@ -1,4 +1,0 @@
-hal_client_domain(priv_app, hal_audiocontrol)
-hal_client_domain(priv_app, hal_vehicle)
-
-get_prop(priv_app, opengles_prop)

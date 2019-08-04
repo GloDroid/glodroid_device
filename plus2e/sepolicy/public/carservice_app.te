@@ -1,4 +1,0 @@
-# Domain to run Car Service (com.android.car)
-type carservice_app, domain, coredomain;
-
-allow carservice_app sysfs:file { getattr open read };

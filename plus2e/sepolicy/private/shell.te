@@ -1,3 +1,0 @@
-allow shell shell_tmpfs:file map;
-allow shell runtime_event_log_tags_file:file map;
-allow shell boottime_prop:file { getattr open };

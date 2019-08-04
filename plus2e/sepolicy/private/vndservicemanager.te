@@ -1,2 +1,0 @@
-
-allow vndservicemanager runtime_event_log_tags_file:file map;

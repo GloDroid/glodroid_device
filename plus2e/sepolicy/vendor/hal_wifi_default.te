@@ -1,4 +1,0 @@
-allow hal_wifi_default wlan_driver_prop:file { getattr map open read };
-allow hal_wifi_default wlan_driver_prop:property_service set;
-
-set_prop(hal_wifi_default, wlan_driver_prop)

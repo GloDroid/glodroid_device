@@ -1,6 +1,0 @@
-typeattribute hal_vehicle_default hal_automotive_socket_exemption;
-allow hal_vehicle_default node:tcp_socket node_bind;
-allow hal_vehicle_default self:tcp_socket { accept bind create listen };
-allow hal_vehicle_default input_device:dir { search };
-allow hal_vehicle_default input_device:chr_file { open read ioctl };
-

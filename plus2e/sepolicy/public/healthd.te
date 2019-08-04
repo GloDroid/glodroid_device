@@ -1,2 +1,0 @@
-
-allow healthd self:capability2 wake_alarm;

@@ -1,5 +1,0 @@
-type car_prop, property_type;
-type hdmi_prop, property_type;
-type tee_prop, property_type;
-type hw_cabl_prop, property_type;
-type opengles_prop, property_type;
