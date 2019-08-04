@@ -98,6 +98,7 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth.a2dp@1.0-impl
 
 PRODUCT_PACKAGES += \
+    libGLES_mesa \
     hwcomposer.drm \
     hwcomposer.drm_minigbm \
     gralloc.minigbm \
