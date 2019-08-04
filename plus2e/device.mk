@@ -98,9 +98,6 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth.a2dp@1.0-impl
 
 PRODUCT_PACKAGES += \
-    libEGL_swiftshader \
-    libGLESv1_CM_swiftshader \
-    libGLESv2_swiftshader \
     hwcomposer.drm \
     hwcomposer.drm_minigbm \
     gralloc.minigbm \
