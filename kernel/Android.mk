@@ -49,7 +49,7 @@ ifeq ($(TARGET_KERNEL_EXT_MODULES),)
 endif
 
 KMAKE := \
-    PATH=/usr/bin:$$PATH \
+    PATH=/usr/bin:/bin:$$PATH \
     $(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
     ARCH=$(TARGET_ARCH) \
     CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE))
