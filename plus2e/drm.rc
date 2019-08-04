@@ -6,9 +6,7 @@ on early-boot
     chmod 777 /sys/kernel/debug/sync/sw_sync
     chown graphics graphics /sys/kernel/debug/sync/info
 
-    setprop ro.hardware.gralloc minigbm
-    setprop ro.hardware.hwcomposer drm_minigbm
-    setprop debug.sf.no_hw_vsync 1
-    setprop hwc.drm.use_framebuffer_target 1
+    setprop ro.hardware.gralloc gbm
+    setprop ro.hardware.hwcomposer drm
     setprop hwc.drm.use_overlay_planes 0
-    setprop hwc.drm.device /dev/dri/card1
+    setprop hwc.drm.device /dev/dri/card0

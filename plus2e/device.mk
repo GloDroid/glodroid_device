@@ -101,8 +101,10 @@ PRODUCT_PACKAGES += \
     libEGL_swiftshader \
     libGLESv1_CM_swiftshader \
     libGLESv2_swiftshader \
+    hwcomposer.drm \
     hwcomposer.drm_minigbm \
     gralloc.minigbm \
+    gralloc.gbm \
     android.hardware.graphics.composer@2.1-service \
     android.hardware.graphics.composer@2.1-impl \
     android.hardware.graphics.mapper@2.0-impl \
