@@ -97,7 +97,7 @@ BUILD_EMULATOR_OPENGL := true
 USE_OPENGL_RENDERER := true
 BOARD_USE_LEGACY_UI := true
 
-BOARD_GPU_DRIVERS := lima
+BOARD_GPU_DRIVERS := lima kmsro
 
 # Enable dex-preoptimization to speed up first boot sequence
 DEX_PREOPT_DEFAULT := nostripping
