@@ -109,6 +109,9 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-service \
     android.hardware.graphics.allocator@2.0-impl
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.sf.lcd_density=160 \
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.rc \
     device/allwinner/common/init.common.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.usb.rc \
