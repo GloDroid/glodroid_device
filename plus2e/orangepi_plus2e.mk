@@ -13,7 +13,6 @@
 # limitations under the License.
 
 $(call inherit-product, device/allwinner/plus2e/device.mk)
-$(call inherit-product, device/generic/armv7-a-neon/mini_common.mk)
 
 PRODUCT_BOARD_PLATFORM ?= H3_Quad-core_Cortex-A7
 PRODUCT_NAME := orangepi_plus2e

@@ -115,3 +115,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.rc \
     device/allwinner/common/init.common.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.usb.rc \
+
+PRODUCT_PACKAGES += \
+    SystemUI \
+
+# $(call inherit-product, device/allwinner/plus2e/mini_common.mk)
+$(call inherit-product, build/target/product/core_minimal.mk)
