@@ -1,6 +1,0 @@
-
-allow mediacodec mmngr_device:chr_file { open read write ioctl map };
-allow mediacodec uvcs_device:chr_file { open read write ioctl map };
-allow mediacodec vspm_device:chr_file { open read write ioctl map };
-
-allow mediacodec system_file:dir { open read search };

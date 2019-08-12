@@ -1,2 +1,0 @@
-
-dontaudit domain self:capability dac_read_search;

@@ -77,7 +77,7 @@ add_part metadata.img metadata
 chmod a+w ${SDIMG} # nbd-server runs from root and needs write access
 lz4c -f ${SDIMG} ${SDIMG}.lz4
 
-echo "===> Add partition wil bootscript for netboot sdcard image"
+echo "===> Add partition with bootscript for netboot sdcard image"
 SDIMG=sdcard_net.img
 PTR=$PART_START
 pn=1

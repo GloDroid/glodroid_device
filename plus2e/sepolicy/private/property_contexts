@@ -1,6 +1,0 @@
-boot.car_service_created    u:object_r:system_prop:s0
-persist.hdmi.               u:object_r:hdmi_prop:s0
-tee_loader.                 u:object_r:tee_prop:s0
-hw.cabl.                    u:object_r:hw_cabl_prop:s0
-wlan.driver.                u:object_r:wlan_driver_prop:s0
-ro.opengles.                u:object_r:opengles_prop:s0

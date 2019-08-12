@@ -49,15 +49,15 @@ ifeq ($(TARGET_KERNEL_EXT_MODULES),)
 endif
 
 KMAKE := \
-    PATH=/usr/bin:$$PATH \
+    PATH=/usr/bin:/bin:$$PATH \
     $(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
     ARCH=$(TARGET_ARCH) \
     CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE))
 
 #-------------------------------------------------------------------------------
-$(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS) $(sort $(shell find -L -name "*config" $(KERNEL_SRC)))
+$(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS) $(sort $(shell find -L $(KERNEL_SRC)))
 	$(KMAKE) $(KERNEL_DEFCONFIG)
-	$(KERNEL_SRC)/scripts/kconfig/merge_config.sh -m -O $(KERNEL_OUT)/ $(KERNEL_OUT)/.config $(KERNEL_FRAGMENTS)
+	PATH=/usr/bin:/bin:$$PATH $(KERNEL_SRC)/scripts/kconfig/merge_config.sh -m -O $(KERNEL_OUT)/ $(KERNEL_OUT)/.config $(KERNEL_FRAGMENTS)
 	$(KMAKE) olddefconfig
 
 $(KERNEL_BINARY): $(sort $(shell find -L $(KERNEL_SRC))) $(KERNEL_OUT)/.config
@@ -75,11 +75,11 @@ $(KERNEL_MODULES_OUT): $(KERNEL_BINARY)
 #-------------------------------------------------------------------------------
 $(ANDROID_DTBO): $(ANDROID_DTS_OVERLAY)
 	rm -f $@
-	dtc -@ -I dts -O dtb -o $@ $<
+	./prebuilts/misc/linux-x86/dtc/dtc -@ -I dts -O dtb -o $@ $<
 
-$(DTB_IMG): $(DTB_IMG_CONFIG) mkdtimg $(KERNEL_BINARY) $(ANDROID_DTBO)
+$(DTB_IMG): $(DTB_IMG_CONFIG) $(KERNEL_BINARY) $(ANDROID_DTBO)
 	$(call pretty,"Target dtb image: $@")
-	mkdtimg cfg_create $@ $< --dtb-dir=$(KERNEL_DTB_OUT)
+	./prebuilts/misc/linux-x86/libufdt/mkdtimg cfg_create $@ $< --dtb-dir=$(KERNEL_DTB_OUT)
 
 #-------------------------------------------------------------------------------
 $(PRODUCT_OUT)/kernel: $(KERNEL_BINARY) $(DTB_IMG) $(KERNEL_MODULES_OUT)

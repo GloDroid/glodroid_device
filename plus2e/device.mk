@@ -98,16 +98,26 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth.a2dp@1.0-impl
 
 PRODUCT_PACKAGES += \
-    libEGL_swiftshader \
-    libGLESv1_CM_swiftshader \
-    libGLESv2_swiftshader \
+    libGLES_mesa \
+    hwcomposer.drm \
     hwcomposer.drm_minigbm \
     gralloc.minigbm \
+    gralloc.gbm \
     android.hardware.graphics.composer@2.1-service \
     android.hardware.graphics.composer@2.1-impl \
     android.hardware.graphics.mapper@2.0-impl \
     android.hardware.graphics.allocator@2.0-service \
     android.hardware.graphics.allocator@2.0-impl
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.sf.lcd_density=160 \
+
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.rc
+    $(LOCAL_PATH)/drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.rc \
+    device/allwinner/common/init.common.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.usb.rc \
+
+PRODUCT_PACKAGES += \
+    SystemUI \
+
+# $(call inherit-product, device/allwinner/plus2e/mini_common.mk)
+$(call inherit-product, build/target/product/core_minimal.mk)

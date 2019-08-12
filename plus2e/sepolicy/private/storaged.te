@@ -1,9 +1,0 @@
-
-allow storaged runtime_event_log_tags_file:file map;
-
-allow storaged dumpstate:fifo_file write;
-
-allow storaged debugfs_mmc:file r_file_perms;
-
-allow storaged sysfs:file { getattr open read };
-allow storaged sysfs_fs_lifetime:file { getattr open read };
