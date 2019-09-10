@@ -97,6 +97,8 @@ PRODUCT_PACKAGES += \
     android.hardware.audio.effect@all-versions-impl \
     android.hardware.bluetooth.a2dp@1.0-impl
 
+USE_XML_AUDIO_POLICY_CONF := 1
+
 PRODUCT_PACKAGES += \
     libGLES_mesa \
     hwcomposer.drm \
