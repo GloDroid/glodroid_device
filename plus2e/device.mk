@@ -13,6 +13,9 @@
 # limitations under the License.
 #
 
+$(call inherit-product, device/linaro/hikey/device-common.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
+
 # bootloaders in srec format
 PRODUCT_PACKAGES += \
     boot.scr \
@@ -32,72 +35,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/allwinner/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
 
-# Keymaster HAL
-PRODUCT_PACKAGES += \
-    android.hardware.keymaster@3.0-impl \
-    android.hardware.keymaster@3.0-service
-
-# Set custom settings
-DEVICE_PACKAGE_OVERLAYS += device/linaro/hikey/overlay
-
-# Add openssh support for remote debugging and job submission
-PRODUCT_PACKAGES += ssh sftp scp sshd ssh-keygen sshd_config start-ssh
-
-# Add wifi-related packages
-PRODUCT_PACKAGES += libwpa_client wpa_supplicant hostapd wificond wifilogd
-PRODUCT_PROPERTY_OVERRIDES += wifi.interface=wlan0 \
-                              wifi.supplicant_scan_interval=15
-
 # Build and run only ART
 PRODUCT_RUNTIMES := runtime_libart_default
-
-# Build default bluetooth a2dp and usb audio HALs
-PRODUCT_PACKAGES += audio.a2dp.default \
-		    audio.usb.default \
-		    audio.r_submix.default \
-		    tinyplay
-
-PRODUCT_PACKAGES += \
-    android.hardware.audio@2.0-impl \
-    android.hardware.audio.effect@2.0-impl \
-    android.hardware.broadcastradio@1.0-impl \
-    android.hardware.soundtrigger@2.0-impl
-
-PRODUCT_PACKAGES += \
-    android.hardware.drm@1.0-impl \
-
-# Graphics HAL
-PRODUCT_PACKAGES += \
-    android.hardware.graphics.allocator@2.0-impl \
-    android.hardware.graphics.composer@2.1-impl \
-    android.hardware.graphics.mapper@2.0-impl
-
-# Memtrack
-PRODUCT_PACKAGES += \
-    memtrack.default \
-    android.hardware.memtrack@1.0-service \
-    android.hardware.memtrack@1.0-impl
-
-PRODUCT_PACKAGES += android.hardware.bluetooth@1.0-service.btlinux
-
-# PowerHAL
-PRODUCT_PACKAGES += android.hardware.power@1.0-impl
-
-#GNSS HAL
-PRODUCT_PACKAGES += \
-    android.hardware.gnss@1.0-impl
-
-# Audio HAL
-PRODUCT_PACKAGES += \
-    android.hardware.audio@4.0-impl \
-    android.hardware.audio@2.0-service \
-    android.hardware.audio.effect@2.0-impl \
-    android.hardware.audio.common@4.0-util \
-    android.hardware.audio.effect@4.0-impl \
-    android.hardware.audio.effect@all-versions-impl \
-    android.hardware.bluetooth.a2dp@1.0-impl
-
-USE_XML_AUDIO_POLICY_CONF := 1
 
 PRODUCT_PACKAGES += \
     libGLES_mesa \
@@ -117,9 +56,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.rc \
     device/allwinner/common/init.common.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.usb.rc \
-
-PRODUCT_PACKAGES += \
-    SystemUI \
-
-# $(call inherit-product, device/allwinner/plus2e/mini_common.mk)
-$(call inherit-product, build/target/product/core_minimal.mk)
