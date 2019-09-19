@@ -89,4 +89,7 @@ $(PRODUCT_OUT)/kernel: $(KERNEL_BINARY) $(DTB_IMG) $(KERNEL_MODULES_OUT)
 	cp -v $< $@
 
 #-------------------------------------------------------------------------------
+
+include $(LOCAL_PATH)/rtl8189ftv-mod.mk
+
 endif # TARGET_PREBUILT_KERNEL
