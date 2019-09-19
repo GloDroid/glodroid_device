@@ -41,8 +41,6 @@ PRODUCT_RUNTIMES := runtime_libart_default
 PRODUCT_PACKAGES += \
     libGLES_mesa \
     hwcomposer.drm \
-    hwcomposer.drm_minigbm \
-    gralloc.minigbm \
     gralloc.gbm \
     android.hardware.graphics.composer@2.1-service \
     android.hardware.graphics.composer@2.1-impl \
