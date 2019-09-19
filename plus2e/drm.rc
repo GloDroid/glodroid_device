@@ -8,6 +8,5 @@ on early-boot
 
     setprop ro.hardware.gralloc gbm
     setprop ro.hardware.hwcomposer drm
-    setprop hwc.drm.use_overlay_planes 0
     setprop hwc.drm.device /dev/dri/card0
     setprop gralloc.gbm.device /dev/dri/card0
