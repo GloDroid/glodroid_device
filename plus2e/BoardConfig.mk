@@ -34,6 +34,11 @@ TARGET_SUPPORTS_64_BIT_APPS := false
 
 TARGET_BOARD_INFO_FILE := device/allwinner/plus2e/board-info.txt
 
+# generic wifi
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_HOSTAPD_DRIVER := NL80211
+
 # --- Android images ---
 BOARD_FLASH_BLOCK_SIZE := 512
 
