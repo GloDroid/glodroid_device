@@ -35,6 +35,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/allwinner/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
 
+# Out-of-tree modules
+PRODUCT_PACKAGES += \
+    8189fs.ko \
+
 # Build and run only ART
 PRODUCT_RUNTIMES := runtime_libart_default
 

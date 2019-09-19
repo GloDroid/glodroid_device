@@ -15,6 +15,7 @@
 on early-init
     mount debugfs debugfs /sys/kernel/debug
     mkdir /dev/input
+    insmod /vendor/lib/modules/8189fs.ko
 
 on fs
     wait /dev/block/${ro.boot.bootdevice}
