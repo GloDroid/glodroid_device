@@ -48,11 +48,14 @@ ifeq ($(TARGET_KERNEL_EXT_MODULES),)
     TARGET_KERNEL_EXT_MODULES := no-external-modules
 endif
 
+KMAKEENV := \
+    ARCH=$(TARGET_ARCH) \
+    CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE)) \
+
 KMAKE := \
     PATH=/usr/bin:/bin:$$PATH \
+    $(KMAKEENV) \
     $(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
-    ARCH=$(TARGET_ARCH) \
-    CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE))
 
 #-------------------------------------------------------------------------------
 $(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS) $(sort $(shell find -L $(KERNEL_SRC)))
