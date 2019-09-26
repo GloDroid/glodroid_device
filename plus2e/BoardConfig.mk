@@ -17,6 +17,7 @@
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RECOVERY := true
 TARGET_NO_KERNEL := false
+TARGET_BOARD_PLATFORM := allwinner
 
 # Architecture
 TARGET_ARCH := arm
@@ -93,8 +94,8 @@ TARGET_KERNEL_SOURCE  := kernel/allwinner
 BOARD_VNDK_VERSION := current
 
 # Some framework code requires this to enable BT
-#BOARD_HAVE_BLUETOOTH := true
-#BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
+BOARD_HAVE_BLUETOOTH := true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
 
 BOARD_USES_GENERIC_AUDIO := true
 #USE_CAMERA_STUB := true
