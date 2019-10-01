@@ -4,7 +4,7 @@ MODULES_DIR := $(PRODUCT_OUT)/vendor/lib/modules/
 INTERMEDIATE_DIR := $(PRODUCT_OUT)/obj/RTL8189FTV-MOD
 MODULE := $(INTERMEDIATE_DIR)/8189fs.ko
 
-$(MODULE): $(KERNEL_OUT)/.config $(sort $(shell find -L $(MOD_SRC)))
+$(MODULE): $(KERNEL_OUT)/.config $(sort $(shell find -L $(MOD_SRC))) $(PRODUCT_OUT)/kernel
 	rm -rf $(INTERMEDIATE_DIR)
 	mkdir -p $(INTERMEDIATE_DIR)
 	cp -r $(MOD_SRC)/* $(INTERMEDIATE_DIR)
