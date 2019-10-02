@@ -17,7 +17,6 @@
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RECOVERY := true
 TARGET_NO_KERNEL := false
-TARGET_BOARD_PLATFORM := allwinner
 
 # Architecture
 TARGET_ARCH := arm

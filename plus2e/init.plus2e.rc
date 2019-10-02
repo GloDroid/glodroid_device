@@ -24,12 +24,6 @@ on early-init
     chown bluetooth net_bt /sys/class/rfkill/rfkill0/device/extldo
     chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
 
-    # Sound
-    exec u:r:init:s0 system audio -- /system/bin/tinymix 2 31
-    exec u:r:init:s0 system audio -- /system/bin/tinymix 3 1 1
-    exec u:r:init:s0 system audio -- /system/bin/tinymix 9 1 1
-    setprop ro.hardware.audio.primary allwinner
-
 on fs
     wait /dev/block/${ro.boot.bootdevice}
     symlink /dev/block/${ro.boot.bootdevice} /dev/block/bootdevice
