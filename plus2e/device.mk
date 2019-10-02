@@ -58,3 +58,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.rc \
     device/allwinner/common/init.common.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.usb.rc \
+
+# Audio
+PRODUCT_PACKAGES += \
+    tinyalsa tinymix tinycap tinypcminfo \
+    audio.primary.plus2e \
+
+PRODUCT_COPY_FILES += \
+    device/allwinner/plus2e/audio.plus2e.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.plus2e.xml \

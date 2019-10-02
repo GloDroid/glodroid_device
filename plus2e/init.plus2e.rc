@@ -24,6 +24,8 @@ on early-init
     chown bluetooth net_bt /sys/class/rfkill/rfkill0/device/extldo
     chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
 
+    setprop ro.hardware.audio.primary plus2e
+
 on fs
     wait /dev/block/${ro.boot.bootdevice}
     symlink /dev/block/${ro.boot.bootdevice} /dev/block/bootdevice

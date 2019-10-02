@@ -1,0 +1,34 @@
+<audiohal>
+    <mixer card="0">
+        <init>
+            <ctl name="Line Out Playback Volume" val="0" />
+            <ctl name="Line Out Playback Switch" val="0"/>
+            <ctl name="DAC Playback Switch" val="0"/>
+        </init>
+    </mixer>
+
+    <device name="speaker">
+        <path name="on">
+            <ctl name="Line Out Playback Switch" val="1"/>
+            <ctl name="DAC Playback Switch" val="1"/>
+        </path>
+        <path name="off">
+            <ctl name="Line Out Playback Switch" val="0"/>
+            <ctl name="DAC Playback Switch" val="0"/>
+        </path>
+        <path name="pcm_out_en">
+            <ctl name="Line Out Playback Volume" val="31" />
+        </path>
+        <path name="pcm_out_dis">
+            <ctl name="Line Out Playback Volume" val="0" />
+        </path>
+    </device>
+
+    <stream type="pcm" dir="out" card="0" device="0" rate="48000">
+        <enable path="pcm_out_en"/>
+        <disable path="pcm_out_dis"/>
+    </stream>
+
+    <stream type="pcm" dir="in" card="0" device="0" rate="48000">
+    </stream>
+</audiohal>
