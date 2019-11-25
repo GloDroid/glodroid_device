@@ -28,26 +28,6 @@ DTB_IMG_CONFIG		:= $(LOCAL_PATH)/dtbimg.cfg
 ANDROID_DTS_OVERLAY	:= $(LOCAL_PATH)/fstab-android-sdcard.dts
 ANDROID_DTBO		:= $(KERNEL_DTB_OUT)/fstab-android-sdcard.dtbo
 
-#-------------------------------------------------------------------------------
-ifeq ($(KERNEL_CROSS_COMPILE),)
-$(error KERNEL_CROSS_COMPILE is not defined)
-endif
-
-#DTB_BLOBS := \
-#	$(KERNEL_DTS_DIR)/sun8i-h3-orangepi-plus2e.dtb --id=0x00779520
-
-#-------------------------------------------------------------------------------
-# Include only for Renesas ones.
-ifeq ($(DTB_BLOBS),)
-ifneq (,$(filter $(TARGET_PRODUCT), allwinner))
-$(error "DTB_BLOBS is not set for target product $(TARGET_PRODUCT)")
-endif
-endif
-
-ifeq ($(TARGET_KERNEL_EXT_MODULES),)
-    TARGET_KERNEL_EXT_MODULES := no-external-modules
-endif
-
 KMAKEENV := \
     ARCH=$(TARGET_ARCH) \
     CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE)) \
