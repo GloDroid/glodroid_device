@@ -1,5 +1,5 @@
 
-MOD_SRC := kernel/allwinner-modules/rtl8189ES_linux
+MOD_SRC := kernel/glodroid-modules/rtl8189ES_linux
 MODULES_DIR := $(PRODUCT_OUT)/vendor/lib/modules/
 INTERMEDIATE_DIR := $(PRODUCT_OUT)/obj/RTL8189FTV-MOD
 MODULE := $(INTERMEDIATE_DIR)/8189fs.ko

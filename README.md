@@ -1,9 +1,9 @@
-# android_allwinner_bsp
-Android BSP for Allwinner
+# glodroid_device
+GloDroid device
 
-## Running Android on Orange-Pi Plus2E
+## Supports Orange-Pi Plus2E
 
-### Build:
+### How to build:
 ```
 $ . ./build/envsetup.sh
 $ lunch orangepi_plus2e-userdebug

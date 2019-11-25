@@ -32,7 +32,7 @@ TARGET_USES_64_BIT_BINDER := true
 TARGET_SUPPORTS_32_BIT_APPS := true
 TARGET_SUPPORTS_64_BIT_APPS := false
 
-TARGET_BOARD_INFO_FILE := device/allwinner/plus2e/board-info.txt
+TARGET_BOARD_INFO_FILE := device/glodroid/plus2e/board-info.txt
 
 # generic wifi
 WPA_SUPPLICANT_VERSION := VER_0_8_X
@@ -85,7 +85,7 @@ KERNEL_CONFIGS_DIR:= ../configs/p/android-4.14
 BOARD_KERNEL_BASE     := 0x40008000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_MKBOOTIMG_ARGS  := --second_offset 0x800 --kernel_offset 0x80000 --ramdisk_offset 0x2180000
-TARGET_KERNEL_SOURCE  := kernel/allwinner
+TARGET_KERNEL_SOURCE  := kernel/glodroid
 
 # SELinux support
 #BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
@@ -112,9 +112,9 @@ DEX_PREOPT_DEFAULT := nostripping
 WITH_DEXPREOPT := true
 ART_USE_HSPACE_COMPACT := true
 
-DEVICE_MANIFEST_FILE := device/allwinner/plus2e/manifest.xml
+DEVICE_MANIFEST_FILE := device/glodroid/plus2e/manifest.xml
 
 # SELinux support
-BOARD_PLAT_PUBLIC_SEPOLICY_DIR   += device/allwinner/plus2e/sepolicy/public
-BOARD_PLAT_PRIVATE_SEPOLICY_DIR  += device/allwinner/plus2e/sepolicy/private
-BOARD_VENDOR_SEPOLICY_DIRS       += device/allwinner/plus2e/sepolicy/vendor
+BOARD_PLAT_PUBLIC_SEPOLICY_DIR   += device/glodroid/plus2e/sepolicy/public
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR  += device/glodroid/plus2e/sepolicy/private
+BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/plus2e/sepolicy/vendor

@@ -8,7 +8,7 @@ KERNEL_CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro_arm-linux-gnueabi
 ifeq ($(TARGET_PREBUILT_KERNEL),)
 
 #-------------------------------------------------------------------------------
-KERNEL_SRC		:= kernel/allwinner
+KERNEL_SRC		:= kernel/glodroid
 KERNEL_DEFCONFIG	:= sunxi_defconfig
 KERNEL_FRAGMENTS	:= \
     $(LOCAL_PATH)/android-sunxi.config \

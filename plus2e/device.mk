@@ -24,16 +24,16 @@ PRODUCT_PACKAGES += \
 
 # Init RC files
 PRODUCT_COPY_FILES += \
-    device/allwinner/plus2e/init.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.plus2e.rc \
-    device/allwinner/plus2e/ueventd.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
+    device/glodroid/plus2e/init.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.plus2e.rc \
+    device/glodroid/plus2e/ueventd.plus2e.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
 
 # fstab
 PRODUCT_COPY_FILES += \
-    device/allwinner/plus2e/fstab:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(TARGET_PRODUCT)
+    device/glodroid/plus2e/fstab:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(TARGET_PRODUCT)
 
 # tools
 PRODUCT_COPY_FILES += \
-    device/allwinner/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
+    device/glodroid/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
 
 # Out-of-tree modules
 PRODUCT_PACKAGES += \
@@ -57,7 +57,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.rc \
-    device/allwinner/common/init.common.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.usb.rc \
+    device/glodroid/common/init.common.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.usb.rc \
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -65,4 +65,4 @@ PRODUCT_PACKAGES += \
     audio.primary.plus2e \
 
 PRODUCT_COPY_FILES += \
-    device/allwinner/plus2e/audio.plus2e.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.plus2e.xml \
+    device/glodroid/plus2e/audio.plus2e.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.plus2e.xml \

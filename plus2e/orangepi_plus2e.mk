@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$(call inherit-product, device/allwinner/plus2e/device.mk)
+$(call inherit-product, device/glodroid/plus2e/device.mk)
 
 PRODUCT_BOARD_PLATFORM ?= H3_Quad-core_Cortex-A7
 PRODUCT_NAME := orangepi_plus2e
 PRODUCT_DEVICE := plus2e
-PRODUCT_BRAND := allwinner
-PRODUCT_MODEL := Orange-Pi-Plus2E
-PRODUCT_MANUFACTURER := Globallogic
+PRODUCT_BRAND := OrangePI
+PRODUCT_MODEL := Plus2E
+PRODUCT_MANUFACTURER := xunlong
 

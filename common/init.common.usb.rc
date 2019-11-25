@@ -8,7 +8,7 @@ on boot
     write /config/usb_gadget/g1/idProduct 0x0003
     write /config/usb_gadget/g1/bcdDevice 0x0223
     write /config/usb_gadget/g1/strings/0x409/serialnumber ${ro.serialno}
-    write /config/usb_gadget/g1/strings/0x409/manufacturer "Allwinner"
+    write /config/usb_gadget/g1/strings/0x409/manufacturer "GloDroid"
     write /config/usb_gadget/g1/strings/0x409/product "ADB Gadget"
     mkdir /config/usb_gadget/g1/functions/accessory.gs2
     mkdir /config/usb_gadget/g1/functions/audio_source.gs3
