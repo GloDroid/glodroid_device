@@ -4,6 +4,7 @@
 LOCAL_PATH := $(call my-dir)
 KERNEL_CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 
+CLANG_ABS := $$(readlink -f $(CLANG))
 #-------------------------------------------------------------------------------
 ifeq ($(TARGET_PREBUILT_KERNEL),)
 
@@ -32,10 +33,14 @@ KMAKEENV := \
     ARCH=$(TARGET_ARCH) \
     CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE)) \
 
-KMAKE := \
+KMAKE_COMMON := \
     PATH=/usr/bin:/bin:$$PATH \
     $(KMAKEENV) \
-    $(MAKE) -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
+    $(MAKE) CC=$(CLANG_ABS) HOSTCC=$(CLANG_ABS) \
+
+KMAKE := \
+    $(KMAKE_COMMON) \
+    -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
 
 #-------------------------------------------------------------------------------
 $(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS) $(sort $(shell find -L $(KERNEL_SRC)))

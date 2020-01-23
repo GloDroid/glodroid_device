@@ -8,7 +8,7 @@ $(MODULE): $(KERNEL_OUT)/.config $(sort $(shell find -L $(MOD_SRC))) $(PRODUCT_O
 	rm -rf $(INTERMEDIATE_DIR)
 	mkdir -p $(INTERMEDIATE_DIR)
 	cp -r $(MOD_SRC)/* $(INTERMEDIATE_DIR)
-	$(KMAKEENV) PATH=/usr/bin:$$PATH KSRC=$$(readlink -f $(KERNEL_OUT)) bash -c 'cd $(INTERMEDIATE_DIR) && make -j4'
+	$(KMAKE_COMMON) KSRC=$$(readlink -f $(KERNEL_OUT)) -C $(INTERMEDIATE_DIR)
 
 #-------------------------------------------------------------------------------
 include $(CLEAR_VARS)
