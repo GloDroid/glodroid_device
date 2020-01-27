@@ -93,6 +93,14 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.gnss@1.0-impl
 
+# Gatekeeper HAL
+PRODUCT_PROPERTY_OVERRIDES += ro.hardware.gatekeeper=ranchu
+
+PRODUCT_PACKAGES += \
+    android.hardware.gatekeeper@1.0-impl \
+    android.hardware.gatekeeper@1.0-service \
+    gatekeeper.ranchu \
+
 # Keymaster HAL
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@4.0-impl \
