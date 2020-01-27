@@ -29,18 +29,7 @@ endif
 # Set vendor kernel path
 PRODUCT_VENDOR_KERNEL_HEADERS := device/linaro/hikey/kernel-headers
 
-# Hikey was first supported from Marshmallow 6.0, API level 23
-# PRODUCT_SHIPPING_API_LEVEL is required from Pie build by the CTS test of
-# CtsOsTestCases android.os.cts.BuildTest#testSdkInt
-# as reported here:
-# https://bugs.linaro.org/show_bug.cgi?id=4068
-# https://source.android.com/setup/start/build-numbers
-# Here we set it to 25 first, because Gatekeeper function
-# needs to be supported when set to 26 or above,
-# which we could not boot successfully with the default implementation
-# enabled yet. Will back to set it to the latest number when we have
-# all necessary features supported.
-PRODUCT_SHIPPING_API_LEVEL := 25
+PRODUCT_SHIPPING_API_LEVEL := 29
 
 # Set custom settings
 DEVICE_PACKAGE_OVERLAYS := device/linaro/hikey/overlay
