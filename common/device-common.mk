@@ -60,19 +60,21 @@ PRODUCT_PACKAGES += audio.a2dp.default \
 
 PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-service \
-    android.hardware.audio@2.0-impl \
-    android.hardware.audio.effect@2.0-impl \
-    android.hardware.broadcastradio@1.0-impl \
-    android.hardware.soundtrigger@2.0-impl
+    android.hardware.audio@5.0-impl \
+    android.hardware.audio.effect@5.0-impl \
+    android.hardware.broadcastradio@2.0-impl \
+    android.hardware.soundtrigger@2.0-impl \
+    android.hardware.bluetooth.audio@2.0-impl \
 
 PRODUCT_PACKAGES += vndk_package
 
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
     android.hardware.drm@1.0-service \
-    android.hardware.bluetooth.audio@2.0-impl
 
 PRODUCT_PACKAGES += libGLES_android
+
+PRODUCT_PACKAGES += android.hardware.media.c2@1.0-service
 
 # Graphics HAL
 PRODUCT_PACKAGES += \
@@ -104,9 +106,14 @@ PRODUCT_PACKAGES += \
 
 # Keymaster HAL
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@3.0-impl \
-    android.hardware.keymaster@3.0-service
+    android.hardware.keymaster@4.0-impl \
+    android.hardware.keymaster@4.0-service \
+    keystore.ranchu
 
+# Health HAL
+PRODUCT_PACKAGES += \
+    android.hardware.health@2.0-service \
+    android.hardware.health@2.0-impl-default \
 
 # Sensor HAL
 ifneq ($(TARGET_SENSOR_MEZZANINE),)
@@ -118,8 +125,8 @@ NANOHUB_SENSORHAL_DYNAMIC_SENSOR_EXT_ENABLED := true
 
 PRODUCT_PACKAGES += \
     context_hub.default \
-    android.hardware.sensors@1.0-service \
-    android.hardware.sensors@1.0-impl \
+    android.hardware.sensors@2.0-service \
+    android.hardware.sensors@2.0-impl \
     android.hardware.contexthub@1.0-service \
     android.hardware.contexthub@1.0-impl
 
@@ -258,3 +265,5 @@ PRODUCT_PACKAGES += \
     libunwindstack.vndk-sp\
     liblzma.vndk-sp\
     libion.vndk-sp\
+
+PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
