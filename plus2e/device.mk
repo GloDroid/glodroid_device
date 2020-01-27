@@ -13,7 +13,7 @@
 # limitations under the License.
 #
 
-$(call inherit-product, device/linaro/hikey/device-common.mk)
+$(call inherit-product, device/glodroid/common/device-common.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 
 # bootloaders in srec format
