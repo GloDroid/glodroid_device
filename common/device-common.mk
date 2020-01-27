@@ -78,12 +78,17 @@ PRODUCT_PACKAGES += android.hardware.media.c2@1.0-service
 
 # Graphics HAL
 PRODUCT_PACKAGES += \
+    libGLES_mesa \
+    hwcomposer.drm \
+    gralloc.gbm \
     android.hardware.graphics.allocator@2.0-impl \
     android.hardware.graphics.allocator@2.0-service \
-    android.hardware.graphics.composer@2.1-impl \
-    android.hardware.graphics.composer@2.1-service \
-    android.hardware.graphics.mapper@2.0-impl
+    android.hardware.graphics.composer@2.3-impl \
+    android.hardware.graphics.composer@2.3-service \
+    android.hardware.graphics.mapper@2.0-impl-2.1 \
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.sf.lcd_density=160 \
 
 ifeq ($(HIKEY_USE_LEGACY_TI_BLUETOOTH), true)
 PRODUCT_PACKAGES += android.hardware.bluetooth@1.0-service.hikey uim
@@ -261,5 +266,9 @@ PRODUCT_PACKAGES += \
     libunwindstack.vndk-sp\
     liblzma.vndk-sp\
     libion.vndk-sp\
+
+# Prebuild .apk applications
+PRODUCT_PACKAGES += \
+    FDroid \
 
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
