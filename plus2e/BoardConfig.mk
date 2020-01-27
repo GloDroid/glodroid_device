@@ -109,7 +109,7 @@ DEX_PREOPT_DEFAULT := nostripping
 WITH_DEXPREOPT := true
 ART_USE_HSPACE_COMPACT := true
 
-DEVICE_MANIFEST_FILE := device/glodroid/plus2e/manifest.xml
+DEVICE_MANIFEST_FILE := device/glodroid/common/manifest.xml
 
 # SELinux support
 BOARD_PLAT_PUBLIC_SEPOLICY_DIR   += device/glodroid/plus2e/sepolicy/public
