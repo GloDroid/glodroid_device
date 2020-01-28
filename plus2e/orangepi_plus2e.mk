@@ -21,3 +21,4 @@ PRODUCT_BRAND := OrangePI
 PRODUCT_MODEL := Plus2E
 PRODUCT_MANUFACTURER := xunlong
 
+UBOOT_DEFCONFIG := orangepi_plus2e_defconfig

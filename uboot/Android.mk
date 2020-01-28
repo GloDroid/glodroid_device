@@ -25,8 +25,6 @@ UBOOT_KCFLAGS = \
     -fgnu89-inline \
     $(TARGET_BOOTLOADER_CFLAGS)
 
-UBOOT_DEFCONFIG := $(TARGET_PRODUCT)_defconfig
-
 UMAKE := \
     PATH=/usr/bin:/bin:$$PATH \
     CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) \
