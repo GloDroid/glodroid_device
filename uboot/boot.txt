@@ -44,12 +44,11 @@ setenv bootcmd_prepare_env '
 '
 
 setenv bootcmd_start '
- dtimg start \$knladdr \$dtb_id dtb_start &&
- dtimg size \$knladdr \$dtb_id dtb_size &&
+ adtimg addr \$knladdr
+ adtimg get dt --index=\$dtb_id dtb_start dtb_size &&
  cp.b \$dtb_start \$dtbaddr \$dtb_size &&
  fdt addr \$dtbaddr &&
- dtimg start \$knladdr 1 dtb_start &&
- dtimg size \$knladdr 1 dtb_size &&
+ adtimg get dt --index=1 dtb_start dtb_size &&
  cp.b \$dtb_start \$dtboaddr \$dtb_size &&
  fdt resize 8192 &&
  fdt apply \$dtboaddr &&
