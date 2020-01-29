@@ -27,8 +27,6 @@ on early-init
     setprop ro.hardware.audio.primary plus2e
 
 on fs
-    wait /dev/block/${ro.boot.bootdevice}
-    symlink /dev/block/${ro.boot.bootdevice} /dev/block/bootdevice
     mount_all /vendor/etc/fstab.orangepi_plus2e --early
 
 on late-fs

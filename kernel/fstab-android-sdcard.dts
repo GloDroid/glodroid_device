@@ -14,7 +14,7 @@
 
 			vendor {
 				compatible = "android,vendor";
-				dev = "/dev/block/platform/soc/1c0f000.mmc/by-name/vendor";
+				dev = "/dev/block/by-name/vendor";
 				type = "ext4";
 				mnt_flags = "ro,barrier=1";
 				fsmgr_flags = "wait,slotselect";

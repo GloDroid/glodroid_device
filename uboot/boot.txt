@@ -29,18 +29,18 @@ setenv bootcmd_bcb '
 
 setenv bootcmd_prepare_env '
  setenv mmc_index 0 ;
- setenv bootdevice_path \"platform/soc/1c0f000.mmc\";
+ setenv bootdevice_path \"soc/1c0f000.mmc\";
  if test \"${source}\" = \"emmc\";
  then
   setenv mmc_index 1;
-  setenv bootdevice_path \"platform/soc/<TODO put path here>\";
+  setenv bootdevice_path \"soc/<TODO put path here>\";
  fi;
  if test \"${source}\" = \"network\";
  then
   setenv bootdevice_path \"virtual/block/nbd0\";
   setenv bootargs \"\$bootargs nbdroot=\${netboot_ip}:9000/ ip=dhcp root=/dev/nbd0p6 rootdelay=3\";
  fi;
- setenv bootargs \"\$bootargs androidboot.bootdevice=\${bootdevice_path}\" ;
+ setenv bootargs \"\$bootargs androidboot.boot_devices=\${bootdevice_path}\" ;
 '
 
 setenv bootcmd_start '
@@ -52,7 +52,6 @@ setenv bootcmd_start '
  cp.b \$dtb_start \$dtboaddr \$dtb_size &&
  fdt resize 8192 &&
  fdt apply \$dtboaddr &&
- fdt set /firmware/android/fstab/vendor/ dev "/dev/block/\${bootdevice_path}/by-name/vendor" &&
  bootm \$loadaddr
 '
 
