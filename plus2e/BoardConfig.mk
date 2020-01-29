@@ -81,6 +81,7 @@ TARGET_COPY_OUT_RECOVERY := recovery
 # Kernel build rules
 BOARD_KERNEL_BASE     := 0x40008000
 BOARD_KERNEL_PAGESIZE := 4096
+BOARD_KERNEL_CMDLINE  := androidboot.hardware=$(TARGET_PRODUCT)
 BOARD_MKBOOTIMG_ARGS  := --second_offset 0x800 --kernel_offset 0x80000 --ramdisk_offset 0x2180000
 TARGET_KERNEL_SOURCE  := kernel/glodroid
 
