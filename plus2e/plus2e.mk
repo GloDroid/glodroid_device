@@ -15,7 +15,7 @@
 $(call inherit-product, device/glodroid/plus2e/device.mk)
 
 PRODUCT_BOARD_PLATFORM ?= H3_Quad-core_Cortex-A7
-PRODUCT_NAME := orangepi_plus2e
+PRODUCT_NAME := plus2e
 PRODUCT_DEVICE := plus2e
 PRODUCT_BRAND := OrangePI
 PRODUCT_MODEL := Plus2E
