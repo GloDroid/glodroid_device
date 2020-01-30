@@ -46,6 +46,7 @@ PRODUCT_PROPERTY_OVERRIDES += wifi.interface=wlan0 \
 # Build and run only ART
 PRODUCT_RUNTIMES := runtime_libart_default
 
+# Audio
 # Build default bluetooth a2dp and usb audio HALs
 PRODUCT_PACKAGES += audio.a2dp.default \
 		    audio.usb.default \
@@ -59,6 +60,9 @@ PRODUCT_PACKAGES += \
     android.hardware.broadcastradio@2.0-impl \
     android.hardware.soundtrigger@2.0-impl \
     android.hardware.bluetooth.audio@2.0-impl \
+
+PRODUCT_COPY_FILES += \
+    frameworks/av/media/libeffects/data/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
 
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
