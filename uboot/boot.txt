@@ -16,7 +16,7 @@ setenv dtboaddr 0x52008000
 
 setenv bootargs "
  init=/init rootwait ro androidboot.boottime=223.708 androidboot.selinux=permissive
- androidboot.revision=2.0 androidboot.board_id=0x1234567 init_time=1552948124 androidboot.serialno=0585
+ androidboot.revision=2.0 androidboot.board_id=0x1234567 init_time=1552948124 androidboot.serialno=${serial#}
  androidboot.slot_suffix=_a firmware_class.path=/vendor/etc/firmware video=HDMI-A-1:e ${debug_bootargs}
  androidboot.force_normal_boot=1
 "
