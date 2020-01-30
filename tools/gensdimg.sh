@@ -70,6 +70,7 @@ add_part boot.img boot_a
 add_part dtb.img dtb_a
 add_part vendor.img vendor_a
 add_part system.img system_a
+add_part product.img product_a
 #add_part vbmeta.img vbmeta
 add_part userdata.img userdata
 add_part metadata.img metadata

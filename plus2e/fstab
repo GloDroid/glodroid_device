@@ -5,6 +5,7 @@
 
 /dev/block/by-name/system           /system         ext4    ro,barrier=1,discard,errors=continue  wait,slotselect,first_stage_mount
 /dev/block/by-name/vendor           /vendor         ext4    ro,barrier=1,discard                  wait,slotselect,first_stage_mount
+/dev/block/by-name/product          /product        ext4    ro,barrier=1,discard                  wait,slotselect,first_stage_mount
 /dev/block/by-name/metadata         /metadata       ext4    noatime,nosuid,nodev,discard,sync     wait,formattable,first_stage_mount
 /dev/block/by-name/misc             /misc           emmc    defaults                              defaults
 /dev/block/by-name/pst              /persistent     emmc    defaults                              defaults
