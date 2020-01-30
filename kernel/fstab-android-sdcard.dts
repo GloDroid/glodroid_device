@@ -11,14 +11,6 @@
 
 		fstab {
 			compatible = "android,fstab";
-
-			vendor {
-				compatible = "android,vendor";
-				dev = "/dev/block/by-name/vendor";
-				type = "ext4";
-				mnt_flags = "ro,barrier=1";
-				fsmgr_flags = "wait,slotselect";
-			};
 		};
 	    };
 	};

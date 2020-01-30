@@ -29,7 +29,8 @@ PRODUCT_COPY_FILES += \
 
 # fstab
 PRODUCT_COPY_FILES += \
-    device/glodroid/plus2e/fstab:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(TARGET_PRODUCT)
+    device/glodroid/plus2e/fstab:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(TARGET_PRODUCT) \
+    device/glodroid/plus2e/fstab:$(TARGET_COPY_OUT_RECOVERY)/root/first_stage_ramdisk/fstab.$(TARGET_PRODUCT) \
 
 # tools
 PRODUCT_COPY_FILES += \

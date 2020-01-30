@@ -18,6 +18,8 @@ TARGET_NO_BOOTLOADER := true
 TARGET_NO_RECOVERY := true
 TARGET_NO_KERNEL := false
 
+BOARD_USES_RECOVERY_AS_BOOT := true
+
 # Architecture
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
@@ -73,7 +75,7 @@ BOARD_VENDORIMAGE_PARTITION_SIZE := 268435456 # 256MB
 
 # Root image
 TARGET_COPY_OUT_ROOT := root
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
 
 # Recovery image
 TARGET_COPY_OUT_RECOVERY := recovery
@@ -104,6 +106,7 @@ USE_OPENGL_RENDERER := true
 BOARD_USE_LEGACY_UI := true
 
 BOARD_GPU_DRIVERS := lima kmsro
+BOARD_USES_METADATA_PARTITION := true
 
 # Enable dex-preoptimization to speed up first boot sequence
 DEX_PREOPT_DEFAULT := nostripping

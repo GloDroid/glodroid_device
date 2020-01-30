@@ -17,7 +17,8 @@ setenv dtboaddr 0x52008000
 setenv bootargs "
  init=/init rootwait ro androidboot.boottime=223.708 androidboot.selinux=permissive
  androidboot.revision=2.0 androidboot.board_id=0x1234567 init_time=1552948124 androidboot.serialno=0585
- skip_initramfs androidboot.slot_suffix=_a firmware_class.path=/vendor/etc/firmware video=HDMI-A-1:e ${debug_bootargs}
+ androidboot.slot_suffix=_a firmware_class.path=/vendor/etc/firmware video=HDMI-A-1:e ${debug_bootargs}
+ androidboot.force_normal_boot=1
 "
 
 setenv bootcmd_bcb '
@@ -57,8 +58,6 @@ setenv bootcmd_start '
 
 setenv bootcmd_block '
  run bootcmd_bcb &&
- part uuid mmc \$mmc_index:6 system_a_uuid &&
- setenv bootargs \"\$bootargs root=PARTUUID=\${system_a_uuid}\" &&
  part start mmc \$mmc_index dtb_a dtb_start &&
  part size mmc \$mmc_index dtb_a dtb_size &&
  part start mmc \$mmc_index boot_a boot_start &&
