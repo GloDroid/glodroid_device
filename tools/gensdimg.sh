@@ -68,9 +68,7 @@ add_part env.img env
 add_part misc.img misc
 add_part boot.img boot_a
 add_part obj/KERNEL_OBJ/arch/arm/boot/dts/dtbo.img dtbo_a
-add_part vendor.img vendor_a
-add_part system.img system_a
-add_part product.img product_a
+add_part super.img super
 #add_part vbmeta.img vbmeta
 add_part userdata.img userdata
 add_part metadata.img metadata
