@@ -53,13 +53,14 @@ setenv bootcmd_start '
  cp.b \$dtb_start \$dtboaddr \$dtb_size &&
  fdt resize 8192 &&
  fdt apply \$dtboaddr &&
+ setenv bootargs \"\$bootargs androidboot.dtbo_idx=0,1\" ;
  bootm \$loadaddr
 '
 
 setenv bootcmd_block '
  run bootcmd_bcb &&
- part start mmc \$mmc_index dtb_a dtb_start &&
- part size mmc \$mmc_index dtb_a dtb_size &&
+ part start mmc \$mmc_index dtbo_a dtb_start &&
+ part size mmc \$mmc_index dtbo_a dtb_size &&
  part start mmc \$mmc_index boot_a boot_start &&
  part size mmc \$mmc_index boot_a boot_size &&
  mmc dev \$mmc_index &&
@@ -69,7 +70,7 @@ setenv bootcmd_block '
 
 setenv bootcmd_network '
  setenv ethaddr 98:4F:EE:0C:C8:0C &&
- dhcp \$knladdr \$netboot_ip:dtb.img &&
+ dhcp \$knladdr \$netboot_ip:dtbo.img &&
  dhcp \$loadaddr \$netboot_ip:boot.img
 '
 

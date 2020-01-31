@@ -22,12 +22,12 @@ KERNEL_BOOT_DIR		:= arch/$(TARGET_ARCH)/boot
 KERNEL_TARGET		:= zImage
 KERNEL_BINARY		:= $(KERNEL_OUT)/$(KERNEL_BOOT_DIR)/$(KERNEL_TARGET)
 KERNEL_COMPRESSED	:= $(KERNEL_OUT)/$(KERNEL_BOOT_DIR)/Image.lz4
-DTB_IMG			:= $(PRODUCT_OUT)/dtb.img
 KERNEL_DTS_DIR		:= $(KERNEL_BOOT_DIR)/dts
 KERNEL_DTB_OUT		:= $(KERNEL_OUT)/$(KERNEL_DTS_DIR)
 DTB_IMG_CONFIG		:= $(LOCAL_PATH)/dtbimg.cfg
 ANDROID_DTS_OVERLAY	:= $(LOCAL_PATH)/fstab-android-sdcard.dts
 ANDROID_DTBO		:= $(KERNEL_DTB_OUT)/fstab-android-sdcard.dtbo
+BOARD_PREBUILT_DTBOIMAGE := $(KERNEL_DTB_OUT)/dtbo.img
 
 KMAKEENV := \
     ARCH=$(TARGET_ARCH) \
@@ -65,12 +65,12 @@ $(ANDROID_DTBO): $(ANDROID_DTS_OVERLAY)
 	rm -f $@
 	./prebuilts/misc/linux-x86/dtc/dtc -@ -I dts -O dtb -o $@ $<
 
-$(DTB_IMG): $(DTB_IMG_CONFIG) $(KERNEL_BINARY) $(ANDROID_DTBO)
+$(BOARD_PREBUILT_DTBOIMAGE): $(DTB_IMG_CONFIG) $(KERNEL_BINARY) $(ANDROID_DTBO)
 	$(call pretty,"Target dtb image: $@")
 	./prebuilts/misc/linux-x86/libufdt/mkdtimg cfg_create $@ $< --dtb-dir=$(KERNEL_DTB_OUT)
 
 #-------------------------------------------------------------------------------
-$(PRODUCT_OUT)/kernel: $(KERNEL_BINARY) $(DTB_IMG) $(KERNEL_MODULES_OUT)
+$(PRODUCT_OUT)/kernel: $(KERNEL_BINARY) $(KERNEL_MODULES_OUT)
 	cp -v $< $@
 
 #-------------------------------------------------------------------------------
