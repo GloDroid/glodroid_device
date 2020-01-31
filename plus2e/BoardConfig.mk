@@ -81,10 +81,10 @@ BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
 TARGET_COPY_OUT_RECOVERY := recovery
 
 # Kernel build rules
-BOARD_KERNEL_BASE     := 0x40008000
+BOARD_KERNEL_BASE     := 0x40000000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_CMDLINE  := androidboot.hardware=$(TARGET_PRODUCT)
-BOARD_MKBOOTIMG_ARGS  := --second_offset 0x800 --kernel_offset 0x80000 --ramdisk_offset 0x2180000
+BOARD_MKBOOTIMG_ARGS  := --second_offset 0x8800 --kernel_offset 0x88000 --ramdisk_offset 0x3300000
 TARGET_KERNEL_SOURCE  := kernel/glodroid
 
 # SELinux support
