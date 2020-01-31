@@ -23,7 +23,7 @@ setenv bootargs "
 
 setenv bootcmd_bcb '
  bcb load $mmc_index misc ;
- bcb test command = bootonce-bootloader && bcb clear command && bcb store && fastboot udp ;
+ bcb test command = bootonce-bootloader && bcb clear command && bcb store && setenv autoload n && dhcp && fastboot udp ;
  bcb clear command ;
  bcb store ;
 '
