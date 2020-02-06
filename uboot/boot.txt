@@ -18,14 +18,12 @@ setenv bootargs "
  init=/init rootwait ro androidboot.boottime=223.708 androidboot.selinux=permissive
  androidboot.revision=2.0 androidboot.board_id=0x1234567 init_time=1552948124 androidboot.serialno=${serial#}
  androidboot.slot_suffix=_a firmware_class.path=/vendor/etc/firmware video=HDMI-A-1:e ${debug_bootargs}
- androidboot.force_normal_boot=1
 "
 
 setenv bootcmd_bcb '
  bcb load $mmc_index misc ;
- bcb test command = bootonce-bootloader && bcb clear command && bcb store && setenv autoload n && dhcp && fastboot udp ;
- bcb clear command ;
- bcb store ;
+ bcb test command = bootonce-bootloader && bcb set command boot-fastboot && bcb store && setenv androidrecovery true ;
+ bcb test command = boot-recovery && setenv androidrecovery true ;
 '
 
 setenv bootcmd_prepare_env '
@@ -45,6 +43,10 @@ setenv bootcmd_prepare_env '
 '
 
 setenv bootcmd_start '
+ if test \"${androidrecovery}\" != \"true\";
+ then
+  setenv bootargs \"\$bootargs androidboot.force_normal_boot=1\" ;
+ fi;
  adtimg addr \$knladdr
  adtimg get dt --index=\$dtb_id dtb_start dtb_size &&
  cp.b \$dtb_start \$dtbaddr \$dtb_size &&

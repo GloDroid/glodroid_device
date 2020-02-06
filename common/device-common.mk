@@ -72,6 +72,11 @@ PRODUCT_PACKAGES += libGLES_android
 
 PRODUCT_PACKAGES += android.hardware.media.c2@1.0-service
 
+# fastbootd
+PRODUCT_PACKAGES += \
+    fastbootd \
+    android.hardware.fastboot@1.0-impl-mock \
+
 # Graphics HAL
 PRODUCT_PACKAGES += \
     libGLES_mesa \
@@ -235,6 +240,10 @@ PRODUCT_COPY_FILES += \
 # Prebuild .apk applications
 PRODUCT_PACKAGES += \
     FDroid \
+
+# Recovery
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/init.recovery.glodroid.rc:recovery/root/init.recovery.$(TARGET_PRODUCT).rc \
 
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
