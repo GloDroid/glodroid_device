@@ -47,7 +47,9 @@ setenv bootcmd_start '
  then
   setenv bootargs \"\$bootargs androidboot.force_normal_boot=1\" ;
  fi;
- adtimg addr \$knladdr
+ abootimg addr \$loadaddr
+ abootimg get recovery_dtbo dtbo_addr
+ adtimg addr \${dtbo_addr}
  adtimg get dt --index=\$dtb_id dtb_start dtb_size &&
  cp.b \$dtb_start \$dtbaddr \$dtb_size &&
  fdt addr \$dtbaddr &&
@@ -61,18 +63,14 @@ setenv bootcmd_start '
 
 setenv bootcmd_block '
  run bootcmd_bcb &&
- part start mmc \$mmc_index dtbo_a dtb_start &&
- part size mmc \$mmc_index dtbo_a dtb_size &&
  part start mmc \$mmc_index boot_a boot_start &&
  part size mmc \$mmc_index boot_a boot_size &&
  mmc dev \$mmc_index &&
- mmc read \$knladdr \$dtb_start \$dtb_size &&
  mmc read \$loadaddr \$boot_start \$boot_size
 '
 
 setenv bootcmd_network '
  setenv ethaddr 98:4F:EE:0C:C8:0C &&
- dhcp \$knladdr \$netboot_ip:dtbo.img &&
  dhcp \$loadaddr \$netboot_ip:boot.img
 '
 
