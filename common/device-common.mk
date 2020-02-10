@@ -38,6 +38,12 @@ ifneq (,$(filter $(TARGET_PRODUCT),hikey960_tv hikey_tv))
 DEVICE_PACKAGE_OVERLAYS += device/google/atv/overlay
 endif
 
+# Memtrack stub from hikey
+PRODUCT_PACKAGES += \
+    memtrack.default \
+    android.hardware.memtrack@1.0-service \
+    android.hardware.memtrack@1.0-impl \
+
 # Add wifi-related packages
 PRODUCT_PACKAGES += libwpa_client wpa_supplicant hostapd wificond
 PRODUCT_PROPERTY_OVERRIDES += wifi.interface=wlan0 \
