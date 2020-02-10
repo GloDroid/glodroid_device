@@ -2,6 +2,14 @@
 
 SDIMG=sdcard.img
 
+if [ -e "$SDIMG" ]; then
+    SDSIZE=$(stat $SDIMG -c%s)
+else
+    SDSIZE=$(( 1024 * 1024 * 1024 * 8 ))
+    echo "===> Create raw disk image"
+    dd if=/dev/zero of=$SDIMG bs=4096 count=$(( $SDSIZE / 4096 ))
+fi;
+
 PART_START=$(( 2048 * 1024 ))
 ALIGN=1048576
 
@@ -16,22 +24,22 @@ add_part() {
 	echo $1: size=$SIZE
 	echo $1: partition offset=$PTR
 
-	dd if=/dev/null of=$SDIMG bs=1 count=1 seek=$(( $PTR + $SIZE + $GPT_SIZE ))
+	if [ -z "$3" ]; then
+	    SGCMD="--new $pn:$(( PTR / 512 )):$(( ($PTR + $SIZE - 1) / 512 ))"
+	else
+	    SGCMD="--largest-new=$pn"
+	fi
 
-	sgdisk --move-second-header $SDIMG
+	sgdisk $SGCMD --change-name=$pn:"$2" ${SDIMG}
 
-	sgdisk --new $pn:$(( PTR / 512 )):$(( ($PTR + $SIZE - 1) / 512 )) --change-name=$pn:"$2" ${SDIMG}
-
-	dd if=$1 of=$SDIMG bs=4096 count=$(( SIZE/4096 )) seek=$(( $PTR / 4096 )) conv=notrunc && sync
+	dd if=$1 of=$SDIMG bs=4k count=$(( SIZE/4096 )) seek=$(( $PTR / 4096 )) conv=notrunc && sync
 
 	PTR=$(( $PTR + $SIZE ))
 	pn=$(( $pn+1 ))
 }
 
 prepare_disk() {
-    echo "===> Create raw disk image"
-    rm -f $1
-    dd if=/dev/zero of=$1 bs=4096 count=$(( (PART_START + GPT_SIZE * 2) / 4096 ))
+    echo "===> Clean existing partition table"
     sgdisk --zap-all $1
 
     echo "===> Reduce GPT to have 56 partitions max (LBA 2-15, u-boot is located starting from LBA 16)"
@@ -48,7 +56,6 @@ EOF
 }
 
 prepare_disk ${SDIMG}
-prepare_disk sdcard_net.img
 
 echo "===> Create env.img"
 rm -f env.img
@@ -71,13 +78,7 @@ add_part obj/KERNEL_OBJ/arch/arm/boot/dts/dtbo.img dtbo_a
 add_part metadata.img metadata
 add_part super.img super
 #add_part vbmeta.img vbmeta
-add_part userdata.img userdata
+add_part metadata.img userdata fit
 
 chmod a+w ${SDIMG} # nbd-server runs from root and needs write access
-lz4c -f ${SDIMG} ${SDIMG}.lz4
-
-echo "===> Add partition with bootscript for netboot sdcard image"
-SDIMG=sdcard_net.img
-PTR=$PART_START
-pn=1
-add_part env_net.img env
+#lz4c -f ${SDIMG} ${SDIMG}.lz4
