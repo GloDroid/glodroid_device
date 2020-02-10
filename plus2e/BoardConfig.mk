@@ -131,6 +131,7 @@ WITH_DEXPREOPT := true
 ART_USE_HSPACE_COMPACT := true
 
 DEVICE_MANIFEST_FILE := device/glodroid/common/manifest.xml
+DEVICE_MATRIX_FILE := device/glodroid/common/compatibility_matrix.xml
 
 # SELinux support
 BOARD_PLAT_PUBLIC_SEPOLICY_DIR   += device/glodroid/plus2e/sepolicy/public
