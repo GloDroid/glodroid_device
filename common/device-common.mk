@@ -26,9 +26,6 @@ else
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 endif
 
-# Set vendor kernel path
-PRODUCT_VENDOR_KERNEL_HEADERS := device/linaro/hikey/kernel-headers
-
 PRODUCT_SHIPPING_API_LEVEL := 29
 
 # Set custom settings
@@ -128,60 +125,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.health@2.0-service \
     android.hardware.health@2.0-impl-default \
-
-# Sensor HAL
-ifneq ($(TARGET_SENSOR_MEZZANINE),)
-TARGET_USES_NANOHUB_SENSORHAL := true
-NANOHUB_SENSORHAL_LID_STATE_ENABLED := true
-NANOHUB_SENSORHAL_SENSORLIST := $(LOCAL_PATH)/sensorhal/sensorlist_$(TARGET_SENSOR_MEZZANINE).cpp
-NANOHUB_SENSORHAL_DIRECT_REPORT_ENABLED := true
-NANOHUB_SENSORHAL_DYNAMIC_SENSOR_EXT_ENABLED := true
-
-PRODUCT_PACKAGES += \
-    context_hub.default \
-    android.hardware.sensors@2.0-service \
-    android.hardware.sensors@2.0-impl \
-    android.hardware.contexthub@1.0-service \
-    android.hardware.contexthub@1.0-impl
-
-# Nanohub tools
-PRODUCT_PACKAGES += stm32_flash nanoapp_cmd nanotool
-
-PRODUCT_COPY_FILES += \
-    device/linaro/hikey/init.common.nanohub.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.nanohub.rc
-
-# Copy sensors config file(s)
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.accelerometer.xml \
-    frameworks/native/data/etc/android.hardware.sensor.ambient_temperature.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.ambient_temperature.xml \
-    frameworks/native/data/etc/android.hardware.sensor.barometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.barometer.xml \
-    frameworks/native/data/etc/android.hardware.sensor.compass.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.compass.xml \
-    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.gyroscope.xml \
-    frameworks/native/data/etc/android.hardware.sensor.hifi_sensors.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.hifi_sensors.xml \
-    frameworks/native/data/etc/android.hardware.sensor.light.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.light.xml \
-    frameworks/native/data/etc/android.hardware.sensor.relative_humidity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.relative_humidity.xml \
-    frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepcounter.xml \
-    frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepdetector.xml
-
-# Argonkey VL53L0X proximity driver is not available yet. So we are going to copy conf file for neonkey only
-ifeq ($(TARGET_SENSOR_MEZZANINE),neonkey)
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml
-endif
-
-# VR HAL
-PRODUCT_COPY_FILES += \
-    frameworks/native/services/vr/virtual_touchpad/idc/vr-virtual-touchpad-1.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/vr-virtual-touchpad-1.idc \
-    frameworks/native/data/etc/android.hardware.vr.high_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vr.high_performance.xml \
-    frameworks/native/data/etc/android.hardware.vr.headtracking-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vr.headtracking.xml
-
-PRODUCT_PACKAGES += \
-    vr.default \
-    android.hardware.vr@1.0-service \
-    android.hardware.vr@1.0-impl
-
-endif
-
 
 ifneq (,$(filter $(TARGET_PRODUCT),hikey960_tv hikey_tv))
 # TV Specific Packages
