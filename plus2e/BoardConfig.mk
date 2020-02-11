@@ -136,6 +136,6 @@ DEVICE_MANIFEST_FILE := device/glodroid/common/manifest.xml
 DEVICE_MATRIX_FILE := device/glodroid/common/compatibility_matrix.xml
 
 # SELinux support
-BOARD_PLAT_PUBLIC_SEPOLICY_DIR   += device/glodroid/plus2e/sepolicy/public
-BOARD_PLAT_PRIVATE_SEPOLICY_DIR  += device/glodroid/plus2e/sepolicy/private
-BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/plus2e/sepolicy/vendor
+BOARD_PLAT_PUBLIC_SEPOLICY_DIR   += device/glodroid/common/sepolicy/public
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR  += device/glodroid/common/sepolicy/private
+BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/sepolicy/vendor

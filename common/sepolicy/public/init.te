@@ -1,0 +1,5 @@
+allow init tmpfs:lnk_file create;
+allow init debugfs:dir mounton;
+allow init kernel:system module_request;
+allow init proc:file write;
+

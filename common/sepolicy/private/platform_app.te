@@ -1,0 +1,2 @@
+allow platform_app device:dir { open read };
+

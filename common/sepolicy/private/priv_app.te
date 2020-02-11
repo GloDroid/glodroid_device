@@ -1,0 +1,3 @@
+allow priv_app device:chr_file getattr;
+allow priv_app device:dir open;
+

@@ -1,0 +1,2 @@
+allow bootanim device:dir { open read };
+
