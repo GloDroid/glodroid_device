@@ -60,8 +60,6 @@ PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-service \
     android.hardware.audio@5.0-impl \
     android.hardware.audio.effect@5.0-impl \
-    android.hardware.broadcastradio@2.0-impl \
-    android.hardware.soundtrigger@2.0-impl \
     android.hardware.bluetooth.audio@2.0-impl \
 
 PRODUCT_COPY_FILES += \
@@ -97,15 +95,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=160 \
 
 PRODUCT_PACKAGES += android.hardware.bluetooth@1.0-service.btlinux
-
-# PowerHAL
-PRODUCT_PACKAGES += \
-	android.hardware.power@1.1-impl \
-	android.hardware.power@1.1-service.hikey-common
-
-#GNSS HAL
-PRODUCT_PACKAGES += \
-    android.hardware.gnss@1.0-impl
 
 # Gatekeeper HAL
 PRODUCT_PROPERTY_OVERRIDES += ro.hardware.gatekeeper=ranchu
