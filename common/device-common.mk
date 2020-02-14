@@ -51,8 +51,7 @@ PRODUCT_RUNTIMES := runtime_libart_default
 
 # Audio
 # Build default bluetooth a2dp and usb audio HALs
-PRODUCT_PACKAGES += audio.a2dp.default \
-		    audio.usb.default \
+PRODUCT_PACKAGES += audio.usb.default \
 		    audio.r_submix.default \
 		    tinyplay
 
@@ -60,7 +59,6 @@ PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-service \
     android.hardware.audio@5.0-impl \
     android.hardware.audio.effect@5.0-impl \
-    android.hardware.bluetooth.audio@2.0-impl \
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libeffects/data/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
@@ -75,6 +73,7 @@ PRODUCT_PACKAGES += \
     remove-Telecom \
     remove-TeleService \
     remove-MmsService \
+    remove-Bluetooth \
 
 PRODUCT_PACKAGES += libGLES_android
 
@@ -106,8 +105,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=160 \
-
-PRODUCT_PACKAGES += android.hardware.bluetooth@1.0-service.btlinux
 
 # Gatekeeper HAL
 PRODUCT_PROPERTY_OVERRIDES += ro.hardware.gatekeeper=ranchu
@@ -166,8 +163,6 @@ PRODUCT_COPY_FILES +=  \
 PRODUCT_COPY_FILES += \
         frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
         frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
-        frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
-        frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
         device/linaro/hikey/wpa_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant.conf \
         device/linaro/hikey/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
         device/linaro/hikey/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf

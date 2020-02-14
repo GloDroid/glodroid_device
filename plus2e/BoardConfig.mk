@@ -107,10 +107,6 @@ TARGET_KERNEL_SOURCE  := kernel/glodroid
 
 BOARD_VNDK_VERSION := current
 
-# Some framework code requires this to enable BT
-BOARD_HAVE_BLUETOOTH := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
-
 BOARD_USES_TINYHAL_AUDIO := true
 TINYCOMPRESS_TSTAMP_IS_LONG := true
 TINYALSA_NO_ADD_NEW_CTRLS := true

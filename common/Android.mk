@@ -21,3 +21,8 @@ include $(CLEAR_VARS)
 LOCAL_MODULE                         := remove-Telecom
 EXECUTABLES.remove-Telecom.OVERRIDES := Telecom
 include $(BUILD_PHONY_PACKAGE)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE                         := remove-Bluetooth
+EXECUTABLES.remove-Bluetooth.OVERRIDES := Bluetooth
+include $(BUILD_PHONY_PACKAGE)
