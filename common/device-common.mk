@@ -69,6 +69,13 @@ PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
     android.hardware.drm@1.0-service \
 
+# Remove phone packages that added by default product configuration
+PRODUCT_PACKAGES += \
+    remove-BlockedNumberProvider \
+    remove-Telecom \
+    remove-TeleService \
+    remove-MmsService \
+
 PRODUCT_PACKAGES += libGLES_android
 
 PRODUCT_PACKAGES += \
