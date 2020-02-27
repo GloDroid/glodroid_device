@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-ifneq (,$(filter $(TARGET_PRODUCT),hikey960_tv hikey_tv))
+ifneq (,$(filter $(DEVICE_TYPE),tv))
 # Setup TV Build
 USE_OEM_TV_APP := true
 $(call inherit-product, device/google/atv/products/atv_base.mk)
@@ -30,7 +30,7 @@ PRODUCT_SHIPPING_API_LEVEL := 29
 
 # Set custom settings
 DEVICE_PACKAGE_OVERLAYS := device/linaro/hikey/overlay
-ifneq (,$(filter $(TARGET_PRODUCT),hikey960_tv hikey_tv))
+ifneq (,$(filter $(DEVICE_TYPE),tv))
 # Set TV Custom Settings
 DEVICE_PACKAGE_OVERLAYS += device/google/atv/overlay
 endif
@@ -125,7 +125,7 @@ PRODUCT_PACKAGES += \
     android.hardware.health@2.0-service \
     android.hardware.health@2.0-impl-default \
 
-ifneq (,$(filter $(TARGET_PRODUCT),hikey960_tv hikey_tv))
+ifneq (,$(filter $(DEVICE_TYPE),tv))
 # TV Specific Packages
 PRODUCT_PACKAGES += \
     TvSettings \
