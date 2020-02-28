@@ -191,6 +191,13 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     FDroid \
 
+# Prebuild .apk applications for Android TV
+ifneq (,$(filter $(DEVICE_TYPE),tv))
+PRODUCT_PACKAGES += \
+    Kodi \
+
+endif
+
 # Recovery
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.recovery.glodroid.rc:recovery/root/init.recovery.$(TARGET_PRODUCT).rc \
