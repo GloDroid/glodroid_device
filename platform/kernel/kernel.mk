@@ -2,9 +2,6 @@
 
 #-------------------------------------------------------------------------------
 LOCAL_PATH := $(call my-dir)
-KERNEL_CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
-
-CLANG_ABS := $$(readlink -f $(CLANG))
 #-------------------------------------------------------------------------------
 ifeq ($(TARGET_PREBUILT_KERNEL),)
 
@@ -29,17 +26,8 @@ ANDROID_DTS_OVERLAY	:= $(LOCAL_PATH)/fstab-android-sdcard.dts
 ANDROID_DTBO		:= $(KERNEL_DTB_OUT)/fstab-android-sdcard.dtbo
 BOARD_PREBUILT_DTBOIMAGE := $(KERNEL_DTB_OUT)/dtbo.img
 
-KMAKEENV := \
-    ARCH=$(TARGET_ARCH) \
-    CROSS_COMPILE=$$(readlink -f $(KERNEL_CROSS_COMPILE)) \
-
-KMAKE_COMMON := \
-    PATH=/usr/bin:/bin:$$PATH \
-    $(KMAKEENV) \
-    $(MAKE) CC=$(CLANG_ABS) HOSTCC=$(CLANG_ABS) \
-
 KMAKE := \
-    $(KMAKE_COMMON) \
+    $(MAKE_COMMON) \
     -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
 
 #-------------------------------------------------------------------------------

@@ -16,7 +16,6 @@
 #
 #-------------------------------------------------------------------------------
 BSP_UBOOT_PATH := $(call my-dir)
-UBOOT_CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 
 UBOOT_SRC := external/u-boot
 UBOOT_OUT := $(PRODUCT_OUT)/obj/UBOOT_OBJ
@@ -27,8 +26,9 @@ UBOOT_KCFLAGS = \
 
 UMAKE := \
     PATH=/usr/bin:/bin:$$PATH \
-    CROSS_COMPILE=$$(readlink -f $(UBOOT_CROSS_COMPILE)) \
-    ARCH=$(TARGET_ARCH) $(MAKE) \
+    ARCH=$(TARGET_ARCH) \
+    CROSS_COMPILE=$$(readlink -f $(CROSS_COMPILE)) \
+    $(MAKE) \
     -C $(UBOOT_SRC) \
     O=$$(readlink -f $(UBOOT_OUT))
 
