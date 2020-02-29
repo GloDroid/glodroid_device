@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
+
 ifneq (,$(filter $(DEVICE_TYPE),tv))
 # Setup TV Build
 USE_OEM_TV_APP := true
@@ -62,6 +64,10 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libeffects/data/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
+
+PRODUCT_PACKAGES += \
+    tinyalsa tinymix tinycap tinypcminfo \
+    audio.primary.$(TARGET_PRODUCT) \
 
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
@@ -197,6 +203,29 @@ PRODUCT_PACKAGES += \
     Kodi \
 
 endif
+
+# fstab
+PRODUCT_COPY_FILES += \
+    device/glodroid/common/fstab:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(TARGET_PRODUCT) \
+    device/glodroid/common/fstab:$(TARGET_COPY_OUT_RECOVERY)/root/first_stage_ramdisk/fstab.$(TARGET_PRODUCT) \
+
+# bootloaders in srec format
+PRODUCT_PACKAGES += \
+    boot.scr \
+    boot_net.scr \
+    u-boot-sunxi-with-spl.bin
+
+# Init RC files
+PRODUCT_COPY_FILES += \
+    device/glodroid/common/init.common.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_PRODUCT).rc \
+    device/glodroid/common/ueventd.common.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
+
+# Build and run only ART
+PRODUCT_RUNTIMES := runtime_libart_default
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.rc \
+    device/glodroid/common/init.common.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.usb.rc \
 
 # Recovery
 PRODUCT_COPY_FILES += \
