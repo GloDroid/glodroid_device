@@ -34,7 +34,7 @@ PRODUCT_COPY_FILES += \
 
 # tools
 PRODUCT_COPY_FILES += \
-    device/glodroid/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
+    device/glodroid/platform/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
 
 # Out-of-tree modules
 PRODUCT_PACKAGES += \
