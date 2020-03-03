@@ -17,7 +17,7 @@ MAKE_COMMON := \
     PATH=/usr/bin:/bin:$$PATH \
     ARCH=$(TARGET_ARCH) \
     CROSS_COMPILE=$$(readlink -f $(CROSS_COMPILE)) \
-    $(MAKE) CC=$(CLANG_ABS) HOSTCC=$(CLANG_ABS) \
+    $(MAKE)
 
 include $(PLATFORM_PATH)/kernel/kernel.mk
 include $(PLATFORM_PATH)/uboot/uboot.mk
