@@ -34,6 +34,7 @@ DTB_IMG_CONFIG		:= $(LOCAL_PATH)/dtbimg.cfg
 ANDROID_DTS_OVERLAY	:= $(LOCAL_PATH)/fstab-android-sdcard.dts
 ANDROID_DTBO		:= $(KERNEL_DTB_OUT)/fstab-android-sdcard.dtbo
 BOARD_PREBUILT_DTBOIMAGE := $(KERNEL_DTB_OUT)/dtbo.img
+MKDTBOIMG		:= $(HOST_OUT_EXECUTABLES)/mkdtboimg.py
 
 KMAKE := \
     $(MAKE_COMMON) \
@@ -62,9 +63,9 @@ $(ANDROID_DTBO): $(ANDROID_DTS_OVERLAY)
 	rm -f $@
 	./prebuilts/misc/linux-x86/dtc/dtc -@ -I dts -O dtb -o $@ $<
 
-$(BOARD_PREBUILT_DTBOIMAGE): $(DTB_IMG_CONFIG) $(KERNEL_BINARY) $(ANDROID_DTBO)
+$(BOARD_PREBUILT_DTBOIMAGE): $(DTB_IMG_CONFIG) $(KERNEL_BINARY) $(ANDROID_DTBO) $(MKDTBOIMG)
 	$(call pretty,"Target dtb image: $@")
-	./prebuilts/misc/linux-x86/libufdt/mkdtimg cfg_create $@ $< --dtb-dir=$(KERNEL_DTB_OUT)
+	$(MKDTBOIMG) cfg_create $@ $< --dtb-dir=$(KERNEL_DTB_OUT)
 
 #-------------------------------------------------------------------------------
 $(PRODUCT_OUT)/kernel: $(KERNEL_IMAGE) $(KERNEL_MODULES_OUT)
