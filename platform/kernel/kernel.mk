@@ -41,7 +41,7 @@ $(KERNEL_BINARY): $(sort $(shell find -L $(KERNEL_SRC))) $(KERNEL_OUT)/.config
 
 $(KERNEL_COMPRESSED): $(KERNEL_BINARY)
 	rm -f $@
-	lz4c -c1 $< $@
+	prebuilts/misc/linux-x86/lz4/lz4c -c1 $< $@
 
 $(KERNEL_MODULES_OUT): $(KERNEL_BINARY)
 	rm -rf $(KERNEL_MODULES_OUT)
