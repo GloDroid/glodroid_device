@@ -16,9 +16,18 @@ KERNEL_FRAGMENTS	:= \
 KERNEL_OUT		:= $(PRODUCT_OUT)/obj/KERNEL_OBJ
 KERNEL_MODULES_OUT 	:= $(PRODUCT_OUT)/obj/KERNEL_MODULES
 KERNEL_BOOT_DIR		:= arch/$(TARGET_ARCH)/boot
+ifeq ($(TARGET_ARCH),arm64)
+KERNEL_TARGET		:= Image
+else
 KERNEL_TARGET		:= zImage
+endif
 KERNEL_BINARY		:= $(KERNEL_OUT)/$(KERNEL_BOOT_DIR)/$(KERNEL_TARGET)
 KERNEL_COMPRESSED	:= $(KERNEL_OUT)/$(KERNEL_BOOT_DIR)/Image.lz4
+ifeq ($(TARGET_ARCH),arm64)
+KERNEL_IMAGE		:= $(KERNEL_COMPRESSED)
+else
+KERNEL_IMAGE		:= $(KERNEL_BINARY)
+endif
 KERNEL_DTS_DIR		:= $(KERNEL_BOOT_DIR)/dts
 KERNEL_DTB_OUT		:= $(KERNEL_OUT)/$(KERNEL_DTS_DIR)
 DTB_IMG_CONFIG		:= $(LOCAL_PATH)/dtbimg.cfg
@@ -58,7 +67,7 @@ $(BOARD_PREBUILT_DTBOIMAGE): $(DTB_IMG_CONFIG) $(KERNEL_BINARY) $(ANDROID_DTBO)
 	./prebuilts/misc/linux-x86/libufdt/mkdtimg cfg_create $@ $< --dtb-dir=$(KERNEL_DTB_OUT)
 
 #-------------------------------------------------------------------------------
-$(PRODUCT_OUT)/kernel: $(KERNEL_BINARY) $(KERNEL_MODULES_OUT)
+$(PRODUCT_OUT)/kernel: $(KERNEL_IMAGE) $(KERNEL_MODULES_OUT)
 	cp -v $< $@
 
 #-------------------------------------------------------------------------------
