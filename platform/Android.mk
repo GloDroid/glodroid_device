@@ -5,7 +5,7 @@ PLATFORM_PATH := $(call my-dir)
 
 ifeq ($(TARGET_ARCH),arm)
 TRIPLE=arm-linux-gnueabihf
-CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro_$(TRIPLE)/bin/$(TRIPLE)-
+CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro-$(TRIPLE)/bin/$(TRIPLE)-
 else
 TRIPLE=aarch64-linux-gnu
 CROSS_COMPILE := prebuilts/gcc/linux-x86/aarch64/gcc-linaro-$(TRIPLE)/bin/$(TRIPLE)-
