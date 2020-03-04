@@ -7,12 +7,10 @@ ifeq ($(TARGET_PREBUILT_KERNEL),)
 
 #-------------------------------------------------------------------------------
 KERNEL_SRC		:= kernel/glodroid
-KERNEL_DEFCONFIG	:= sunxi_defconfig
-KERNEL_FRAGMENTS	:= \
-    $(LOCAL_PATH)/android-sunxi.config \
+KERNEL_FRAGMENTS	+= \
     $(LOCAL_PATH)/android-base.config \
     $(LOCAL_PATH)/android-recommended.config \
-    $(LOCAL_PATH)/android-recommended-arm.config
+
 KERNEL_OUT		:= $(PRODUCT_OUT)/obj/KERNEL_OBJ
 KERNEL_MODULES_OUT 	:= $(PRODUCT_OUT)/obj/KERNEL_MODULES
 KERNEL_BOOT_DIR		:= arch/$(TARGET_ARCH)/boot
