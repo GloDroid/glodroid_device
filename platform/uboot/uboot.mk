@@ -24,16 +24,21 @@ UBOOT_KCFLAGS = \
     -fgnu89-inline \
     $(TARGET_BOOTLOADER_CFLAGS)
 
+ifeq ($(TARGET_ARCH),arm64)
+BL31_SET := BL31=$$(readlink -f $(ATF_BINARY))
+endif
+
 UMAKE := \
     PATH=/usr/bin:/bin:$$PATH \
     ARCH=$(TARGET_ARCH) \
     CROSS_COMPILE=$$(readlink -f $(CROSS_COMPILE)) \
+    $(BL31_SET) \
     $(MAKE) \
     -C $(UBOOT_SRC) \
     O=$$(readlink -f $(UBOOT_OUT))
 
 #-------------------------------------------------------------------------------
-$(UBOOT_OUT)/u-boot-sunxi-with-spl.bin: $(BSP_UBOOT_PATH)/android.config $(sort $(shell find -L $(UBOOT_SRC)))
+$(UBOOT_OUT)/u-boot-sunxi-with-spl.bin: $(BSP_UBOOT_PATH)/android.config $(sort $(shell find -L $(UBOOT_SRC))) $(ATF_BINARY)
 	@echo "Building U-Boot: "
 	@echo "TARGET_PRODUCT = " $(TARGET_PRODUCT):
 	mkdir -p $(UBOOT_OUT)
