@@ -50,9 +50,6 @@ $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin: $(BSP_UBOOT_PATH)/android.config $(sort 
 $(UBOOT_OUT)/boot.scr: $(BSP_UBOOT_PATH)/boot.txt $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
 	$(UBOOT_OUT)/tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $< $@
 
-$(UBOOT_OUT)/boot_net.scr: $(BSP_UBOOT_PATH)/boot_net.txt $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
-	$(UBOOT_OUT)/tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $< $@
-
 #-------------------------------------------------------------------------------
 include $(CLEAR_VARS)
 
@@ -67,16 +64,6 @@ include $(BUILD_EXECUTABLE)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := boot.scr
-
-LOCAL_MODULE_PATH := $(PRODUCT_OUT)
-LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT)/$(LOCAL_MODULE)
-
-include $(BUILD_EXECUTABLE)
-
-#-------------------------------------------------------------------------------
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := boot_net.scr
 
 LOCAL_MODULE_PATH := $(PRODUCT_OUT)
 LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT)/$(LOCAL_MODULE)

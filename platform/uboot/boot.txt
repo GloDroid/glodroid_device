@@ -1,14 +1,3 @@
-# Configuration, Source should be one of the: sdcard, emmc or network
-
-if test \"${source}\" != \"network\";
-then
-    setenv source sdcard
-fi;
-
-setenv dtb_id 0
-
-#
-
 setenv knladdr 0x40008000
 setenv dtbaddr ${fdt_addr_r}
 setenv loadaddr ${kernel_addr_r}
@@ -21,23 +10,16 @@ setenv bootargs "
 "
 
 setenv bootcmd_bcb '
- bcb load $mmc_index misc ;
+ bcb load $mmc_bootdev misc ;
  bcb test command = bootonce-bootloader && bcb set command boot-fastboot && bcb store && setenv androidrecovery true ;
  bcb test command = boot-recovery && setenv androidrecovery true ;
 '
 
 setenv bootcmd_prepare_env '
- setenv mmc_index 0 ;
  setenv bootdevice_path \"soc/1c0f000.mmc\";
- if test \"${source}\" = \"emmc\";
+ if test \"${mmc_bootdev}\" = \"1\";
  then
-  setenv mmc_index 1;
-  setenv bootdevice_path \"soc/<TODO put path here>\";
- fi;
- if test \"${source}\" = \"network\";
- then
-  setenv bootdevice_path \"virtual/block/nbd0\";
-  setenv bootargs \"\$bootargs nbdroot=\${netboot_ip}:9000/ ip=dhcp root=/dev/nbd0p6 rootdelay=3\";
+  setenv bootdevice_path \"soc/1c11000.mmc\";
  fi;
  setenv bootargs \"\$bootargs androidboot.boot_devices=\${bootdevice_path}\" ;
 '
@@ -50,7 +32,7 @@ setenv bootcmd_start '
  abootimg addr \$loadaddr
  abootimg get recovery_dtbo dtbo_addr
  adtimg addr \${dtbo_addr}
- adtimg get dt --index=\$dtb_id dtb_start dtb_size &&
+ adtimg get dt --index=0 dtb_start dtb_size &&
  cp.b \$dtb_start \$dtbaddr \$dtb_size &&
  fdt addr \$dtbaddr &&
  adtimg get dt --index=1 dtb_start dtb_size &&
@@ -63,25 +45,15 @@ setenv bootcmd_start '
 
 setenv bootcmd_block '
  run bootcmd_bcb &&
- part start mmc \$mmc_index boot_a boot_start &&
- part size mmc \$mmc_index boot_a boot_size &&
- mmc dev \$mmc_index &&
+ part start mmc \$mmc_bootdev boot_a boot_start &&
+ part size mmc \$mmc_bootdev boot_a boot_size &&
+ mmc dev \$mmc_bootdev &&
  mmc read \$loadaddr \$boot_start \$boot_size
-'
-
-setenv bootcmd_network '
- setenv ethaddr 98:4F:EE:0C:C8:0C &&
- dhcp \$loadaddr \$netboot_ip:boot.img
 '
 
 setenv bootcmd '
  run bootcmd_prepare_env ;
- if test \"${source}\" = \"network\" ;
- then
-  run bootcmd_network ;
- else
-  run bootcmd_block ;
- fi;
+ run bootcmd_block ;
  run bootcmd_start ;
 '
 

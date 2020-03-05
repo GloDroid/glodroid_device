@@ -62,10 +62,6 @@ rm -f env.img
 mkfs.vfat -n "orange-pi" -S 512 -C env.img $(( 256 ))
 mcopy -i env.img -s boot.scr ::boot.scr
 
-rm -f env_net.img
-mkfs.vfat -n "orange-pi" -S 512 -C env_net.img $(( 256 ))
-mcopy -i env_net.img -s boot_net.scr ::boot.scr
-
 dd if=/dev/zero of=misc.img bs=4096 count=$(( (1024 * 512) / 4096 ))
 
 dd if=/dev/zero of=metadata.img bs=4k count=$(( (1024 * 1024 * 16) / 4096 ))
