@@ -1,12 +1,4 @@
 # glodroid_device
-GloDroid device
+GloDroid project devices configuration
 
-## Supports Orange-Pi Plus2E
-
-### How to build:
-```
-$ . ./build/envsetup.sh
-$ lunch orangepi_plus2e-userdebug
-$ make -j4
-```
-
+Find more information at https://github.com/glodroid/glodroid_manifest
