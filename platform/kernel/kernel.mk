@@ -31,7 +31,7 @@ KERNEL_DTB_OUT		:= $(KERNEL_OUT)/$(KERNEL_DTS_DIR)
 DTB_IMG_CONFIG		:= $(LOCAL_PATH)/dtbimg.cfg
 ANDROID_DTS_OVERLAY	:= $(LOCAL_PATH)/fstab-android-sdcard.dts
 ANDROID_DTBO		:= $(KERNEL_DTB_OUT)/fstab-android-sdcard.dtbo
-BOARD_PREBUILT_DTBOIMAGE := $(KERNEL_DTB_OUT)/dtbo.img
+BOARD_PREBUILT_DTBOIMAGE := $(PRODUCT_OUT)/boot_dtbo.img
 MKDTBOIMG		:= $(HOST_OUT_EXECUTABLES)/mkdtboimg.py
 
 KMAKE := \
