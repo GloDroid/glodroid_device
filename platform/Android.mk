@@ -9,6 +9,9 @@ CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro-$(TRIPLE)/bin/$(TRIPLE)-
 else
 TRIPLE=aarch64-linux-gnu
 CROSS_COMPILE := prebuilts/gcc/linux-x86/aarch64/gcc-linaro-$(TRIPLE)/bin/$(TRIPLE)-
+# Common for ATF and u-boot
+ATF_OUT		:= $(PRODUCT_OUT)/obj/ATF_OBJ
+ATF_BINARY	:= $(ATF_OUT)/$(ATF_PLAT)/debug/bl31.bin
 endif
 
 CLANG_ABS := $$(readlink -f $(CLANG))
@@ -22,3 +25,4 @@ MAKE_COMMON := \
 include $(PLATFORM_PATH)/kernel/kernel.mk
 include $(PLATFORM_PATH)/uboot/uboot.mk
 include $(PLATFORM_PATH)/tools/tools.mk
+include $(PLATFORM_PATH)/atf.mk
