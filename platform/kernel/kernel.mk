@@ -11,6 +11,12 @@ KERNEL_FRAGMENTS	+= \
     $(LOCAL_PATH)/android-base.config \
     $(LOCAL_PATH)/android-recommended.config \
 
+ifeq ($(TARGET_ARCH),arm64)
+KERNEL_FRAGMENTS	+= $(LOCAL_PATH)/android-recommended-arm64.config
+else
+KERNEL_FRAGMENTS	+= $(LOCAL_PATH)/android-recommended-arm.config
+endif
+
 KERNEL_OUT		:= $(PRODUCT_OUT)/obj/KERNEL_OBJ
 KERNEL_MODULES_OUT 	:= $(PRODUCT_OUT)/obj/KERNEL_MODULES
 KERNEL_BOOT_DIR		:= arch/$(TARGET_ARCH)/boot

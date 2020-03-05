@@ -25,6 +25,5 @@ UBOOT_DEFCONFIG := orangepi_plus2e_defconfig
 KERNEL_DEFCONFIG := sunxi_defconfig
 KERNEL_FRAGMENTS := \
     device/glodroid/platform/kernel/android-sunxi.config \
-    device/glodroid/platform/kernel/android-recommended-arm.config \
 
 KERNEL_DTB_FILE := sun8i-h3-orangepi-plus2e.dtb
