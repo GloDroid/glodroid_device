@@ -47,7 +47,8 @@ KMAKE := \
 
 #-------------------------------------------------------------------------------
 $(KERNEL_OUT)/.config: $(KERNEL_FRAGMENTS) $(sort $(shell find -L $(KERNEL_SRC)))
-	$(KMAKE) $(KERNEL_DEFCONFIG)
+	cp $(KERNEL_DEFCONFIG) $(KERNEL_OUT)/.config
+	$(KMAKE) olddefconfig
 	PATH=/usr/bin:/bin:$$PATH $(KERNEL_SRC)/scripts/kconfig/merge_config.sh -m -O $(KERNEL_OUT)/ $(KERNEL_OUT)/.config $(KERNEL_FRAGMENTS)
 	$(KMAKE) olddefconfig
 

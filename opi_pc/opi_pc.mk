@@ -12,7 +12,7 @@ PRODUCT_MODEL := opi_pc
 PRODUCT_MANUFACTURER := xunlong
 
 UBOOT_DEFCONFIG := orangepi_pc_defconfig
-KERNEL_DEFCONFIG := sunxi_defconfig
+KERNEL_DEFCONFIG := kernel/glodroid/arch/arm/configs/sunxi_defconfig
 KERNEL_FRAGMENTS := \
     device/glodroid/platform/kernel/android-sunxi.config \
 

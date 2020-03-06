@@ -14,7 +14,7 @@ PRODUCT_MANUFACTURER := xunlong
 UBOOT_DEFCONFIG := orangepi_win_defconfig
 ATF_PLAT        := sun50i_a64
 
-KERNEL_DEFCONFIG := defconfig
+KERNEL_DEFCONFIG := device/glodroid/platform/common/sunxi/sunxi64_defconfig
 KERNEL_FRAGMENTS := \
     device/glodroid/platform/kernel/android-sunxi.config \
 
