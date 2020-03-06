@@ -1,6 +1,6 @@
 setenv knladdr 0x40008000
-setenv dtbaddr ${fdt_addr_r}
-setenv loadaddr ${kernel_addr_r}
+setenv dtbaddr 0x5fa00000
+setenv loadaddr 0x50008000
 setenv dtboaddr 0x52008000
 
 setenv bootargs "
