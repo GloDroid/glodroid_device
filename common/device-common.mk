@@ -191,7 +191,7 @@ PRODUCT_COPY_FILES += \
     device/google/coral/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml \
 
 PRODUCT_COPY_FILES += \
-    device/linaro/hikey/init.common.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.rc \
+    device/glodroid/common/init.common.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.rc \
 
 # Prebuild .apk applications
 PRODUCT_PACKAGES += \
@@ -216,7 +216,6 @@ PRODUCT_PACKAGES += \
 
 # Init RC files
 PRODUCT_COPY_FILES += \
-    device/glodroid/common/init.common.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_PRODUCT).rc \
     device/glodroid/common/ueventd.common.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
 
 # Build and run only ART
