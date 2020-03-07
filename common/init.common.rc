@@ -13,7 +13,9 @@
 # limitations under the License.
 
 on early-init
-    mount debugfs debugfs /sys/kernel/debug
+    # mount debugfs
+    mount debugfs /sys/kernel/debug /sys/kernel/debug mode=755
+
     mkdir /dev/input
     insmod /vendor/lib/modules/8189fs.ko
 
@@ -27,14 +29,21 @@ on early-init
     setprop ro.hardware.audio.primary plus2e
 
 on fs
-    mount_all /vendor/etc/fstab.orangepi_plus2e --early
+    mount_all /vendor/etc/fstab.${ro.hardware} --early
+    setprop ro.crypto.fuse_sdcard false
 
 on late-fs
-    mount_all /vendor/etc/fstab.orangepi_plus2e --late
+    mount_all /vendor/etc/fstab.${ro.hardware} --late
 
 on post-fs
     # set RLIMIT_MEMLOCK to 8MB
     setrlimit 8 8388608 8388608
+
+    chmod 0666 /dev/ion
+
+# enable Google-specific location features,
+# like NetworkLocationProvider and LocationCollector
+    setprop ro.com.google.locationfeatures 1
 
 on post-fs-data
     # Set indication (checked by vold) that we have finished this action
@@ -58,5 +67,11 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     interface android.hardware.wifi.supplicant@1.2::ISupplicant default
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
+    disabled
+    oneshot
+
+service bugreport /system/bin/dumpstate -d -p -B -z \
+    -o /data/user_de/0/com.android.shell/files/bugreports/bugreport
+    class main
     disabled
     oneshot
