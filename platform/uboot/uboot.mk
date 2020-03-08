@@ -20,6 +20,9 @@ BSP_UBOOT_PATH := $(call my-dir)
 UBOOT_SRC := external/u-boot
 UBOOT_OUT := $(PRODUCT_OUT)/obj/UBOOT_OBJ
 
+SYSFS_MMC0_PATH ?= soc/1c0f000.mmc
+SYSFS_MMC1_PATH ?= soc/1c11000.mmc
+
 UBOOT_KCFLAGS = \
     -fgnu89-inline \
     $(TARGET_BOOTLOADER_CFLAGS)
@@ -47,7 +50,15 @@ $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin: $(BSP_UBOOT_PATH)/android.config $(sort 
 	$(UMAKE) olddefconfig
 	$(UMAKE) KCFLAGS="$(UBOOT_KCFLAGS)"
 
-$(UBOOT_OUT)/boot.scr: $(BSP_UBOOT_PATH)/boot.txt $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
+BOOTSCRIPT_GEN := $(PRODUCT_OUT)/gen/BOOTSCRIPT/boot.txt
+
+$(BOOTSCRIPT_GEN): $(BSP_UBOOT_PATH)/boot.txt
+	mkdir -p $(dir $@)
+	cp $< $@
+	sed -i 's+__SYSFS_MMC0_PATH__+$(SYSFS_MMC0_PATH)+' $@
+	sed -i 's+__SYSFS_MMC1_PATH__+$(SYSFS_MMC1_PATH)+' $@
+
+$(UBOOT_OUT)/boot.scr: $(BOOTSCRIPT_GEN) $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
 	$(UBOOT_OUT)/tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $< $@
 
 #-------------------------------------------------------------------------------

@@ -16,10 +16,10 @@ setenv bootcmd_bcb '
 '
 
 setenv bootcmd_prepare_env '
- setenv bootdevice_path \"soc/1c0f000.mmc\";
+ setenv bootdevice_path \"__SYSFS_MMC0_PATH__\";
  if test \"${mmc_bootdev}\" = \"1\";
  then
-  setenv bootdevice_path \"soc/1c11000.mmc\";
+  setenv bootdevice_path \"__SYSFS_MMC1_PATH__\";
  fi;
  setenv bootargs \"\$bootargs androidboot.boot_devices=\${bootdevice_path}\" ;
 '
