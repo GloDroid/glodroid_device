@@ -17,7 +17,7 @@ ATF_PLAT        := sun50i_h6
 
 KERNEL_DEFCONFIG := device/glodroid/platform/common/sunxi/sunxi64_defconfig
 KERNEL_FRAGMENTS := \
-    device/glodroid/platform/kernel/android-sunxi.config \
+    device/glodroid/platform/common/sunxi/sunxi-common.config \
 
 KERNEL_DTB_FILE := allwinner/sun50i-h6-orangepi-3.dtb
 
