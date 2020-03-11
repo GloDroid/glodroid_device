@@ -18,3 +18,5 @@ TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a15
 
 TARGET_BOARD_INFO_FILE := device/glodroid/pinetab/board-info.txt
+
+BOARD_KERNEL_CMDLINE += of_devlink=0
