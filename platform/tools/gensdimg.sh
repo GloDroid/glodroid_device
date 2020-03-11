@@ -20,7 +20,7 @@ pn=1
 add_part() {
 	SIZE=$(stat $1 -c%s)
 	# Align size
-	SIZE="$(( ($SIZE / $ALIGN + 1) * $ALIGN))"
+	SIZE="$(( ($SIZE + $ALIGN - 1) / $ALIGN * $ALIGN))"
 	echo $1: size=$SIZE
 	echo $1: partition offset=$PTR
 
