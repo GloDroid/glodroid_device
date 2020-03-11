@@ -6,7 +6,7 @@ LOCAL_PATH := $(call my-dir)
 ifeq ($(TARGET_PREBUILT_KERNEL),)
 
 #-------------------------------------------------------------------------------
-KERNEL_SRC		:= kernel/glodroid
+KERNEL_SRC		?= kernel/glodroid
 KERNEL_FRAGMENTS	+= \
     $(LOCAL_PATH)/android-base.config \
     $(LOCAL_PATH)/android-recommended.config \

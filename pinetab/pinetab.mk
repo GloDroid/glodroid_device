@@ -20,3 +20,5 @@ KERNEL_FRAGMENTS := \
     device/glodroid/pinetab/kernel.config \
 
 KERNEL_DTB_FILE := allwinner/sun50i-a64-pinetab.dtb
+
+KERNEL_SRC := kernel/icenowy
