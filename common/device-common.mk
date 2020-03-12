@@ -79,7 +79,6 @@ PRODUCT_PACKAGES += \
     remove-Telecom \
     remove-TeleService \
     remove-MmsService \
-    remove-Bluetooth \
 
 PRODUCT_PACKAGES += libGLES_android
 
