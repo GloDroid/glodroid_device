@@ -22,9 +22,8 @@ LOCAL_PROPRIETARY_MODULE := true
 LOCAL_HEADER_LIBRARIES := libhardware_headers
 LOCAL_SHARED_LIBRARIES := libc libcutils liblog
 LOCAL_CFLAGS := $(common_flags) \
-    -DLOG_TAG=\"qdlights\" \
-    -DDEFAULT_LOW_PERSISTENCE_MODE_BRIGHTNESS=$(DEFAULT_LOW_PERSISTENCE_MODE_BRIGHTNESS)
-LOCAL_CFLAGS += -Wall -Werror
+    -DLOG_TAG=\"lights.glodroid\"
+LOCAL_CFLAGS += -Wall
 LOCAL_MODULE := lights.$(TARGET_DEVICE)
 LOCAL_MODULE_TAGS := optional
 
