@@ -17,7 +17,6 @@ on early-init
     mount debugfs /sys/kernel/debug /sys/kernel/debug mode=755
 
     mkdir /dev/input
-    insmod /vendor/lib/modules/8189fs.ko
 
     # Bluetooth
     chown bluetooth net_bt /sys/class/rfkill/rfkill0/type

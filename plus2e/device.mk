@@ -25,3 +25,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     device/glodroid/plus2e/audio.plus2e.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.plus2e.xml \
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/init.opi_plus2e.aux.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.opi_plus2e.aux.rc \
