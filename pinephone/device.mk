@@ -7,8 +7,13 @@ $(call inherit-product, device/glodroid/common/device-common.mk)
 
 PRODUCT_PROPERTY_OVERRIDES += qemu.sf.lcd_density=269
 
+# Out-of-tree modules
+PRODUCT_PACKAGES += \
+    8723cs.ko
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/drm.pinephone.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.pinephone.rc \
+    $(LOCAL_PATH)/wifi.pinephone.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/wifi.pinephone.rc \
 
 # tools
 PRODUCT_COPY_FILES += \
