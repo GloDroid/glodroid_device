@@ -34,8 +34,8 @@ on late-fs
     mount_all /vendor/etc/fstab.${ro.hardware} --late
 
 on post-fs
-    # set RLIMIT_MEMLOCK to 8MB
-    setrlimit 8 8388608 8388608
+    # set RLIMIT_MEMLOCK to 64MB
+    setrlimit 8 67108864 67108864
 
 # enable Google-specific location features,
 # like NetworkLocationProvider and LocationCollector
