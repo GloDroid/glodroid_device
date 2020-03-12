@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
  * Copyright (C) 2014 The  Linux Foundation. All rights reserved.
+ * Copyright (C) 2020 Icenowy Zheng <icenowy@aosc.io>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +16,7 @@
  * limitations under the License.
  */
 
-#include <cutils/log.h>
+#include <log/log.h>
 #include <cutils/properties.h>
 
 #include <stdint.h>
@@ -25,10 +26,8 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <pthread.h>
+#include <math.h>
 
-#include <linux/msm_mdp.h>
-
-#include <sys/ioctl.h>
 #include <sys/types.h>
 
 #include <hardware/lights.h>
@@ -37,57 +36,27 @@
  * Change this to 1 to support battery notifications via BatteryService
  */
 #define LIGHTS_SUPPORT_BATTERY 0
-#define CG_COLOR_ID_PROPERTY "ro.boot.hardware.color"
 
 static pthread_once_t g_init = PTHREAD_ONCE_INIT;
 static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 static struct light_state_t g_notification;
 static struct light_state_t g_battery;
-static int g_last_backlight_mode = BRIGHTNESS_MODE_USER;
 static int g_attention = 0;
 static int rgb_brightness_ratio = 255;
 
+/* RGB LED is not supported on PineTab */
+
 char const*const RED_LED_FILE
-        = "/sys/class/leds/red/brightness";
+        = "/sys/class/leds/pinephone:red:user/brightness";
 
 char const*const GREEN_LED_FILE
-        = "/sys/class/leds/green/brightness";
+        = "/sys/class/leds/pinephone:green:user/brightness";
 
 char const*const BLUE_LED_FILE
-        = "/sys/class/leds/blue/brightness";
+        = "/sys/class/leds/pinephone:blue:user/brightness";
 
 char const*const LCD_FILE
-        = "/sys/class/leds/lcd-backlight/brightness";
-
-char const*const PERSISTENCE_FILE
-        = "/sys/class/graphics/fb0/msm_fb_persist_mode";
-
-char const*const RED_BLINK_FILE
-        = "/sys/class/leds/red/blink";
-
-char const*const GREEN_BLINK_FILE
-        = "/sys/class/leds/green/blink";
-
-char const*const BLUE_BLINK_FILE
-        = "/sys/class/leds/blue/blink";
-
-char const*const RED_ON_OFF_MS_FILE
-        = "/sys/class/leds/red/on_off_ms";
-
-char const*const GREEN_ON_OFF_MS_FILE
-        = "/sys/class/leds/green/on_off_ms";
-
-char const*const BLUE_ON_OFF_MS_FILE
-        = "/sys/class/leds/blue/on_off_ms";
-
-char const*const RED_RGB_START_FILE
-        = "/sys/class/leds/red/rgb_start";
-
-char const*const GREEN_RGB_START_FILE
-        = "/sys/class/leds/green/rgb_start";
-
-char const*const BLUE_RGB_START_FILE
-        = "/sys/class/leds/blue/rgb_start";
+        = "/sys/class/backlight/backlight/brightness";
 
 /**
  * device methods
@@ -95,22 +64,8 @@ char const*const BLUE_RGB_START_FILE
 
 void init_globals(void)
 {
-    char color_id_prop[PROPERTY_VALUE_MAX] = {""};
-
     // init the mutex
     pthread_mutex_init(&g_lock, NULL);
-
-    // check CG color
-    property_get(CG_COLOR_ID_PROPERTY, color_id_prop, "DEF00");
-    if (strcmp(color_id_prop, "GRA00") == 0) {
-        rgb_brightness_ratio = 25;
-    } else if (strcmp(color_id_prop, "SLV00") == 0) {
-        rgb_brightness_ratio = 15;
-    } else if (strcmp(color_id_prop, "BLU00") == 0) {
-        rgb_brightness_ratio = 15;
-    } else {
-        rgb_brightness_ratio = 20;
-    }
 }
 
 static int
@@ -129,30 +84,7 @@ write_int(char const* path, int value)
         return amt == -1 ? -errno : 0;
     } else {
         if (already_warned == 0) {
-            ALOGE("write_int failed to open %s\n", path);
-            already_warned = 1;
-        }
-        return -errno;
-    }
-}
-
-static int
-write_double_int(char const* path, int value1, int value2)
-{
-    int fd;
-    static int already_warned = 0;
-
-    fd = open(path, O_WRONLY);
-    if (fd >= 0) {
-        char buffer[20];
-        size_t bytes = snprintf(buffer, sizeof(buffer), "%d %d\n", value1, value2);
-        if(bytes >= sizeof(buffer)) return -EINVAL;
-        ssize_t amt = write(fd, buffer, bytes);
-        close(fd);
-        return amt == -1 ? -errno : 0;
-    } else {
-        if (already_warned == 0) {
-            ALOGE("write_int failed to open %s\n", path);
+            ALOGE("write_int failed to open %s: %d\n", path, fd);
             already_warned = 1;
         }
         return -errno;
@@ -184,21 +116,16 @@ set_light_backlight(struct light_device_t* dev,
         return -1;
     }
 
-    pthread_mutex_lock(&g_lock);
-
-    // If we're not in lp mode and it has been enabled or if we are in lp mode
-    // and it has been disabled send an ioctl to the display with the update
-    if ((g_last_backlight_mode != state->brightnessMode && lpEnabled) ||
-            (!lpEnabled && g_last_backlight_mode == BRIGHTNESS_MODE_LOW_PERSISTENCE)) {
-        if ((err = write_int(PERSISTENCE_FILE, lpEnabled)) != 0) {
-            ALOGE("%s: Failed to write to %s: %s\n", __FUNCTION__, PERSISTENCE_FILE,
-                    strerror(errno));
-        }
+    if (lpEnabled) {
+        return -ENOSYS;
     }
 
-    g_last_backlight_mode = state->brightnessMode;
+    pthread_mutex_lock(&g_lock);
 
     if (!err) {
+	brightness = (int) (log(brightness + 1) / log(256) * 20);
+	if (!brightness)
+            brightness = 1;
         err = write_int(LCD_FILE, brightness);
     }
 
@@ -211,47 +138,25 @@ set_speaker_light_locked(struct light_device_t* dev,
         struct light_state_t const* state)
 {
     int red, green, blue;
-    int onMS, offMS;
     unsigned int colorRGB;
 
     if(!dev) {
         return -1;
     }
 
-    switch (state->flashMode) {
-        case LIGHT_FLASH_TIMED:
-            onMS = state->flashOnMS;
-            offMS = state->flashOffMS;
-            break;
-        case LIGHT_FLASH_NONE:
-        default:
-            onMS = 0;
-            offMS = 0;
-            break;
+    if (state->flashMode == LIGHT_FLASH_TIMED) {
+        return -ENODEV;
     }
 
     colorRGB = state->color;
-
-#if 0
-    ALOGD("set_speaker_light_locked mode %d, colorRGB=%08X, onMS=%d, offMS=%d\n",
-            state->flashMode, colorRGB, onMS, offMS);
-#endif
 
     red = ((colorRGB >> 16) & 0xFF) * rgb_brightness_ratio / 255;
     green = ((colorRGB >> 8) & 0xFF) * rgb_brightness_ratio / 255;
     blue = (colorRGB & 0xFF) * rgb_brightness_ratio / 255;
 
-    write_double_int(RED_ON_OFF_MS_FILE, onMS, offMS);
     write_int(RED_LED_FILE, red);
-    write_double_int(GREEN_ON_OFF_MS_FILE, onMS, offMS);
     write_int(GREEN_LED_FILE, green);
-    write_double_int(BLUE_ON_OFF_MS_FILE, onMS, offMS);
     write_int(BLUE_LED_FILE, blue);
-
-    if(!write_int(RED_RGB_START_FILE, 1))
-        if(!write_int(GREEN_RGB_START_FILE, 1))
-            if(!write_int(BLUE_RGB_START_FILE, 1))
-                return -1;
 
     return 0;
 }
@@ -374,6 +279,6 @@ struct hw_module_t HAL_MODULE_INFO_SYM = {
     .version_minor = 0,
     .id = LIGHTS_HARDWARE_MODULE_ID,
     .name = "lights Module",
-    .author = "Google, Inc.",
+    .author = "Icenowy Zheng",
     .methods = &lights_module_methods,
 };
