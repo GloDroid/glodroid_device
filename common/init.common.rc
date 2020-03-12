@@ -39,8 +39,6 @@ on post-fs
     # set RLIMIT_MEMLOCK to 8MB
     setrlimit 8 8388608 8388608
 
-    chmod 0666 /dev/ion
-
 # enable Google-specific location features,
 # like NetworkLocationProvider and LocationCollector
     setprop ro.com.google.locationfeatures 1
