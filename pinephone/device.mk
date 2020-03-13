@@ -17,6 +17,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/lights.pinephone.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/lights.pinephone.rc \
     $(LOCAL_PATH)/vibrator.pinephone.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/vibrator.pinephone.rc \
 
+PRODUCT_COPY_FILES += \
+    device/glodroid/pinephone/audio.pinephone.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.pinephone.xml \
+
 # tools
 PRODUCT_COPY_FILES += \
     device/glodroid/platform/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
