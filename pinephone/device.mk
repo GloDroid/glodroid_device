@@ -15,6 +15,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/drm.pinephone.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.pinephone.rc \
     $(LOCAL_PATH)/wifi.pinephone.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/wifi.pinephone.rc \
     $(LOCAL_PATH)/lights.pinephone.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/lights.pinephone.rc \
+    $(LOCAL_PATH)/vibrator.pinephone.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/vibrator.pinephone.rc \
 
 # tools
 PRODUCT_COPY_FILES += \
@@ -24,3 +25,8 @@ PRODUCT_PACKAGES += \
     lights.pinephone \
     android.hardware.light@2.0-impl:64 \
     android.hardware.light@2.0-service
+
+PRODUCT_PACKAGES += \
+    vibrator.default \
+    android.hardware.vibrator@1.0-impl \
+    android.hardware.vibrator@1.0-service
