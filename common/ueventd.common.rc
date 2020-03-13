@@ -1,3 +1,5 @@
+modalias_handling enabled
+
 /dev/pvr_sync                                          0666    system       graphics
 /dev/sw_sync                                           0666    system       graphics
 /dev/dri/controlD64                                    0660    system       graphics
