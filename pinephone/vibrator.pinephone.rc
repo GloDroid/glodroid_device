@@ -1,0 +1,11 @@
+on boot
+    chown system system /sys/class/leds/vibrator/activate
+    chmod 0660 /sys/class/leds/vibrator/activate
+    chown system system /sys/class/leds/vibrator/brightness
+    chmod 0660 /sys/class/leds/vibrator/brightness
+    chown system system /sys/class/leds/vibrator/duration
+    chmod 0660 /sys/class/leds/vibrator/duration
+    chown system system /sys/class/leds/vibrator/state
+    chmod 0660 /sys/class/leds/vibrator/state
+    chown system system /sys/class/leds/vibrator/trigger
+    chmod 0660 /sys/class/leds/vibrator/trigger
