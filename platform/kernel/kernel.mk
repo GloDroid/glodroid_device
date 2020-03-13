@@ -19,6 +19,9 @@ endif
 
 KERNEL_OUT		:= $(PRODUCT_OUT)/obj/KERNEL_OBJ
 KERNEL_MODULES_OUT 	:= $(PRODUCT_OUT)/obj/KERNEL_MODULES
+KERNEL_VERSION_FILE     := $(KERNEL_OUT)/include/config/kernel.release
+TARGET_VENDOR_MODULES   := $(TARGET_OUT_VENDOR)/lib/modules
+
 KERNEL_BOOT_DIR		:= arch/$(TARGET_ARCH)/boot
 ifeq ($(TARGET_ARCH),arm64)
 KERNEL_TARGET		:= Image
@@ -59,10 +62,21 @@ $(KERNEL_COMPRESSED): $(KERNEL_BINARY)
 	rm -f $@
 	prebuilts/misc/linux-x86/lz4/lz4c -c1 $< $@
 
+# Modules
+
 $(KERNEL_MODULES_OUT): $(KERNEL_BINARY)
 	rm -rf $(KERNEL_MODULES_OUT)
 	$(KMAKE) INSTALL_MOD_PATH=$$(readlink -f $(KERNEL_MODULES_OUT)) modules_install
 	find $(KERNEL_MODULES_OUT) -mindepth 2 -type f -name '*.ko' | xargs -I{} cp {} $(KERNEL_MODULES_OUT)
+
+$(TARGET_VENDOR_MODULES) : $(KERNEL_MODULES_OUT)
+	rm -rf $@
+	mkdir -p $@
+	D1=$</lib/modules/$$(cat $(KERNEL_VERSION_FILE)); \
+	    cp -r $${D1}/modules.dep $${D1}/modules.order $${D1}/modules.alias $${D1}/kernel $@
+	D2=/vendor/lib/modules/kernel/; sed -e"s|^kernel/|$${D2}|; s| kernel/| $${D2}|g" -i $@/modules.dep
+
+$(PRODUCT_OUT)/vendor.img: $(TARGET_VENDOR_MODULES)
 
 #-------------------------------------------------------------------------------
 $(ANDROID_DTBO): $(ANDROID_DTS_OVERLAY)
