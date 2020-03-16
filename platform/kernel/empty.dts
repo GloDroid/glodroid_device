@@ -1,0 +1,20 @@
+/dts-v1/;
+/plugin/;
+
+/{
+    fragment_root {
+        target-path = "/";
+        __overlay__ {
+            /* This section was used on AOSP v9.0 for defining first-stage fstab records */
+            firmware {
+                android {
+                    compatible = "android,firmware";
+
+                    fstab {
+                        compatible = "android,fstab";
+                    };
+                };
+            };
+        };
+    };
+};
