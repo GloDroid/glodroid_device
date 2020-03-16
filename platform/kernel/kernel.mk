@@ -47,6 +47,7 @@ GEN_DTBCFG		:= $(PRODUCT_OUT)/gen/DTBO/dtbo.cfg
 KMAKE := \
     $(MAKE_COMMON) \
     -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
+    DTC_FLAGS='--symbols' \
 
 #-------------------------------------------------------------------------------
 $(KERNEL_OUT)/.config: $(KERNEL_DEFCONFIG) $(KERNEL_FRAGMENTS) $(sort $(shell find -L $(KERNEL_SRC)))
