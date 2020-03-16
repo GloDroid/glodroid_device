@@ -35,19 +35,27 @@ namespace vibrator {
 namespace V1_0 {
 namespace implementation {
 
-static constexpr int MAX_VOLTAGE = 3596;
-static constexpr int MIN_VOLTAGE = 116;
+static constexpr uint32_t CLICK_TIMING_MS = 100;
 
-static constexpr uint32_t CLICK_TIMING_MS = 20;
-
-Vibrator::Vibrator(std::ofstream&& enable, std::ofstream&& amplitude) :
-        mEnable(std::move(enable)),
-        mAmplitude(std::move(amplitude)) {}
+Vibrator::Vibrator(std::ofstream&& state, std::ofstream&& duration, std::ofstream&& activate) :
+        mState(std::move(state)),
+        mDuration(std::move(duration)),
+        mActivate(std::move(activate)) {}
 
 // Methods from ::android::hardware::vibrator::V1_0::IVibrator follow.
 Return<Status> Vibrator::on(uint32_t timeout_ms) {
-    mEnable << timeout_ms << std::endl;
-    if (!mEnable) {
+    mState << 1 << std::endl;
+    if (!mState) {
+        ALOGE("Failed to turn vibrator on (%d): %s", errno, strerror(errno));
+        return Status::UNKNOWN_ERROR;
+    }
+    mDuration << timeout_ms << std::endl;
+    if (!mDuration) {
+        ALOGE("Failed to turn vibrator on (%d): %s", errno, strerror(errno));
+        return Status::UNKNOWN_ERROR;
+    }
+    mActivate << 1 << std::endl;
+    if (!mActivate) {
         ALOGE("Failed to turn vibrator on (%d): %s", errno, strerror(errno));
         return Status::UNKNOWN_ERROR;
     }
@@ -55,8 +63,8 @@ Return<Status> Vibrator::on(uint32_t timeout_ms) {
 }
 
 Return<Status> Vibrator::off()  {
-    mEnable << 0 << std::endl;
-    if (!mEnable) {
+    mActivate << 0 << std::endl;
+    if (!mActivate) {
         ALOGE("Failed to turn vibrator off (%d): %s", errno, strerror(errno));
         return Status::UNKNOWN_ERROR;
     }
@@ -64,45 +72,19 @@ Return<Status> Vibrator::off()  {
 }
 
 Return<bool> Vibrator::supportsAmplitudeControl()  {
-    return true;
+    return false;
 }
 
 Return<Status> Vibrator::setAmplitude(uint8_t amplitude) {
-    if (amplitude == 0) {
-        return Status::BAD_VALUE;
-    }
-    // Scale the voltage such that an amplitude of 1 is MIN_VOLTAGE, an amplitude of 255 is
-    // MAX_VOLTAGE, and there are equal steps for every value in between.
-    long voltage =
-            std::lround((amplitude - 1) / 254.0 * (MAX_VOLTAGE - MIN_VOLTAGE) + MIN_VOLTAGE);
-    ALOGE("Setting amplitude  to: %ld", voltage);
-    mAmplitude << voltage << std::endl;
-    if (!mAmplitude) {
-        ALOGE("Failed to set amplitude (%d): %s", errno, strerror(errno));
-        return Status::UNKNOWN_ERROR;
-    }
-    return Status::OK;
+    (void) amplitude;
+    return Status::BAD_VALUE;
 }
 
 Return<void> Vibrator::perform(Effect effect, EffectStrength strength, perform_cb _hidl_cb) {
+    ALOGD("Vibrator::perform()");
+    (void) strength;
     if (effect == Effect::CLICK) {
-        uint8_t amplitude;
-        switch (strength) {
-        case EffectStrength::LIGHT:
-            amplitude = 36;
-            break;
-        case EffectStrength::MEDIUM:
-            amplitude = 128;
-            break;
-        case EffectStrength::STRONG:
-            amplitude = 255;
-            break;
-        default:
-            _hidl_cb(Status::UNSUPPORTED_OPERATION, 0);
-            return Void();
-        }
         on(CLICK_TIMING_MS);
-        setAmplitude(amplitude);
         _hidl_cb(Status::OK, CLICK_TIMING_MS);
     } else {
         _hidl_cb(Status::UNSUPPORTED_OPERATION, 0);
