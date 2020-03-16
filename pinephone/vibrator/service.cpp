@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#define LOG_TAG "android.hardware.vibrator@1.0-service.marlin"
+#define LOG_TAG "android.hardware.vibrator@1.0-service.pinephone"
 
 #include <android/hardware/vibrator/1.0/IVibrator.h>
 #include <hidl/HidlSupport.h>
@@ -29,25 +29,33 @@ using android::hardware::vibrator::V1_0::IVibrator;
 using android::hardware::vibrator::V1_0::implementation::Vibrator;
 using namespace android;
 
-static const char *ENABLE_PATH = "/sys/class/timed_output/vibrator/enable";
-static const char *AMPLITUDE_PATH = "/sys/class/timed_output/vibrator/voltage_level";
+static const char *STATE_PATH = "/sys/class/leds/vibrator/state";
+static const char *DURATION_PATH = "/sys/class/leds/vibrator/duration";
+static const char *ACTIVATE_PATH = "/sys/class/leds/vibrator/activate";
 
 status_t registerVibratorService() {
-    std::ofstream enable{ENABLE_PATH};
-    if (!enable) {
+    std::ofstream state{STATE_PATH};
+    if (!state) {
         int error = errno;
-        ALOGE("Failed to open %s (%d): %s", ENABLE_PATH, error, strerror(error));
+        ALOGE("Failed to open %s (%d): %s", STATE_PATH, error, strerror(error));
         return -error;
     }
 
-    std::ofstream amplitude{AMPLITUDE_PATH};
-    if (!amplitude) {
+    std::ofstream duration{DURATION_PATH};
+    if (!duration) {
         int error = errno;
-        ALOGE("Failed to open %s (%d): %s", AMPLITUDE_PATH, error, strerror(error));
+        ALOGE("Failed to open %s (%d): %s", DURATION_PATH, error, strerror(error));
         return -error;
     }
 
-    sp<IVibrator> vibrator = new Vibrator(std::move(enable), std::move(amplitude));
+    std::ofstream activate{ACTIVATE_PATH};
+    if (!activate) {
+        int error = errno;
+        ALOGE("Failed to open %s (%d): %s", ACTIVATE_PATH, error, strerror(error));
+        return -error;
+    }
+
+    sp<IVibrator> vibrator = new Vibrator(std::move(state), std::move(duration), std::move(activate));
     (void) vibrator->registerAsService(); // suppress unused-result warning
     return OK;
 }

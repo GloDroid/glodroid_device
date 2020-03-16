@@ -13,9 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 cc_binary {
-    name: "android.hardware.vibrator@1.0-service.marlin",
+    name: "android.hardware.vibrator@1.0-service.pinephone",
     relative_install_path: "hw",
-    init_rc: ["android.hardware.vibrator@1.0-service.marlin.rc"],
+    init_rc: ["android.hardware.vibrator@1.0-service.pinephone.rc"],
     srcs: ["service.cpp", "Vibrator.cpp"],
     cflags: ["-Wall", "-Werror"],
     shared_libs: [

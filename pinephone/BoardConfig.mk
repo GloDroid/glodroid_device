@@ -22,3 +22,4 @@ TARGET_BOARD_INFO_FILE := device/glodroid/pinephone/board-info.txt
 BOARD_KERNEL_CMDLINE += of_devlink=0
 
 DEVICE_MANIFEST_FILE += device/glodroid/pinephone/manifest.xml
+BOARD_VENDOR_SEPOLICY_DIRS += device/glodroid/pinephone/sepolicy/vendor

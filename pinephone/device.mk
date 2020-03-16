@@ -30,6 +30,4 @@ PRODUCT_PACKAGES += \
     android.hardware.light@2.0-service
 
 PRODUCT_PACKAGES += \
-    vibrator.default \
-    android.hardware.vibrator@1.0-impl \
-    android.hardware.vibrator@1.0-service
+    android.hardware.vibrator@1.0-service.pinephone
