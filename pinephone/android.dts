@@ -1,0 +1,26 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    /*
+     * Disable gpio-vibrator via /dev/input, because Android wants a
+     * fake LED instead
+     */
+    fragment@0 {
+        target-path = "/vibrator";
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+    /* Fake LED for vibrator */
+    fragment@1 {
+        target-path = "/leds";
+        __overlay__ {
+            android-vibrator {
+                label = "vibrator";
+                gpios = <&pio 3 2 0>; /* PD2 */
+                linux,default-trigger = "transient";
+            };
+        };
+    };
+};
