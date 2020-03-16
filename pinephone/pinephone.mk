@@ -20,3 +20,5 @@ KERNEL_FRAGMENTS := \
     device/glodroid/pinephone/kernel.config \
 
 KERNEL_DTB_FILE := allwinner/sun50i-a64-pinephone.dtb
+
+ANDROID_DTS_OVERLAY := $(LOCAL_PATH)/android.dts
