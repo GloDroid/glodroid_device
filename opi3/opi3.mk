@@ -23,3 +23,5 @@ KERNEL_FRAGMENTS := \
 KERNEL_DTB_FILE := allwinner/sun50i-h6-orangepi-3.dtb
 
 SYSFS_MMC0_PATH := soc/4020000.mmc
+
+ANDROID_DTS_OVERLAY := $(LOCAL_PATH)/android.dts
