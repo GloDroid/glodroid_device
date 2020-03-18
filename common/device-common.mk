@@ -75,6 +75,7 @@ PRODUCT_PACKAGES += \
 
 # Remove phone packages that added by default product configuration
 PRODUCT_PACKAGES += \
+    remove-android.hardware.configstore@1.1-service \
     remove-BlockedNumberProvider \
     remove-Telecom \
     remove-TeleService \
