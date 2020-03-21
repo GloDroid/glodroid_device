@@ -212,7 +212,7 @@ PRODUCT_COPY_FILES += \
 # bootloaders in srec format
 PRODUCT_PACKAGES += \
     boot.scr \
-    u-boot-sunxi-with-spl.bin
+    bootloader.img \
 
 # Init RC files
 PRODUCT_COPY_FILES += \

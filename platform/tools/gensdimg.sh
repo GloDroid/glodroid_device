@@ -10,17 +10,20 @@ else
     dd if=/dev/zero of=$SDIMG bs=4096 count=$(( $SDSIZE / 4096 ))
 fi;
 
-PART_START=$(( 2048 * 1024 ))
-ALIGN=1048576
+# Allwinner boot ROM looks for the SPL binary starting from 16th LBA of SDCARD and EMMC.
+# Align first partition to 16th LBA to allow update bootloader binaries using fastboot.
+PART_START=$(( 16 * 512 ))
+
+# 1 MiB alignment is relevant for USB flash devices. Follow that rules to improve
+# read performance when using SDCARD with USB card reader.
+ALIGN=$(( 2048 * 512 ))
 
 PTR=$PART_START
-GPT_SIZE=$(( 512 * 34 ))
 pn=1
 
 add_part() {
 	SIZE=$(stat $1 -c%s)
 	# Align size
-	SIZE="$(( ($SIZE + $ALIGN - 1) / $ALIGN * $ALIGN))"
 	echo $1: size=$SIZE
 	echo $1: partition offset=$PTR
 
@@ -30,11 +33,11 @@ add_part() {
 	    SGCMD="--largest-new=$pn"
 	fi
 
-	sgdisk $SGCMD --change-name=$pn:"$2" ${SDIMG}
+	sgdisk --set-alignment=1 $SGCMD --change-name=$pn:"$2" ${SDIMG}
 
 	dd if=$1 of=$SDIMG bs=4k count=$(( SIZE/4096 )) seek=$(( $PTR / 4096 )) conv=notrunc && sync
 
-	PTR=$(( $PTR + $SIZE ))
+	PTR=$(( ($PTR + $SIZE + $ALIGN - 1) / $ALIGN * $ALIGN ))
 	pn=$(( $pn+1 ))
 }
 
@@ -50,9 +53,6 @@ s
 w
 Y
 EOF
-
-    echo "===> Put u-boot with spl to image"
-    dd if=u-boot-sunxi-with-spl.bin of=$1 bs=1024 seek=8 conv=notrunc
 }
 
 prepare_disk ${SDIMG}
@@ -67,6 +67,7 @@ dd if=/dev/zero of=misc.img bs=4096 count=$(( (1024 * 512) / 4096 ))
 dd if=/dev/zero of=metadata.img bs=4k count=$(( (1024 * 1024 * 16) / 4096 ))
 
 echo "===> Add partitions"
+add_part bootloader.img bootloader
 add_part env.img env
 add_part misc.img misc
 add_part boot.img boot_a

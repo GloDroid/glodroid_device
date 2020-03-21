@@ -41,7 +41,9 @@ UMAKE := \
     O=$$(readlink -f $(UBOOT_OUT))
 
 #-------------------------------------------------------------------------------
-$(UBOOT_OUT)/u-boot-sunxi-with-spl.bin: $(BSP_UBOOT_PATH)/android.config $(sort $(shell find -L $(UBOOT_SRC))) $(ATF_BINARY)
+UBOOT_BINARY := $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
+
+$(UBOOT_BINARY): $(BSP_UBOOT_PATH)/android.config $(sort $(shell find -L $(UBOOT_SRC))) $(ATF_BINARY)
 	@echo "Building U-Boot: "
 	@echo "TARGET_PRODUCT = " $(TARGET_PRODUCT):
 	mkdir -p $(UBOOT_OUT)
@@ -58,13 +60,17 @@ $(BOOTSCRIPT_GEN): $(BSP_UBOOT_PATH)/boot.txt
 	sed -i 's+__SYSFS_MMC0_PATH__+$(SYSFS_MMC0_PATH)+' $@
 	sed -i 's+__SYSFS_MMC1_PATH__+$(SYSFS_MMC1_PATH)+' $@
 
-$(UBOOT_OUT)/boot.scr: $(BOOTSCRIPT_GEN) $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
+$(UBOOT_OUT)/boot.scr: $(BOOTSCRIPT_GEN) $(UBOOT_BINARY)
 	$(UBOOT_OUT)/tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $< $@
+
+$(UBOOT_OUT)/bootloader.img: $(UBOOT_BINARY)
+	cp -f $< $@
+	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 2048 * 1024 - 16 * 512 ))
 
 #-------------------------------------------------------------------------------
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := u-boot-sunxi-with-spl.bin
+LOCAL_MODULE := bootloader.img
 
 LOCAL_MODULE_PATH := $(PRODUCT_OUT)
 LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT)/$(LOCAL_MODULE)
