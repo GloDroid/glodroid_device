@@ -1,0 +1,7 @@
+on boot
+    # Bluetooth
+    chown bluetooth net_bt /sys/class/rfkill/rfkill1/type
+    chown bluetooth net_bt /sys/class/rfkill/rfkill1/state
+    chmod 0660 /sys/class/rfkill/rfkill1/state
+    chown bluetooth net_bt /sys/class/rfkill/rfkill1/device/extldo
+    chmod 0660 /sys/class/rfkill/rfkill1/device/extldo
