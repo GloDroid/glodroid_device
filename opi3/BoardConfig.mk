@@ -3,6 +3,7 @@
 # Copyright (C) 2019 The Android Open-Source Project
 
 include device/glodroid/common/boardconfig-common.mk
+include device/glodroid/common/bluetooth/boardconfig.mk
 
 # Architecture
 TARGET_ARCH := arm64
@@ -20,7 +21,3 @@ TARGET_2ND_CPU_VARIANT := cortex-a15
 TARGET_BOARD_INFO_FILE := device/glodroid/opi3/board-info.txt
 
 BOARD_GPU_DRIVERS := panfrost kmsro
-
-# Some framework code requires this to enable BT
-BOARD_HAVE_BLUETOOTH := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
