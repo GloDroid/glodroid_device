@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2020 Roman Stratiienko (r.stratiienko@gmail.com)
 
-$(call inherit-product, device/glodroid/common/device-common.mk)
+$(call inherit-product, device/glodroid/common/lowram/device-common-1gb.mk)
 $(call inherit-product, device/glodroid/common/bluetooth/bluetooth.mk)
 
 # tools

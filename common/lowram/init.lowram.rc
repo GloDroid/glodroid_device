@@ -1,0 +1,4 @@
+on boot
+    write /proc/sys/vm/page-cluster 0
+    swapon_all /vendor/etc/fstab.lowram
+    write /proc/sys/vm/extra_free_kbytes 32768

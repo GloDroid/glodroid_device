@@ -24,8 +24,11 @@ PRODUCT_CHARACTERISTICS := tv
 PRODUCT_AAPT_PREF_CONFIG := tvdpi
 PRODUCT_IS_ATV := true
 else
+
+ifeq (,$(filter $(GLODROID_LOWRAM),))
 # Adjust the dalvik heap to be appropriate for a tablet.
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
+endif
 endif
 
 PRODUCT_SHIPPING_API_LEVEL := 29
@@ -193,9 +196,12 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/glodroid/common/init.common.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.rc \
 
-# Prebuild .apk applications
+# Prebuild .apk applications for non-lowram devices
+ifeq (,$(filter $(GLODROID_LOWRAM),))
 PRODUCT_PACKAGES += \
     FDroid \
+
+endif
 
 # Prebuild .apk applications for Android TV
 ifneq (,$(filter $(DEVICE_TYPE),tv))
