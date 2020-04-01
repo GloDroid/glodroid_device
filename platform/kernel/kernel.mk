@@ -7,9 +7,10 @@ ifeq ($(TARGET_PREBUILT_KERNEL),)
 
 #-------------------------------------------------------------------------------
 KERNEL_SRC		:= kernel/glodroid
-KERNEL_FRAGMENTS	+= \
+KERNEL_FRAGMENTS	:= \
     $(LOCAL_PATH)/android-base.config \
     $(LOCAL_PATH)/android-recommended.config \
+    $(KERNEL_FRAGMENTS)
 
 ifeq ($(TARGET_ARCH),arm64)
 KERNEL_FRAGMENTS	+= $(LOCAL_PATH)/android-recommended-arm64.config
