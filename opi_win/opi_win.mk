@@ -16,7 +16,7 @@ UBOOT_DEFCONFIG := orangepi_win_defconfig
 ATF_PLAT        := sun50i_a64
 
 KERNEL_DEFCONFIG := device/glodroid/platform/common/sunxi/sunxi64_defconfig
-KERNEL_FRAGMENTS := \
+KERNEL_FRAGMENTS += \
     device/glodroid/platform/common/sunxi/sunxi-common.config \
 
-KERNEL_DTB_FILE := allwinner/sun50i-a64-orangepi-win.dts
+KERNEL_DTB_FILE := allwinner/sun50i-a64-orangepi-win.dtb
