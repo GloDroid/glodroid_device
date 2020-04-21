@@ -5,7 +5,7 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, device/glodroid/opi3/device.mk)
 
-PRODUCT_BOARD_PLATFORM ?= H6
+PRODUCT_BOARD_PLATFORM := sunxi
 PRODUCT_NAME := opi3
 PRODUCT_DEVICE := opi3
 PRODUCT_BRAND := OrangePI

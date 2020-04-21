@@ -4,7 +4,7 @@
 
 $(call inherit-product, device/glodroid/opi_pc/device.mk)
 
-PRODUCT_BOARD_PLATFORM ?= H3_Quad-core_Cortex-A7
+PRODUCT_BOARD_PLATFORM := sunxi
 PRODUCT_NAME := opi_pc
 PRODUCT_DEVICE := opi_pc
 PRODUCT_BRAND := OrangePI

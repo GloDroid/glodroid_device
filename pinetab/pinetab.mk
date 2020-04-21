@@ -4,7 +4,7 @@
 
 $(call inherit-product, device/glodroid/pinetab/device.mk)
 
-PRODUCT_BOARD_PLATFORM ?= A64
+PRODUCT_BOARD_PLATFORM := sunxi
 PRODUCT_NAME := pinetab
 PRODUCT_DEVICE := pinetab
 PRODUCT_BRAND := Pine64
