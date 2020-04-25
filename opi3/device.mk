@@ -3,11 +3,8 @@
 # Copyright (C) 2020 Roman Stratiienko (r.stratiienko@gmail.com)
 
 $(call inherit-product, device/glodroid/common/device-common.mk)
+$(call inherit-product, device/glodroid/common/device-common-sunxi.mk)
 $(call inherit-product, device/glodroid/common/bluetooth/bluetooth.mk)
-
-# tools
-PRODUCT_COPY_FILES += \
-    device/glodroid/platform/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
 
 # Firmware
 PRODUCT_COPY_FILES += \

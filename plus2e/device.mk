@@ -14,11 +14,8 @@
 #
 
 $(call inherit-product, device/glodroid/common/device-common.mk)
+$(call inherit-product, device/glodroid/common/device-common-sunxi.mk)
 $(call inherit-product, device/glodroid/common/bluetooth/no-bluetooth.mk)
-
-# tools
-PRODUCT_COPY_FILES += \
-    device/glodroid/platform/tools/gensdimg.sh:$(TARGET_COPY_OUT)/gensdimg.sh
 
 # Out-of-tree modules
 PRODUCT_PACKAGES += \

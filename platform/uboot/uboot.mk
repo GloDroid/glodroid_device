@@ -40,15 +40,17 @@ UMAKE := \
     -C $(UBOOT_SRC) \
     O=$$(readlink -f $(UBOOT_OUT))
 
+UBOOT_FRAGMENTS	+= device/glodroid/platform/common/uboot.config
+
 #-------------------------------------------------------------------------------
 UBOOT_BINARY := $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
 
-$(UBOOT_BINARY): $(BSP_UBOOT_PATH)/android.config $(sort $(shell find -L $(UBOOT_SRC))) $(ATF_BINARY)
+$(UBOOT_BINARY): $(UBOOT_FRAGMENTS) $(sort $(shell find -L $(UBOOT_SRC))) $(ATF_BINARY)
 	@echo "Building U-Boot: "
 	@echo "TARGET_PRODUCT = " $(TARGET_PRODUCT):
 	mkdir -p $(UBOOT_OUT)
 	$(UMAKE) $(UBOOT_DEFCONFIG)
-	PATH=/usr/bin:/bin $(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $<
+	PATH=/usr/bin:/bin $(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $(UBOOT_FRAGMENTS)
 	$(UMAKE) olddefconfig
 	$(UMAKE) KCFLAGS="$(UBOOT_KCFLAGS)"
 
