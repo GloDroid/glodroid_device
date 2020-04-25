@@ -1,7 +1,13 @@
-setenv knladdr 0x40008000
+if test "${vendor}" = "raspberrypi";
+then
+setenv dtbaddr 0x1fa00000
+setenv loadaddr 0x10008000
+setenv dtboaddr 0x12008000
+else
 setenv dtbaddr 0x5fa00000
 setenv loadaddr 0x50008000
 setenv dtboaddr 0x52008000
+fi;
 
 # EMMC cards have 512k erase block size. Align partitions accordingly to avoid issues with erasing.
 

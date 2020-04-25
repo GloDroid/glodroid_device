@@ -47,6 +47,22 @@ prepare_disk() {
     sgdisk --zap-all $SDIMG
 }
 
+modify_for_rpi() {
+    echo "===> Transforming GPT to hybrid partition table"
+    gdisk $SDIMG <<EOF
+r
+h
+1
+n
+04
+y
+n
+m
+w
+y
+EOF
+}
+
 gen_sd() {
     prepare_disk $(( 1024 * 8 )) # Default size - 8 GB
 
@@ -55,7 +71,7 @@ gen_sd() {
     dd if=/dev/zero of=metadata.img bs=4k count=$(( (1024 * 1024 * 16) / 4096 ))
 
     echo "===> Add partitions"
-    add_part bootloader.img bootloader
+    add_part bootloader-sd.img bootloader
     add_part env.img uboot-env
     add_part boot.img recovery_boot
     add_part misc.img misc

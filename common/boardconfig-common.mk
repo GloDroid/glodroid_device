@@ -84,10 +84,15 @@ BOARD_INCLUDE_RECOVERY_DTBO := true
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_PREBUILT_DTBIMAGE_DIR := device/glodroid/platform/kernel
 BOARD_BOOT_HEADER_VERSION := 2
+ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
 BOARD_KERNEL_BASE     := 0x40000000
+endif
+ifeq ($(PRODUCT_BOARD_PLATFORM),broadcom)
+BOARD_KERNEL_BASE     := 0x00000000
+endif
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_CMDLINE  := androidboot.hardware=$(TARGET_PRODUCT)
-BOARD_MKBOOTIMG_ARGS  := --second_offset 0x8800 --kernel_offset 0x88000 --ramdisk_offset 0x3300000
+BOARD_MKBOOTIMG_ARGS  += --kernel_offset 0x80000 --second_offset 0x8800 --ramdisk_offset 0x3300000
 BOARD_MKBOOTIMG_ARGS  += --dtb_offset 0x3000000 --header_version $(BOARD_BOOT_HEADER_VERSION)
 TARGET_KERNEL_SOURCE  := kernel/glodroid
 

@@ -1,0 +1,13 @@
+[all]
+enable_uart=1
+uart_2ndstage=1
+arm_64bit=1
+enable_gic=1
+kernel=u-boot.bin
+armstub=bl31.bin
+
+dtoverlay=dwc2
+dtoverlay=uart0
+dtoverlay=vc4-kms-v3d-pi4
+
+max_framebuffers=2

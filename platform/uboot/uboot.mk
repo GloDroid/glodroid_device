@@ -45,7 +45,17 @@ UBOOT_FRAGMENT_EMMC := device/glodroid/platform/common/uboot-emmc.config
 UBOOT_FRAGMENT_SD := device/glodroid/platform/common/uboot-sd.config
 
 #-------------------------------------------------------------------------------
+ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
+UBOOT_FRAGMENTS	+= device/glodroid/platform/common/sunxi/uboot.config
 UBOOT_BINARY := $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
+endif
+
+ifeq ($(PRODUCT_BOARD_PLATFORM),broadcom)
+UBOOT_FRAGMENTS	+= device/glodroid/platform/common/broadcom/uboot.config
+UBOOT_BINARY := $(UBOOT_OUT)/u-boot.bin
+RPI_CONFIG := device/glodroid/platform/common/broadcom/config.txt
+RPI_FIRMWARE_DIR := vendor/raspberry/firmware
+endif
 
 $(UBOOT_BINARY): $(UBOOT_FRAGMENTS) $(UBOOT_FRAGMENT_SD) $(UBOOT_FRAGMENT_EMMC) $(sort $(shell find -L $(UBOOT_SRC))) $(ATF_BINARY)
 	@echo "Building U-Boot: "
@@ -77,15 +87,48 @@ $(UBOOT_OUT)/boot.scr: $(BOOTSCRIPT_GEN) $(UBOOT_BINARY)
 
 $(PRODUCT_OUT)/env.img: $(UBOOT_OUT)/boot.scr
 	rm -f $@
-	/sbin/mkfs.vfat -n "orange-pi" -S 512 -C $@ 256
+	/sbin/mkfs.vfat -n "uboot-scr" -S 512 -C $@ 256
 	/usr/bin/mcopy -i $@ -s $< ::$(notdir $<)
 
+$(UBOOT_OUT)/bootloader.img: $(UBOOT_BINARY)
+	cp -f $< $@
+	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 2048 * 1024 - 256 * 512 ))
+
+
+ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
 $(PRODUCT_OUT)/bootloader-sd.img: $(UBOOT_BINARY)
 	cp -f $<.sd $@
 	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 2048 * 1024 - 256 * 512 ))
+endif
+
+ifeq ($(PRODUCT_BOARD_PLATFORM),broadcom)
+BOOT_FILES := \
+    $(RPI_FIRMWARE_DIR)/boot/bootcode.bin \
+    $(RPI_FIRMWARE_DIR)/boot/start.elf \
+    $(RPI_FIRMWARE_DIR)/boot/start4.elf \
+    $(RPI_FIRMWARE_DIR)/boot/fixup.dat \
+    $(RPI_FIRMWARE_DIR)/boot/fixup4.dat \
+    $(RPI_FIRMWARE_DIR)/boot/bcm2710-rpi-3-b.dtb \
+    $(RPI_FIRMWARE_DIR)/boot/bcm2710-rpi-3-b-plus.dtb \
+    $(RPI_FIRMWARE_DIR)/boot/bcm2711-rpi-4-b.dtb \
+
+OVERLAY_FILES := $(sort $(shell find -L $(RPI_FIRMWARE_DIR)/boot/overlays))
+
+$(PRODUCT_OUT)/bootloader-sd.img: $(UBOOT_BINARY) $(BOOT_FILES) $(OVERLAY_FILES)
+	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 128 * 1024 * 1024 - 256 * 512 ))
+	/sbin/mkfs.vfat -F 32 -n boot $@
+	/usr/bin/mcopy -i $@ $< ::$(notdir $<)
+	/usr/bin/mcopy -i $@ $(ATF_BINARY) ::$(notdir $(ATF_BINARY))
+	/usr/bin/mcopy -i $@ $(RPI_CONFIG) ::$(notdir $(RPI_CONFIG))
+	/usr/bin/mcopy -i $@ $(BOOT_FILES) ::
+	/usr/bin/mmd -i $@ ::overlays
+	/usr/bin/mcopy -i $@ $(OVERLAY_FILES) ::overlays/
+endif
 
 ifneq ($(PRODUCT_HAS_EMMC),)
+ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
 $(PRODUCT_OUT)/bootloader-emmc.img: $(UBOOT_BINARY)
 	cp -f $<.emmc $@
 	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 2048 * 1024 - 256 * 512 ))
+endif
 endif
