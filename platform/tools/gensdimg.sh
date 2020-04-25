@@ -10,9 +10,10 @@ else
     dd if=/dev/zero of=$SDIMG bs=4096 count=$(( $SDSIZE / 4096 ))
 fi;
 
-# Allwinner boot ROM looks for the SPL binary starting from 16th LBA of SDCARD and EMMC.
-# Align first partition to 16th LBA to allow update bootloader binaries using fastboot.
-PART_START=$(( 16 * 512 ))
+# Old Allwinner boot ROM looks for the SPL binary starting from 16th LBA of SDCARD and EMMC.
+# Newer Alwinner SOCs including H3, A64, and later is looking for SPL at both 16th LBA and 256th LBA.
+# Align first partition to 256th LBA to allow update bootloader binaries using fastboot.
+PART_START=$(( 256 * 512 ))
 
 # 1 MiB alignment is relevant for USB flash devices. Follow that rules to improve
 # read performance when using SDCARD with USB card reader.
@@ -44,15 +45,6 @@ add_part() {
 prepare_disk() {
     echo "===> Clean existing partition table"
     sgdisk --zap-all $1
-
-    echo "===> Reduce GPT to have 56 partitions max (LBA 2-15, u-boot is located starting from LBA 16)"
-    gdisk $1<<EOF
-x
-s
-56
-w
-Y
-EOF
 }
 
 prepare_disk ${SDIMG}

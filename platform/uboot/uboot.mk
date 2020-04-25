@@ -67,7 +67,7 @@ $(UBOOT_OUT)/boot.scr: $(BOOTSCRIPT_GEN) $(UBOOT_BINARY)
 
 $(UBOOT_OUT)/bootloader.img: $(UBOOT_BINARY)
 	cp -f $< $@
-	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 2048 * 1024 - 16 * 512 ))
+	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 2048 * 1024 - 256 * 512 ))
 
 #-------------------------------------------------------------------------------
 include $(CLEAR_VARS)
