@@ -124,12 +124,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.hardware.hwcomposer=drm \
 
 # Gatekeeper HAL
-PRODUCT_PROPERTY_OVERRIDES += ro.hardware.gatekeeper=ranchu
-
 PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper@1.0-impl \
-    android.hardware.gatekeeper@1.0-service \
-    gatekeeper.ranchu \
+    android.hardware.gatekeeper@1.0-service.software \
 
 # Keymaster HAL
 PRODUCT_PACKAGES += \
