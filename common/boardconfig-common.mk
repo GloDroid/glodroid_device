@@ -124,3 +124,5 @@ BOARD_PLAT_PRIVATE_SEPOLICY_DIR  += device/glodroid/common/sepolicy/private
 BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/sepolicy/vendor
 
 BOARD_USES_GRALLOC_HANDLE := true
+# Required to build mesa starting from R
+BUILD_BROKEN_USES_BUILD_HOST_STATIC_LIBRARY := true
