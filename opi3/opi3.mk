@@ -12,7 +12,7 @@ PRODUCT_BRAND := OrangePI
 PRODUCT_MODEL := opi3
 PRODUCT_MANUFACTURER := xunlong
 
-UBOOT_DEFCONFIG := orangepi_one_plus_defconfig
+UBOOT_DEFCONFIG := orangepi_3_defconfig
 ATF_PLAT        := sun50i_h6
 
 KERNEL_DEFCONFIG := device/glodroid/platform/common/sunxi/sunxi64_defconfig
