@@ -69,7 +69,7 @@ $(KERNEL_COMPRESSED): $(KERNEL_BINARY)
 $(KERNEL_MODULES_OUT): $(KERNEL_BINARY)
 	rm -rf $(KERNEL_MODULES_OUT)
 	$(KMAKE) INSTALL_MOD_PATH=$$(readlink -f $(KERNEL_MODULES_OUT)) modules_install
-	find $(KERNEL_MODULES_OUT) -mindepth 2 -type f -name '*.ko' | xargs -I{} cp {} $(KERNEL_MODULES_OUT)
+	find $(KERNEL_MODULES_OUT) -mindepth 2 -type f -name '*.ko' | PATH=/usr/bin:$$PATH xargs -I{} cp {} $(KERNEL_MODULES_OUT)
 
 $(TARGET_VENDOR_MODULES) : $(KERNEL_MODULES_OUT)
 	rm -rf $@
