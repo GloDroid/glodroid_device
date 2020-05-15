@@ -215,11 +215,6 @@ PRODUCT_COPY_FILES += \
     device/glodroid/common/fstab:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(TARGET_PRODUCT) \
     device/glodroid/common/fstab:$(TARGET_COPY_OUT_RECOVERY)/root/first_stage_ramdisk/fstab.$(TARGET_PRODUCT) \
 
-# bootloaders in srec format
-PRODUCT_PACKAGES += \
-    boot.scr \
-    bootloader.img \
-
 # Init RC files
 PRODUCT_COPY_FILES += \
     device/glodroid/common/ueventd.common.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \

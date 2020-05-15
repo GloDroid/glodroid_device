@@ -11,6 +11,7 @@ PRODUCT_DEVICE := opi3
 PRODUCT_BRAND := OrangePI
 PRODUCT_MODEL := opi3
 PRODUCT_MANUFACTURER := xunlong
+PRODUCT_HAS_EMMC := true
 
 UBOOT_DEFCONFIG := orangepi_3_defconfig
 ATF_PLAT        := sun50i_h6

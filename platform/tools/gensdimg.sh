@@ -1,14 +1,4 @@
-#!/bin/sh -e
-
-SDIMG=sdcard.img
-
-if [ -e "$SDIMG" ]; then
-    SDSIZE=$(stat $SDIMG -c%s)
-else
-    SDSIZE=$(( 1024 * 1024 * 1024 * 8 ))
-    echo "===> Create raw disk image"
-    dd if=/dev/zero of=$SDIMG bs=4096 count=$(( $SDSIZE / 4096 ))
-fi;
+#!/bin/bash -e
 
 # Old Allwinner boot ROM looks for the SPL binary starting from 16th LBA of SDCARD and EMMC.
 # Newer Alwinner SOCs including H3, A64, and later is looking for SPL at both 16th LBA and 256th LBA.
@@ -43,31 +33,76 @@ add_part() {
 }
 
 prepare_disk() {
+    if [ -e "$SDIMG" ]; then
+        SDSIZE=$(stat $SDIMG -c%s)
+    else
+        SDSIZE=$(( 1024 * 1024 * $1 ))
+        echo "===> Create raw disk image"
+        dd if=/dev/zero of=$SDIMG bs=4096 count=$(( $SDSIZE / 4096 ))
+    fi;
+
     echo "===> Clean existing partition table"
-    sgdisk --zap-all $1
+    sgdisk --zap-all $SDIMG
 }
 
-prepare_disk ${SDIMG}
+gen_sd() {
+    prepare_disk $(( 1024 * 8 )) # Default size - 8 GB
 
-echo "===> Create env.img"
-rm -f env.img
-mkfs.vfat -n "orange-pi" -S 512 -C env.img $(( 256 ))
-mcopy -i env.img -s boot.scr ::boot.scr
+    dd if=/dev/zero of=misc.img bs=4096 count=$(( (1024 * 512) / 4096 ))
 
-dd if=/dev/zero of=misc.img bs=4096 count=$(( (1024 * 512) / 4096 ))
+    dd if=/dev/zero of=metadata.img bs=4k count=$(( (1024 * 1024 * 16) / 4096 ))
 
-dd if=/dev/zero of=metadata.img bs=4k count=$(( (1024 * 1024 * 16) / 4096 ))
+    echo "===> Add partitions"
+    add_part bootloader.img bootloader
+    add_part env.img uboot-env
+    add_part misc.img misc
+    add_part boot.img boot_a
+    add_part boot_dtbo.img dtbo_a
+    add_part metadata.img metadata
+    add_part super.img super
+    add_part vbmeta.img vbmeta
+    add_part metadata.img userdata fit
+}
 
-echo "===> Add partitions"
-add_part bootloader.img bootloader
-add_part env.img env
-add_part misc.img misc
-add_part boot.img boot_a
-add_part boot_dtbo.img dtbo_a
-add_part metadata.img metadata
-add_part super.img super
-#add_part vbmeta.img vbmeta
-add_part metadata.img userdata fit
+gen_deploy() {
+    local SUFFIX=$1
+    prepare_disk $(( 256 )) # Default size - 256 MB
 
-chmod a+w ${SDIMG} # nbd-server runs from root and needs write access
-#lz4c -f ${SDIMG} ${SDIMG}.lz4
+    echo "===> Add partitions"
+    add_part bootloader-$SUFFIX.img bootloader
+    add_part env.img uboot-env
+}
+
+for i in "$@"
+do
+case $i in
+    -C=*|--directory=*)
+    cd "${i#*=}"
+    shift
+    ;;
+    -T=*|--type=*)
+    TYPE="${i#*=}"
+    shift
+    ;;
+    *)
+    ;;
+esac
+done
+
+if [[ -n $1 ]]; then
+    SDIMG=$1
+else
+    SDIMG=sdcard.img
+fi
+
+case $TYPE in
+    DEPLOY-SD)
+    gen_deploy "sd"
+    ;;
+    DEPLOY-SD-FOR-EMMC)
+    gen_deploy "emmc"
+    ;;
+    SD|*)
+    gen_sd
+    ;;
+esac

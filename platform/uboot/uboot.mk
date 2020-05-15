@@ -41,18 +41,28 @@ UMAKE := \
     O=$$(readlink -f $(UBOOT_OUT))
 
 UBOOT_FRAGMENTS	+= device/glodroid/platform/common/uboot.config
+UBOOT_FRAGMENT_EMMC := device/glodroid/platform/common/uboot-emmc.config
+UBOOT_FRAGMENT_SD := device/glodroid/platform/common/uboot-sd.config
 
 #-------------------------------------------------------------------------------
 UBOOT_BINARY := $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
 
-$(UBOOT_BINARY): $(UBOOT_FRAGMENTS) $(sort $(shell find -L $(UBOOT_SRC))) $(ATF_BINARY)
+$(UBOOT_BINARY): $(UBOOT_FRAGMENTS) $(UBOOT_FRAGMENT_SD) $(UBOOT_FRAGMENT_EMMC) $(sort $(shell find -L $(UBOOT_SRC))) $(ATF_BINARY)
 	@echo "Building U-Boot: "
 	@echo "TARGET_PRODUCT = " $(TARGET_PRODUCT):
 	mkdir -p $(UBOOT_OUT)
 	$(UMAKE) $(UBOOT_DEFCONFIG)
-	PATH=/usr/bin:/bin $(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $(UBOOT_FRAGMENTS)
+	PATH=/usr/bin:/bin $(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $(UBOOT_FRAGMENTS) $(UBOOT_FRAGMENT_SD)
 	$(UMAKE) olddefconfig
 	$(UMAKE) KCFLAGS="$(UBOOT_KCFLAGS)"
+	cp $@ $@.sd
+ifneq ($(PRODUCT_HAS_EMMC),)
+	$(UMAKE) $(UBOOT_DEFCONFIG)
+	PATH=/usr/bin:/bin $(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $(UBOOT_FRAGMENTS) $(UBOOT_FRAGMENT_EMMC)
+	$(UMAKE) olddefconfig
+	$(UMAKE) KCFLAGS="$(UBOOT_KCFLAGS)"
+	cp $@ $@.emmc
+endif
 
 BOOTSCRIPT_GEN := $(PRODUCT_OUT)/gen/BOOTSCRIPT/boot.txt
 
@@ -65,28 +75,17 @@ $(BOOTSCRIPT_GEN): $(BSP_UBOOT_PATH)/boot.txt
 $(UBOOT_OUT)/boot.scr: $(BOOTSCRIPT_GEN) $(UBOOT_BINARY)
 	$(UBOOT_OUT)/tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $< $@
 
-$(UBOOT_OUT)/bootloader.img: $(UBOOT_BINARY)
-	cp -f $< $@
+$(PRODUCT_OUT)/env.img: $(UBOOT_OUT)/boot.scr
+	rm -f $@
+	/sbin/mkfs.vfat -n "orange-pi" -S 512 -C $@ 256
+	/usr/bin/mcopy -i $@ -s $< ::$(notdir $<)
+
+$(PRODUCT_OUT)/bootloader-sd.img: $(UBOOT_BINARY)
+	cp -f $<.sd $@
 	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 2048 * 1024 - 256 * 512 ))
 
-#-------------------------------------------------------------------------------
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := bootloader.img
-
-LOCAL_MODULE_PATH := $(PRODUCT_OUT)
-LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT)/$(LOCAL_MODULE)
-
-include $(BUILD_EXECUTABLE)
-
-#-------------------------------------------------------------------------------
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := boot.scr
-
-LOCAL_MODULE_PATH := $(PRODUCT_OUT)
-LOCAL_PREBUILT_MODULE_FILE:= $(UBOOT_OUT)/$(LOCAL_MODULE)
-
-include $(BUILD_EXECUTABLE)
-
-#-------------------------------------------------------------------------------
+ifneq ($(PRODUCT_HAS_EMMC),)
+$(PRODUCT_OUT)/bootloader-emmc.img: $(UBOOT_BINARY)
+	cp -f $<.emmc $@
+	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 2048 * 1024 - 256 * 512 ))
+endif

@@ -10,6 +10,7 @@ PRODUCT_DEVICE := pinetab
 PRODUCT_BRAND := Pine64
 PRODUCT_MODEL := pinetab
 PRODUCT_MANUFACTURER := pine64
+PRODUCT_HAS_EMMC := true
 
 UBOOT_DEFCONFIG := sopine_baseboard_defconfig
 ATF_PLAT        := sun50i_a64
