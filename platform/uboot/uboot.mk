@@ -76,11 +76,12 @@ endif
 
 BOOTSCRIPT_GEN := $(PRODUCT_OUT)/gen/BOOTSCRIPT/boot.txt
 
-$(BOOTSCRIPT_GEN): $(BSP_UBOOT_PATH)/boot.txt
+$(BOOTSCRIPT_GEN): $(BSP_UBOOT_PATH)/bootscript.cpp $(BSP_UBOOT_PATH)/bootscript.h
 	mkdir -p $(dir $@)
-	cp $< $@
-	sed -i 's+__SYSFS_MMC0_PATH__+$(SYSFS_MMC0_PATH)+' $@
-	sed -i 's+__SYSFS_MMC1_PATH__+$(SYSFS_MMC1_PATH)+' $@
+	$(CLANG) -E -P -Wno-invalid-pp-token $< -o $@ \
+	    -D$(PRODUCT_BOARD_PLATFORM) \
+	    -D__SYSFS_MMC0_PATH__=$(SYSFS_MMC0_PATH) \
+	    -D__SYSFS_MMC1_PATH__=$(SYSFS_MMC1_PATH) \
 
 $(UBOOT_OUT)/boot.scr: $(BOOTSCRIPT_GEN) $(UBOOT_BINARY)
 	$(UBOOT_OUT)/tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $< $@
