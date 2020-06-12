@@ -55,6 +55,7 @@ gen_sd() {
     echo "===> Add partitions"
     add_part bootloader.img bootloader
     add_part env.img uboot-env
+    add_part boot.img recovery_boot
     add_part misc.img misc
     add_part boot.img boot_a
     add_part boot_dtbo.img dtbo_a
@@ -71,6 +72,7 @@ gen_deploy() {
     echo "===> Add partitions"
     add_part bootloader-$SUFFIX.img bootloader
     add_part env.img uboot-env
+    add_part boot.img recovery_boot
 }
 
 for i in "$@"
