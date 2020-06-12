@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+PLATFORM=sunxi
+
 # Old Allwinner boot ROM looks for the SPL binary starting from 16th LBA of SDCARD and EMMC.
 # Newer Alwinner SOCs including H3, A64, and later is looking for SPL at both 16th LBA and 256th LBA.
 # Align first partition to 256th LBA to allow update bootloader binaries using fastboot.
@@ -63,6 +65,10 @@ gen_sd() {
     add_part super.img super
     add_part vbmeta.img vbmeta
     add_part metadata.img userdata fit
+
+    if [ "$PLATFORM" = "broadcom" ]; then
+        modify_for_rpi
+    fi
 }
 
 gen_deploy() {
@@ -73,6 +79,10 @@ gen_deploy() {
     add_part bootloader-$SUFFIX.img bootloader
     add_part env.img uboot-env
     add_part boot.img recovery_boot
+
+    if [ "$PLATFORM" = "broadcom" ]; then
+        modify_for_rpi
+    fi
 }
 
 for i in "$@"
@@ -84,6 +94,10 @@ case $i in
     ;;
     -T=*|--type=*)
     TYPE="${i#*=}"
+    shift
+    ;;
+    -P=*|--platform=*)
+    PLATFORM="${i#*=}"
     shift
     ;;
     *)
