@@ -14,16 +14,13 @@
 # limitations under the License.
 #
 
-TARGET_NO_BOOTLOADER := true
-TARGET_NO_RECOVERY := true
+include build/make/target/board/BoardConfigMainlineCommon.mk
+
+AB_OTA_UPDATER := false
+
 TARGET_NO_KERNEL := false
 
 BOARD_USES_RECOVERY_AS_BOOT := true
-
-BOARD_AVB_ENABLE := true
-
-# Binder interface should be 64bit even on 32bit SoC
-TARGET_USES_64_BIT_BINDER := true
 
 # generic wifi
 WPA_SUPPLICANT_VERSION := VER_0_8_X
@@ -50,7 +47,6 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_CACHEIMAGE_PARTITION_SIZE := 69206016 # 66MB
 
 # Vendor image
-TARGET_COPY_OUT_VENDOR := vendor
 BOARD_USES_VENDORIMAGE := true
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 #BOARD_VENDORIMAGE_PARTITION_SIZE := 2147483648 # 2GB
@@ -99,8 +95,6 @@ TARGET_KERNEL_SOURCE  := kernel/glodroid
 # SELinux support
 #BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
 
-BOARD_VNDK_VERSION := current
-
 BOARD_USES_TINYHAL_AUDIO := true
 TINYCOMPRESS_TSTAMP_IS_LONG := true
 TINYALSA_NO_ADD_NEW_CTRLS := true
@@ -113,7 +107,6 @@ BOARD_USE_LEGACY_UI := true
 BOARD_GPU_DRIVERS := lima kmsro
 BOARD_USES_METADATA_PARTITION := true
 
-TARGET_COPY_OUT_PRODUCT := product
 BOARD_USES_PRODUCTIMAGE := true
 BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
 
