@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$(call inherit-product, device/glodroid/plus2e/device.mk)
+$(call inherit-product, device/glodroid/opi_plus2e/device.mk)
 
 PRODUCT_BOARD_PLATFORM := sunxi
-PRODUCT_NAME := plus2e
-PRODUCT_DEVICE := plus2e
+PRODUCT_NAME := opi_plus2e
+PRODUCT_DEVICE := opi_plus2e
 PRODUCT_BRAND := OrangePI
-PRODUCT_MODEL := Plus2E
+PRODUCT_MODEL := opi_plus2e
 PRODUCT_MANUFACTURER := xunlong
 PRODUCT_HAS_EMMC := true
 

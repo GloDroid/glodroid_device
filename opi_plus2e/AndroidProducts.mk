@@ -14,17 +14,8 @@
 # limitations under the License.
 #
 
-include device/glodroid/common/boardconfig-common.mk
+PRODUCT_MAKEFILES := \
+    $(LOCAL_DIR)/opi_plus2e.mk
 
-# Architecture
-TARGET_ARCH := arm
-TARGET_ARCH_VARIANT := armv7-a-neon
-#TARGET_CPU_VARIANT := cortex-a7
-TARGET_CPU_VARIANT := generic
-TARGET_CPU_ABI := armeabi-v7a
-TARGET_CPU_ABI2 := armeabi
-
-TARGET_SUPPORTS_32_BIT_APPS := true
-TARGET_SUPPORTS_64_BIT_APPS := false
-
-TARGET_BOARD_INFO_FILE := device/glodroid/plus2e/board-info.txt
+COMMON_LUNCH_CHOICES := \
+    opi_plus2e-userdebug
