@@ -104,7 +104,8 @@ $(PRODUCT_OUT)/kernel: $(KERNEL_IMAGE) $(KERNEL_MODULES_OUT)
 
 #-------------------------------------------------------------------------------
 
-include $(LOCAL_PATH)/rtl8189ftv-mod.mk
+include $(LOCAL_PATH)/rtl8189es-mod.mk
+include $(LOCAL_PATH)/rtl8189fs-mod.mk
 include $(LOCAL_PATH)/rtl8723cs-mod.mk
 
 endif # TARGET_PREBUILT_KERNEL

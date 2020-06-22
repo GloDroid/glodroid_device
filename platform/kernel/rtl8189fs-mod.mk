@@ -1,7 +1,7 @@
 
 MODULES_DIR := $(PRODUCT_OUT)/vendor/lib/modules/
 MODULE := $(PRODUCT_OUT)/obj/RTL8189FTV-MOD/8189fs.ko
-MOD_SRC := kernel/glodroid-modules/rtl8189ES_linux
+MOD_SRC := kernel/glodroid-modules/rtl8189fs
 
 $(MODULE): $(MOD_SRC) $(KERNEL_OUT)/.config $(sort $(shell find -L $(MOD_SRC))) $(PRODUCT_OUT)/kernel
 	rm -rf $(dir $@)
