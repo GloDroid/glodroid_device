@@ -13,7 +13,7 @@ PRODUCT_MANUFACTURER := xunlong
 PRODUCT_HAS_EMMC := true
 
 UBOOT_DEFCONFIG := orangepi_plus_defconfig
-KERNEL_DEFCONFIG := kernel/glodroid/arch/arm/configs/sunxi_defconfig
+KERNEL_DEFCONFIG := kernel/glodroid-sunxi/arch/arm/configs/sunxi_defconfig
 KERNEL_FRAGMENTS += \
     device/glodroid/platform/common/sunxi/sunxi-common.config \
 
