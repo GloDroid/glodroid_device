@@ -16,12 +16,17 @@ endif
 KERNEL_FRAGMENTS	:= \
     $(LOCAL_PATH)/android-base.config \
     $(LOCAL_PATH)/android-recommended.config \
+    $(LOCAL_PATH)/android-extra.config \
     $(KERNEL_FRAGMENTS)
 
 ifeq ($(TARGET_ARCH),arm64)
-KERNEL_FRAGMENTS	+= $(LOCAL_PATH)/android-recommended-arm64.config
+KERNEL_FRAGMENTS	+= \
+    $(LOCAL_PATH)/android-recommended-arm64.config \
+    $(LOCAL_PATH)/android-extra-arm64.config
 else
-KERNEL_FRAGMENTS	+= $(LOCAL_PATH)/android-recommended-arm.config
+KERNEL_FRAGMENTS	+= \
+    $(LOCAL_PATH)/android-recommended-arm.config \
+    $(LOCAL_PATH)/android-extra-arm.config
 endif
 
 KERNEL_OUT		:= $(PRODUCT_OUT)/obj/KERNEL_OBJ
