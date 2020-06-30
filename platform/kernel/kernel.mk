@@ -78,18 +78,18 @@ $(KERNEL_COMPRESSED): $(KERNEL_BINARY)
 # Modules
 
 $(KERNEL_MODULES_OUT): $(KERNEL_BINARY)
-	rm -rf $(KERNEL_MODULES_OUT)
-	$(KMAKE) INSTALL_MOD_PATH=$$(readlink -f $(KERNEL_MODULES_OUT)) modules_install
-	find $(KERNEL_MODULES_OUT) -mindepth 2 -type f -name '*.ko' | PATH=/usr/bin:$$PATH xargs -I{} cp {} $(KERNEL_MODULES_OUT)
-
-$(TARGET_VENDOR_MODULES) : $(KERNEL_MODULES_OUT)
 	rm -rf $@
-	mkdir -p $@
-	D1=$</lib/modules/$$(cat $(KERNEL_VERSION_FILE)); \
-	    cp -r $${D1}/modules.dep $${D1}/modules.order $${D1}/modules.alias $${D1}/kernel $@
-	D2=/vendor/lib/modules/kernel/; sed -e"s|^kernel/|$${D2}|; s| kernel/| $${D2}|g" -i $@/modules.dep
+	$(KMAKE) INSTALL_MOD_PATH=$$(readlink -f $@) modules_install
 
-$(PRODUCT_OUT)/vendor.img: $(TARGET_VENDOR_MODULES)
+$(TARGET_VENDOR_MODULES)/modules.dep : $(KERNEL_MODULES_OUT)
+	rm -rf $(TARGET_VENDOR_MODULES)/kernel
+	rm -f $(TARGET_VENDOR_MODULES)/modules.*
+	mkdir -p $(TARGET_VENDOR_MODULES)
+	D1=$</lib/modules/$$(cat $(KERNEL_VERSION_FILE)); \
+	    cp -r $${D1}/modules.dep $${D1}/modules.order $${D1}/modules.alias $${D1}/kernel $(TARGET_VENDOR_MODULES)
+	D2=/vendor/lib/modules/kernel/; sed -e"s|^kernel/|$${D2}|; s| kernel/| $${D2}|g" -i $(TARGET_VENDOR_MODULES)/modules.dep
+
+$(PRODUCT_OUT)/vendor.img: $(TARGET_VENDOR_MODULES)/modules.dep
 
 #-------------------------------------------------------------------------------
 $(ANDROID_DTBO): $(ANDROID_DTS_OVERLAY)
