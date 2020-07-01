@@ -235,6 +235,7 @@ PRODUCT_COPY_FILES += \
 # Vendor seccomp policy files:
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/seccomp_policy/mediaswcodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaswcodec.policy \
+    $(LOCAL_PATH)/seccomp_policy/mediacodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
 
 # Recovery
 PRODUCT_COPY_FILES += \
