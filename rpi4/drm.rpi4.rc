@@ -1,0 +1,3 @@
+on init
+    setprop hwc.drm.device /dev/dri/card1
+    setprop gralloc.gbm.device /dev/dri/card1
