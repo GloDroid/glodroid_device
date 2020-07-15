@@ -14,6 +14,12 @@
 # limitations under the License.
 #
 
+# Enable updating of APEXes
+$(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
+
+# Enable userspace reboot
+$(call inherit-product, $(SRC_TARGET_DIR)/product/userspace_reboot.mk)
+
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 
 ifneq (,$(filter $(DEVICE_TYPE),tv))
