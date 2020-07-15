@@ -22,6 +22,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/userspace_reboot.mk)
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 
+# Enable Scoped Storage related
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
+
 ifneq (,$(filter $(DEVICE_TYPE),tv))
 # Setup TV Build
 USE_OEM_TV_APP := true
