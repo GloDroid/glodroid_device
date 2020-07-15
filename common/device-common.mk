@@ -142,6 +142,12 @@ PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-service \
     keystore.ranchu
 
+# PowerHAL
+PRODUCT_PACKAGES += \
+    power.default \
+    android.hardware.power@1.0-impl \
+    android.hardware.power@1.0-service \
+
 # Health HAL
 PRODUCT_PACKAGES += \
     android.hardware.health@2.0-service \
