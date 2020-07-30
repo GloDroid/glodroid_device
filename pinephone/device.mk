@@ -35,3 +35,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     android.hardware.vibrator@1.0-service.pinephone
+
+DEVICE_PACKAGE_OVERLAYS += \
+    device/glodroid/pinephone/overlay
