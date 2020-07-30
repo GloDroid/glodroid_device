@@ -9,3 +9,6 @@ $(call inherit-product, device/glodroid/common/bluetooth/no-bluetooth.mk)
 
 PRODUCT_CHARACTERISTICS := tablet
 PRODUCT_PROPERTY_OVERRIDES += ro.sf.lcd_density=151
+
+DEVICE_PACKAGE_OVERLAYS += \
+    device/glodroid/pinetab/overlay
