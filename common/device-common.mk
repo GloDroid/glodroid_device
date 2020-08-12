@@ -122,8 +122,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=160 \
     ro.hardware.gralloc=gbm \
     ro.hardware.hwcomposer=drm \
-    hwc.drm.device=/dev/dri/card0 \
-    gralloc.gbm.device=/dev/dri/card0 \
 
 # Gatekeeper HAL
 PRODUCT_PROPERTY_OVERRIDES += ro.hardware.gatekeeper=ranchu

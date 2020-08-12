@@ -10,6 +10,3 @@ PRODUCT_COPY_FILES += \
         vendor/raspberry/firmware-nonfree/brcm/brcmfmac43455-sdio.clm_blob:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43455-sdio.clm_blob \
         vendor/raspberry/firmware-nonfree/brcm/brcmfmac43455-sdio.bin:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43455-sdio.bin \
         vendor/raspberry/firmware-nonfree/brcm/brcmfmac43455-sdio.txt:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-model-b.txt \
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/drm.rpi4.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.rpi4.rc \
