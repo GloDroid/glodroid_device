@@ -166,6 +166,14 @@ PRODUCT_PACKAGES += Launcher3QuickStep
 PRODUCT_PROPERTY_OVERRIDES += ro.sf.lcd_density=160
 endif
 
+#External USB Camera HAL
+PRODUCT_PACKAGES += \
+    android.hardware.camera.provider@2.4-impl \
+    android.hardware.camera.provider@2.4-external-service \
+
+PRODUCT_COPY_FILES += \
+    device/glodroid/common/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
+
 # Copy hardware config file(s)
 PRODUCT_COPY_FILES +=  \
         device/linaro/hikey/etc/permissions/android.hardware.screen.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.screen.xml \
