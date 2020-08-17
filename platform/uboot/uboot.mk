@@ -79,7 +79,8 @@ BOOTSCRIPT_GEN := $(PRODUCT_OUT)/gen/BOOTSCRIPT/boot.txt
 $(BOOTSCRIPT_GEN): $(BSP_UBOOT_PATH)/bootscript.cpp $(BSP_UBOOT_PATH)/bootscript.h
 	mkdir -p $(dir $@)
 	$(CLANG) -E -P -Wno-invalid-pp-token $< -o $@ \
-	    -D$(PRODUCT_BOARD_PLATFORM) \
+	    -Dplatform_$(PRODUCT_BOARD_PLATFORM) \
+	    -Ddevice_$(PRODUCT_DEVICE) \
 	    -D__SYSFS_MMC0_PATH__=$(SYSFS_MMC0_PATH) \
 	    -D__SYSFS_MMC1_PATH__=$(SYSFS_MMC1_PATH) \
 

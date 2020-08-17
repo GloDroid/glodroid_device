@@ -8,17 +8,20 @@
 
 #include "bootscript.h"
 
-#ifdef broadcom
+#ifdef platform_broadcom
 setenv dtbaddr 0x1fa00000
 setenv loadaddr 0x10008000
 setenv dtboaddr 0x12008000
 #endif
 
-#ifdef sunxi
+#ifdef platform_sunxi
 setenv dtbaddr 0x5fa00000
 setenv loadaddr 0x50008000
 setenv dtboaddr 0x52008000
 #endif
+
+setenv    main_fdt_id 0x100
+setenv overlay_fdt_id 0xFFF
 
 /* EMMC cards have 512k erase block size. Align partitions accordingly to avoid issues with erasing. */
 
@@ -41,7 +44,7 @@ EXTENV(bootargs, " androidboot.verifiedbootstate=orange fw_devlink=permissive ${
 
 FUNC_BEGIN(enter_fastboot)
  setenv fastboot_fail 0
-#ifdef sunxi
+#ifdef platform_sunxi
  /* OTG on sunxi require USB to be initialized */
  usb start ;
 #endif
@@ -85,20 +88,28 @@ FUNC_BEGIN(bootcmd_start)
  abootimg addr \$loadaddr
  abootimg get recovery_dtbo dtbo_addr
  adtimg addr \${dtbo_addr}
-#ifdef sunxi
- adtimg get dt --index=0 dtb_start dtb_size &&
+#ifdef platform_sunxi
+#ifdef device_pinephone
+/* Select proper DTS version for PinePhone (v1.1 or v1.2) */
+ setenv main_fdt_id 0x11; /* -> PinePhone v1.1 */
+ if test STRESC(\${fdtfile}) != STRESC(allwinner/sun50i-a64-pinephone-1.1.dtb);
+ then
+  setenv main_fdt_id 0x12; /* -> PinePhone v1.2 */
+ fi;
+#endif
+ adtimg get dt --id=\$main_fdt_id dtb_start dtb_size main_fdt_index &&
  cp.b \$dtb_start \$dtbaddr \$dtb_size &&
  fdt addr \$dtbaddr &&
 #endif
-#ifdef broadcom
+#ifdef platform_broadcom
 /* raspberrypi vc bootloader prepare fdt based on many factors. Use this fdt instead of dtb compiled by the kernel */
  fdt addr \${fdt_addr} &&
 #endif
- adtimg get dt --index=1 dtb_start dtb_size &&
+ adtimg get dt --id=\$overlay_fdt_id dtb_start dtb_size overlay_fdt_index &&
  cp.b \$dtb_start \$dtboaddr \$dtb_size &&
  fdt resize 8192 &&
  fdt apply \$dtboaddr &&
- FEXTENV(bootargs, " androidboot.dtbo_idx=0,1") ;
+ FEXTENV(bootargs, " androidboot.dtbo_idx=\${main_fdt_index},\${overlay_fdt_index}") ;
  /* START KERNEL */
  bootm \$loadaddr
  /* Should never get here */
