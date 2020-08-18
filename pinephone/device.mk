@@ -5,13 +5,14 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, device/glodroid/common/device-common.mk)
 $(call inherit-product, device/glodroid/common/device-common-sunxi.mk)
-$(call inherit-product, device/glodroid/common/bluetooth/no-bluetooth.mk)
+$(call inherit-product, device/glodroid/common/bluetooth/bluetooth.mk)
 
 PRODUCT_PROPERTY_OVERRIDES += qemu.sf.lcd_density=269
 
-# Out-of-tree modules
-PRODUCT_PACKAGES += \
-    8723cs.ko
+# Firmware
+PRODUCT_COPY_FILES += \
+    kernel/firmware/rtlbt/rtl8723cs_xx_fw:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtl_bt/rtl8723cs_xx_fw.bin \
+    kernel/firmware/rtlbt/rtl8723cs_xx_config:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtl_bt/rtl8723cs_xx_config-pinephone.bin \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi.pinephone.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/wifi.pinephone.rc \

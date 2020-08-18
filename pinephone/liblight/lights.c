@@ -123,10 +123,9 @@ set_light_backlight(struct light_device_t* dev,
     pthread_mutex_lock(&g_lock);
 
     if (!err) {
-	brightness = (int) (log(brightness + 1) / log(256) * 20);
-	if (!brightness)
+        if (!brightness)
             brightness = 1;
-        err = write_int(LCD_FILE, brightness);
+        err = write_int(LCD_FILE, brightness * 3); /* max_value=754 */
     }
 
     pthread_mutex_unlock(&g_lock);

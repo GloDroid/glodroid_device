@@ -7,6 +7,6 @@ UBOOT_FRAGMENTS += \
     device/glodroid/platform/common/sunxi/uboot.config
 
 # SUNXI has broken drm/sun4i DE2 kernel driver.
-# Disable drm_hwcomposer for layer composition.
+# Disable scaling to acoid UI glitches.
 PRODUCT_PROPERTY_OVERRIDES += \
-    setprop hwc.drm.exclude_non_hwfb_imports=1
+    hwc.drm.scale_with_gpu=1 \

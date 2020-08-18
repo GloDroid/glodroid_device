@@ -2,7 +2,7 @@
     <mixer card="0">
         <init>
             <ctl name="Line Out Playback Volume" val="27" />
-            <ctl name="AIF1 Slot 0 Digital DAC Playback Switch" val="1"/>
+            <ctl name="DAC Mixer AIF1 DA0 Playback Switch" val="1"/>
             <ctl name="DAC Playback Switch" val="1"/>
             <ctl name="Line Out Source Playback Route" val="Mono Differential"/>
         </init>

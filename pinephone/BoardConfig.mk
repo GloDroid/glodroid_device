@@ -3,6 +3,7 @@
 # Copyright (C) 2019 The Android Open-Source Project
 
 include device/glodroid/common/boardconfig-common.mk
+include device/glodroid/common/bluetooth/boardconfig.mk
 
 # Architecture
 TARGET_ARCH := arm64
