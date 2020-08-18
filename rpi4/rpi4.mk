@@ -20,3 +20,5 @@ KERNEL_DEFCONFIG := $(LOCAL_PATH)/bcm2711_defconfig
 KERNEL_DTB_FILE := broadcom/bcm2711-rpi-4-b.dtb
 
 SYSFS_MMC0_PATH := emmc2bus/fe340000.emmc2
+
+RPI_CONFIG := $(LOCAL_PATH)/config.txt

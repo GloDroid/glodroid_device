@@ -53,7 +53,6 @@ endif
 ifeq ($(PRODUCT_BOARD_PLATFORM),broadcom)
 UBOOT_FRAGMENTS	+= device/glodroid/platform/common/broadcom/uboot.config
 UBOOT_BINARY := $(UBOOT_OUT)/u-boot.bin
-RPI_CONFIG := device/glodroid/platform/common/broadcom/config.txt
 RPI_FIRMWARE_DIR := vendor/raspberry/firmware
 endif
 

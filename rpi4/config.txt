@@ -8,6 +8,6 @@ armstub=bl31.bin
 
 dtoverlay=dwc2
 dtoverlay=uart0
-dtoverlay=vc4-kms-v3d-pi4
+dtoverlay=vc4-kms-v3d
 
 max_framebuffers=2
