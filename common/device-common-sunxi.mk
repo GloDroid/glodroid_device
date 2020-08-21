@@ -9,4 +9,4 @@ UBOOT_FRAGMENTS += \
 # SUNXI has broken drm/sun4i DE2 kernel driver.
 # Disable scaling to acoid UI glitches.
 PRODUCT_PROPERTY_OVERRIDES += \
-    hwc.drm.scale_with_gpu=1 \
+    vendor.hwc.drm.scale_with_gpu=1 \
