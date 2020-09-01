@@ -1,7 +1,7 @@
 <audiohal>
-    <mixer card="0">
+    <mixer name="sun50ia64audio">
         <init>
-            <ctl name="Line Out Playback Volume" val="27" />
+            <ctl name="Line Out Playback Volume" val="15" />
             <ctl name="DAC Mixer AIF1 DA0 Playback Switch" val="1"/>
             <ctl name="DAC Playback Switch" val="1"/>
             <ctl name="Line Out Source Playback Route" val="Mono Differential"/>
@@ -18,9 +18,9 @@
         </path>
     </device>
 
-    <stream type="pcm" dir="out" card="0" device="0" rate="48000">
+    <stream type="pcm" dir="out" cardname="sun50ia64audio" device="0" rate="48000">
     </stream>
 
-    <stream type="pcm" dir="in" card="0" device="0" rate="48000">
+    <stream type="pcm" dir="in" cardname="sun50ia64audio" device="0" rate="48000">
     </stream>
 </audiohal>
