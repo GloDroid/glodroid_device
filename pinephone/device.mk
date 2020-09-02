@@ -38,3 +38,8 @@ PRODUCT_PACKAGES += \
 
 DEVICE_PACKAGE_OVERLAYS += \
     device/glodroid/pinephone/overlay
+
+# SUNXI has broken drm/sun4i DE2 kernel driver.
+# Disable scaling to avoid UI glitches.
+PRODUCT_PROPERTY_OVERRIDES += \
+    vendor.hwc.drm.scale_with_gpu=1 \
