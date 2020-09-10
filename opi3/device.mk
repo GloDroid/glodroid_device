@@ -14,3 +14,6 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/bluetooth.opi3.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/bluetooth.opi3.rc \
+
+PRODUCT_COPY_FILES += \
+    device/glodroid/opi3/audio.opi3.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.opi3.xml \
