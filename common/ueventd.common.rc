@@ -9,6 +9,9 @@ modalias_handling enabled
 /dev/tee0                                              0660    system       keystore
 /dev/teepriv0                                          0660    system       keystore
 /dev/ttyUSB0                                           0666    system       system
+/dev/ttyUSB1                                           0666    system       system
+/dev/ttyUSB2                                           0666    system       system
+/dev/ttyUSB3                                           0666    system       system
 /dev/block/platform/soc/1c0f000.mmc/by-name/vendor     0600    system       system
 /dev/block/platform/soc/1c0f000.mmc/by-name/userdata   0600    system       system
 /dev/rfkill                                            0660    bluetooth    net_bt

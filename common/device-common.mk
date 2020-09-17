@@ -34,7 +34,9 @@ endif
 PRODUCT_SHIPPING_API_LEVEL := 29
 
 # Set custom settings
-DEVICE_PACKAGE_OVERLAYS := device/linaro/hikey/overlay
+## -> remove non phone overlay
+#DEVICE_PACKAGE_OVERLAYS := device/linaro/hikey/overlay
+## <-
 ifneq (,$(filter $(DEVICE_TYPE),tv))
 # Set TV Custom Settings
 DEVICE_PACKAGE_OVERLAYS += device/google/atv/overlay
@@ -79,10 +81,6 @@ PRODUCT_PACKAGES += \
 # Remove phone packages that added by default product configuration
 PRODUCT_PACKAGES += \
     remove-android.hardware.configstore@1.1-service \
-    remove-BlockedNumberProvider \
-    remove-Telecom \
-    remove-TeleService \
-    remove-MmsService \
 
 PRODUCT_PACKAGES += libGLES_android
 

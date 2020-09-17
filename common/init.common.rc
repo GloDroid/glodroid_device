@@ -24,6 +24,9 @@ on early-init
     chmod 0660 /sys/class/rfkill/rfkill0/state
     chown bluetooth net_bt /sys/class/rfkill/rfkill0/device/extldo
     chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
+    chmod 0777 /proc/cmdline
+    write /sys/class/modem-power/modem-power/device/powered 1
+
 
 on fs
     mount_all /vendor/etc/fstab.${ro.hardware} --early
@@ -64,6 +67,11 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
     oneshot
+
+service ril-daemon /vendor/bin/hw/rild -l /vendor/lib64/libquectel-ril.so
+    class main
+    user root
+    group radio cache inet misc audio sdcard_rw log
 
 service bugreport /system/bin/dumpstate -d -p -B -z \
     -o /data/user_de/0/com.android.shell/files/bugreports/bugreport

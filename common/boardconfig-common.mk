@@ -111,8 +111,8 @@ BOARD_USES_PRODUCTIMAGE := true
 BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
 
 # Enable dex-preoptimization to speed up first boot sequence
-DEX_PREOPT_DEFAULT := nostripping
-WITH_DEXPREOPT := true
+WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
+DONT_DEXPREOPT_PREBUILTS = true
 ART_USE_HSPACE_COMPACT := true
 
 DEVICE_MANIFEST_FILE := device/glodroid/common/manifest.xml

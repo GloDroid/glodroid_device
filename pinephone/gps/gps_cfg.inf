@@ -1,0 +1,20 @@
+#you can modify this config file to adapt your demand.
+#the line start with ';' means not support
+#the line start with '#' means use default config
+
+NMEA_PORT_PATH=rild-nmea
+;RMC_HZ=1
+;NMEA_PORT_PATH=/dev/ttyO1
+;BAUD_RATE=9600
+;DATA_BITS=8
+;STOP_BITS=1
+;PARITY_TYPE=N
+;FLOW_CONTROL=N
+;LOG_LEVEL=LOG_DEBUG
+
+;LOG_TYPE=
+;LOG_PATH=
+;FUNC_NMEA=
+;FUNC_XTRA=
+;FUNC_AGPS
+;I2C_ADDR=
