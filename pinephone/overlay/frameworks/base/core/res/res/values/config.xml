@@ -34,7 +34,7 @@
 
          Sleep is buggy, disable on pinephone as a temporary workaround.
     -->
-    <integer name="config_shortPressOnPowerBehavior">4</integer>
+    <integer name="config_shortPressOnPowerBehavior">1</integer>
 
     <!-- User activity timeout: Minimum screen off timeout in milliseconds.
 
