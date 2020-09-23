@@ -1,9 +1,0 @@
-on early-init
-    chown system system /sys/class/backlight/backlight/brightness
-    chmod 0660 /sys/class/backlight/backlight/brightness
-    chown system system /sys/class/leds/pinephone:red:user/brightness
-    chmod 0660 /sys/class/leds/pinephone:red:user/brightness
-    chown system system /sys/class/leds/pinephone:green:user/brightness
-    chmod 0660 /sys/class/leds/pinephone:green:user/brightness
-    chown system system /sys/class/leds/pinephone:blue:user/brightness
-    chmod 0660 /sys/class/leds/pinephone:blue:user/brightness
