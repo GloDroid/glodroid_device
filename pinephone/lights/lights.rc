@@ -1,0 +1,7 @@
+service vendor.lights-yukawa  /vendor/bin/hw/lights-yukawa
+    class hal
+    user system
+    group system
+    # FIXME: actually do this
+    # shutting off lights while powering-off
+    shutdown critical
