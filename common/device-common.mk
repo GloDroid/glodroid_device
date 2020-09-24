@@ -107,8 +107,8 @@ PRODUCT_PACKAGES += \
 # Boot control
 PRODUCT_PACKAGES += \
     bootctrl.default \
-    android.hardware.boot@1.0-impl \
-    android.hardware.boot@1.0-service \
+    android.hardware.boot@1.1-impl \
+    android.hardware.boot@1.1-service \
 
 # Thermal HAL
 PRODUCT_PACKAGES += \
