@@ -1,5 +1,5 @@
 cc_binary {
-    name: "lights-yukawa",
+    name: "android.hardware.lights-service.pinephone",
     relative_install_path: "hw",
     init_rc: ["lights.rc"],
     vintf_fragments: ["lights.xml"],

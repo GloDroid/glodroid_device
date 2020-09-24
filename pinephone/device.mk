@@ -22,6 +22,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/glodroid/pinephone/audio.pinephone.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.pinephone.xml \
 
+# Lights HAL
+PRODUCT_PACKAGES += \
+    android.hardware.lights-service.pinephone \
+
 PRODUCT_PACKAGES += \
     sensors.iio \
     android.hardware.sensors@1.0-impl:64 \

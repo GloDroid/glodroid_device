@@ -24,7 +24,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 
@@ -50,19 +49,13 @@ struct LightAddress {
     uint8_t blue;
 };
 
-char const* const RED_LED_FILE = "/sys/class/leds/sei610:red:power/brightness";
+char const* const RED_LED_FILE = "/sys/class/leds/red:indicator/brightness";
 
-char const* const BLUE_LED_FILE = "/sys/class/leds/sei610:blue:bt/brightness";
+char const* const BLUE_LED_FILE = "/sys/class/leds/blue:indicator/brightness";
 
-std::array<LightAddress, 4> const lightAddrs = {
-        LightAddress{0x20, 0x21, 0x22}, LightAddress{0x23, 0x24, 0x25},
-        LightAddress{0x26, 0x27, 0x28}, LightAddress{0x29, 0x2A, 0x2B}};
+char const* const GREEN_LED_FILE = "/sys/class/leds/green:indicator/brightness";
 
-#define LA_P0_ENABLE 0x12
-#define LA_P1_ENABLE 0x13
-#define LA_RESET_ADDR 0x7F
-char const* const ARRAY_LED_DEVICE = "/dev/i2c-0";
-const int i2c_dev_addr = (0xB6 >> 1); /* 0x5B */
+char const* const LCD_FILE = "/sys/class/backlight/backlight/brightness";
 
 static int sys_write_int(int fd, int value) {
     char buffer[16];
@@ -73,15 +66,6 @@ static int sys_write_int(int fd, int value) {
     if (bytes >= sizeof(buffer)) return -EINVAL;
     amount = write(fd, buffer, bytes);
     return amount == -1 ? -errno : 0;
-}
-
-static int write8reg8(int fd, uint8_t regaddr, uint8_t cmd) {
-    uint8_t buf[2];
-
-    buf[0] = regaddr;
-    buf[1] = cmd;
-    if (write(fd, buf, 2) != 2) return -1;
-    return 0;
 }
 
 class Lights : public BnLights {
@@ -101,29 +85,6 @@ class Lights : public BnLights {
         int const g = ((color >> 8) & 0xFF) * 150 / 255;
         int const b = (color & 0xFF) * 29 / 255;
         return (r << 16) | (g << 8) | b;
-    }
-
-    int writeLedArray(const char* path, LightAddress const& addr, int color) {
-        int const fd = open(path, O_RDWR);
-        if (fd < 0) {
-            LOG(ERROR) << "COULD NOT OPEN ARRAY_LED_DEVICE " << path;
-            return fd;
-        }
-        if (ioctl(fd, I2C_SLAVE, i2c_dev_addr) < 0) {
-            LOG(ERROR) << "Error setting slave addr";
-            close(fd);
-            return -errno;
-        }
-
-        write8reg8(fd, addr.red, ((color >> 16) & 0xFF));
-        write8reg8(fd, addr.green, ((color >> 8) & 0xFF));
-        write8reg8(fd, addr.blue, (color)&0xFF);
-
-        write8reg8(fd, LA_P0_ENABLE, 0x00);
-        write8reg8(fd, LA_P1_ENABLE, 0x00);
-
-        close(fd);
-        return 0;
     }
 
     void writeLed(const char* path, int color) {
@@ -149,13 +110,6 @@ class Lights : public BnLights {
         addLight(LightType::ATTENTION, 0);
         addLight(LightType::BLUETOOTH, 0);
         addLight(LightType::WIFI, 0);
-
-        for (int i = 0; i < 4; i++) {
-            addLight(LightType::MICROPHONE, i);
-        }
-
-        writeLed(RED_LED_FILE, rgbToBrightness(0x00000000));
-        writeLed(BLUE_LED_FILE, rgbToBrightness(0xFFFFFFFF));
     }
 
     ScopedAStatus setLightState(int id, const HwLightState& state) override {
@@ -170,14 +124,16 @@ class Lights : public BnLights {
         int ret = 0;
 
         switch (light.type) {
-            case LightType::MICROPHONE:
-                ret = writeLedArray(ARRAY_LED_DEVICE, lightAddrs[light.ordinal], color);
-                break;
             case LightType::BATTERY:
-                writeLed(RED_LED_FILE, color);
+                writeLed(RED_LED_FILE, ((state.color >> 16) & 0xff) > 128 ? 1 : 0);
+                writeLed(GREEN_LED_FILE, ((state.color >> 8) & 0xff) > 128 ? 1 : 0);
                 break;
-            case LightType::BLUETOOTH:
-                writeLed(BLUE_LED_FILE, color);
+            case LightType::ATTENTION:
+            case LightType::NOTIFICATIONS:
+                writeLed(BLUE_LED_FILE, color ? 1 : 0);
+                break;
+            case LightType::BACKLIGHT:
+                writeLed(LCD_FILE, (color >> 16) * 3);
                 break;
         }
 
