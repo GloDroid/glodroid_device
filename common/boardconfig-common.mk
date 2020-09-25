@@ -37,6 +37,8 @@ TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 33554432
 
+BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
+
 # System image
 #TARGET_COPY_OUT_SYSTEM := system
 # Disable Jack build system due deprecated status (https://source.android.com/source/jack)
@@ -70,7 +72,7 @@ BOARD_SUPER_PARTITION_SIZE := 1468006400
 BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
 BOARD_SUPER_PARTITION_GROUPS := glodroid_dynamic_partitions
 BOARD_GLODROID_DYNAMIC_PARTITIONS_SIZE := 1466957824
-BOARD_GLODROID_DYNAMIC_PARTITIONS_PARTITION_LIST := system vendor product
+BOARD_GLODROID_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext vendor product
 
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_RECOVERY_FSTAB := device/glodroid/common/fstab
@@ -100,7 +102,6 @@ TINYCOMPRESS_TSTAMP_IS_LONG := true
 TINYALSA_NO_ADD_NEW_CTRLS := true
 TINYALSA_NO_CTL_GET_ID := true
 #USE_CAMERA_STUB := true
-BUILD_EMULATOR_OPENGL := true
 USE_OPENGL_RENDERER := true
 BOARD_USE_LEGACY_UI := true
 
@@ -119,8 +120,8 @@ DEVICE_MANIFEST_FILE := device/glodroid/common/manifest.xml
 DEVICE_MATRIX_FILE := device/glodroid/common/compatibility_matrix.xml
 
 # SELinux support
-BOARD_PLAT_PUBLIC_SEPOLICY_DIR   += device/glodroid/common/sepolicy/public
-BOARD_PLAT_PRIVATE_SEPOLICY_DIR  += device/glodroid/common/sepolicy/private
 BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/sepolicy/vendor
 
 BOARD_USES_GRALLOC_HANDLE := true
+# Required to build mesa starting from R
+BUILD_BROKEN_USES_BUILD_HOST_STATIC_LIBRARY := true

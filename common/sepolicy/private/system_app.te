@@ -1,2 +1,0 @@
-allow system_app gpu_device:chr_file getattr;
-

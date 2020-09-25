@@ -14,7 +14,16 @@
 # limitations under the License.
 #
 
+# Enable updating of APEXes
+$(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
+
+# Enable userspace reboot
+$(call inherit-product, $(SRC_TARGET_DIR)/product/userspace_reboot.mk)
+
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
+
+# Enable Scoped Storage related
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
 ifneq (,$(filter $(DEVICE_TYPE),tv))
 # Setup TV Build
@@ -101,9 +110,7 @@ PRODUCT_PACKAGES += \
 
 # Thermal HAL
 PRODUCT_PACKAGES += \
-    android.hardware.thermal@1.0-impl \
-    android.hardware.thermal@1.0-service \
-    thermal.default
+    android.hardware.thermal@2.0-service.mock \
 
 # Graphics HAL
 PRODUCT_PACKAGES += \
@@ -122,18 +129,20 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.hardware.hwcomposer=drm \
 
 # Gatekeeper HAL
-PRODUCT_PROPERTY_OVERRIDES += ro.hardware.gatekeeper=ranchu
-
 PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper@1.0-impl \
-    android.hardware.gatekeeper@1.0-service \
-    gatekeeper.ranchu \
+    android.hardware.gatekeeper@1.0-service.software \
 
 # Keymaster HAL
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-impl \
     android.hardware.keymaster@3.0-service \
     keystore.ranchu
+
+# PowerHAL
+PRODUCT_PACKAGES += \
+    power.default \
+    android.hardware.power@1.0-impl \
+    android.hardware.power@1.0-service \
 
 # Health HAL
 PRODUCT_PACKAGES += \
@@ -195,6 +204,7 @@ USE_XML_AUDIO_POLICY_CONF := 1
 PRODUCT_COPY_FILES += \
     device/linaro/hikey/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_audio_policy_configuration.xml \
+    frameworks/av/services/audiopolicy/config/a2dp_in_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_in_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
