@@ -145,8 +145,8 @@ PRODUCT_PACKAGES += \
 
 # Health HAL
 PRODUCT_PACKAGES += \
-    android.hardware.health@2.0-service \
-    android.hardware.health@2.0-impl-default \
+    android.hardware.health@2.1-service \
+    android.hardware.health@2.1-impl \
 
 ifneq (,$(filter $(DEVICE_TYPE),tv))
 # TV Specific Packages
