@@ -82,8 +82,7 @@ PRODUCT_PACKAGES += \
     audio.primary.$(TARGET_PRODUCT) \
 
 PRODUCT_PACKAGES += \
-    android.hardware.drm@1.0-impl \
-    android.hardware.drm@1.0-service \
+    android.hardware.drm@1.3-service.clearkey \
 
 # Remove phone packages that added by default product configuration
 PRODUCT_PACKAGES += \
