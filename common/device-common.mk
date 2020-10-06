@@ -142,9 +142,7 @@ PRODUCT_PACKAGES += \
 
 # PowerHAL
 PRODUCT_PACKAGES += \
-    power.default \
-    android.hardware.power@1.0-impl \
-    android.hardware.power@1.0-service \
+    android.hardware.power-service.example \
 
 # Health HAL
 PRODUCT_PACKAGES += \
