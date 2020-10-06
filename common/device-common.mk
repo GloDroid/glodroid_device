@@ -43,7 +43,7 @@ $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-he
 endif
 endif
 
-PRODUCT_SHIPPING_API_LEVEL := 29
+PRODUCT_SHIPPING_API_LEVEL := 30
 
 # Set custom settings
 DEVICE_PACKAGE_OVERLAYS := device/linaro/hikey/overlay
