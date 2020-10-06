@@ -1,5 +1,5 @@
 cc_library_static {
-    name: "libvibratorexampleimpl",
+    name: "libvibratorpinephoneimpl",
     vendor: true,
     shared_libs: [
         "libbase",
@@ -15,10 +15,10 @@ cc_library_static {
 }
 
 cc_binary {
-    name: "android.hardware.vibrator-service.example",
+    name: "android.hardware.vibrator-service.pinephone",
     relative_install_path: "hw",
-    init_rc: ["vibrator-default.rc"],
-    vintf_fragments: ["vibrator-default.xml"],
+    init_rc: ["vibrator-pinephone.rc"],
+    vintf_fragments: ["vibrator-pinephone.xml"],
     vendor: true,
     shared_libs: [
         "libbase",
@@ -26,7 +26,7 @@ cc_binary {
         "android.hardware.vibrator-ndk_platform",
     ],
     static_libs: [
-        "libvibratorexampleimpl",
+        "libvibratorpinephoneimpl",
     ],
     srcs: ["main.cpp"],
 }
