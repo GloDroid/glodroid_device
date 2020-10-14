@@ -111,11 +111,11 @@ BOOT_FILES := \
     $(RPI_FIRMWARE_DIR)/boot/fixup4.dat \
     $(RPI_FIRMWARE_DIR)/boot/bcm2710-rpi-3-b.dtb \
     $(RPI_FIRMWARE_DIR)/boot/bcm2710-rpi-3-b-plus.dtb \
-    $(RPI_FIRMWARE_DIR)/boot/bcm2711-rpi-4-b.dtb \
+    $(PRODUCT_OUT)/obj/KERNEL_OBJ/arch/$(TARGET_ARCH)/boot/dts/$(KERNEL_DTB_FILE) \
 
 OVERLAY_FILES := $(sort $(shell find -L $(RPI_FIRMWARE_DIR)/boot/overlays))
 
-$(PRODUCT_OUT)/bootloader-sd.img: $(UBOOT_BINARY) $(BOOT_FILES) $(OVERLAY_FILES) $(ATF_BINARY) $(RPI_CONFIG)
+$(PRODUCT_OUT)/bootloader-sd.img: $(UBOOT_BINARY) $(BOOT_FILES) $(OVERLAY_FILES) $(ATF_BINARY) $(RPI_CONFIG) $(KERNEL_BINARY)
 	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 128 * 1024 * 1024 - 256 * 512 ))
 	/sbin/mkfs.vfat -F 32 -n boot $@
 	/usr/bin/mcopy -i $@ $(UBOOT_BINARY) ::$(notdir $(UBOOT_BINARY))
