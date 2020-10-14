@@ -13,4 +13,3 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     device/glodroid/rpi4/audio.rpi4.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.rpi4.xml \
-    device/glodroid/rpi4/snd-dummy.rpi4.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/snd-dummy.rpi4.rc \
