@@ -1,2 +1,0 @@
-on early-init
-    insmod /vendor/lib/modules/8723cs.ko
