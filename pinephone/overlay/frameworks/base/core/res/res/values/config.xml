@@ -24,18 +24,6 @@
      entries do not follow the convention, but all new entries should. -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Control the behavior when the user short presses the power button.
-            0 - Nothing
-            1 - Go to sleep (doze)
-            2 - Really go to sleep (don't doze)
-            3 - Really go to sleep and go home (don't doze)
-            4 - Go to home
-            5 - Dismiss IME if shown. Otherwise go to home
-
-         Sleep is buggy, disable on pinephone as a temporary workaround.
-    -->
-    <integer name="config_shortPressOnPowerBehavior">4</integer>
-
     <!-- User activity timeout: Minimum screen off timeout in milliseconds.
 
          Sets a lower bound for the {@link Settings.System#SCREEN_OFF_TIMEOUT} setting
