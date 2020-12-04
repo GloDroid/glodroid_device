@@ -22,6 +22,8 @@ UBOOT_OUT := $(PRODUCT_OUT)/obj/UBOOT_OBJ
 
 SYSFS_MMC0_PATH ?= soc/1c0f000.mmc
 SYSFS_MMC1_PATH ?= soc/1c11000.mmc
+UBOOT_EMMC_DEV_INDEX := 1
+UBOOT_SD_DEV_INDEX := 0
 
 UBOOT_KCFLAGS = \
     -fgnu89-inline \
@@ -41,8 +43,8 @@ UMAKE := \
     O=$$(readlink -f $(UBOOT_OUT))
 
 UBOOT_FRAGMENTS	+= device/glodroid/platform/common/uboot.config
-UBOOT_FRAGMENT_EMMC := device/glodroid/platform/common/uboot-emmc.config
-UBOOT_FRAGMENT_SD := device/glodroid/platform/common/uboot-sd.config
+UBOOT_FRAGMENT_EMMC := $(UBOOT_OUT)/uboot-emmc.config
+UBOOT_FRAGMENT_SD := $(UBOOT_OUT)/uboot-sd.config
 
 #-------------------------------------------------------------------------------
 ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
@@ -56,6 +58,31 @@ UBOOT_BINARY := $(UBOOT_OUT)/u-boot.bin
 RPI_FIRMWARE_DIR := vendor/raspberry/firmware
 endif
 
+ifeq ($(PRODUCT_BOARD_PLATFORM),rockchip)
+UBOOT_FRAGMENTS += device/glodroid/platform/common/rockchip/uboot.config
+UBOOT_FRAGMENT_ROCKCHIP_EMMC := device/glodroid/platform/common/rockchip/uboot-emmc.config
+UBOOT_BINARY := $(UBOOT_OUT)/u-boot-dtb.bin
+UBOOT_IDBLOADER := $(UBOOT_OUT)/idbloader_externel.img
+UBOOT_TRUST := $(UBOOT_OUT)/trust.img
+UBOOT_BINARY_SD_EMMC := $(UBOOT_BINARY).deploy-emmc
+BOOTLOADER_SD_FOR_EMMC := $(PRODUCT_OUT)/bootloader-deploy-emmc.img
+BOOTLOADER_EMMC := $(PRODUCT_OUT)/bootloader-emmc.img
+ROCKCHIP_FIRMWARE_DIR := vendor/rockchip/rkbin
+TRUST_MERGER := tools/trust_merger
+RK_BIN_DIR := $(ROCKCHIP_FIRMWARE_DIR)/$(RK33_BIN)
+RKTRUST_DIR := $(ROCKCHIP_FIRMWARE_DIR)/RKTRUST
+UBOOT_EMMC_DEV_INDEX := 0
+UBOOT_SD_DEV_INDEX := 1
+SYSFS_MMC0_PATH := fe330000.sdhci
+SYSFS_MMC1_PATH := fe320000.mmc
+endif
+
+$(UBOOT_FRAGMENT_EMMC):
+	echo "CONFIG_FASTBOOT_FLASH_MMC_DEV=$(UBOOT_EMMC_DEV_INDEX)" > $@
+
+$(UBOOT_FRAGMENT_SD):
+	echo "CONFIG_FASTBOOT_FLASH_MMC_DEV=$(UBOOT_SD_DEV_INDEX)" > $@
+
 $(UBOOT_BINARY): $(UBOOT_FRAGMENTS) $(UBOOT_FRAGMENT_SD) $(UBOOT_FRAGMENT_EMMC) $(sort $(shell find -L $(UBOOT_SRC))) $(ATF_BINARY)
 	@echo "Building U-Boot: "
 	@echo "TARGET_PRODUCT = " $(TARGET_PRODUCT):
@@ -67,7 +94,11 @@ $(UBOOT_BINARY): $(UBOOT_FRAGMENTS) $(UBOOT_FRAGMENT_SD) $(UBOOT_FRAGMENT_EMMC) 
 	cp $@ $@.sd
 ifneq ($(PRODUCT_HAS_EMMC),)
 	$(UMAKE) $(UBOOT_DEFCONFIG)
+ifeq ($(PRODUCT_BOARD_PLATFORM),rockchip)
+	PATH=/usr/bin:/bin $(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $(UBOOT_FRAGMENTS) $(UBOOT_FRAGMENT_ROCKCHIP_EMMC) $(UBOOT_FRAGMENT_EMMC)
+else
 	PATH=/usr/bin:/bin $(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $(UBOOT_FRAGMENTS) $(UBOOT_FRAGMENT_EMMC)
+endif
 	$(UMAKE) olddefconfig
 	$(UMAKE) KCFLAGS="$(UBOOT_KCFLAGS)"
 	cp $@ $@.emmc
@@ -100,6 +131,36 @@ ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
 $(PRODUCT_OUT)/bootloader-sd.img: $(UBOOT_BINARY)
 	cp -f $<.sd $@
 	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 2048 * 1024 - 256 * 512 ))
+endif
+
+ifeq ($(PRODUCT_BOARD_PLATFORM),rockchip)
+$(UBOOT_BINARY_SD_EMMC): $(UBOOT_BINARY)
+	mkdir -p $(UBOOT_OUT)
+	$(UMAKE) $(UBOOT_DEFCONFIG)
+	PATH=/usr/bin:/bin $(UBOOT_SRC)/scripts/kconfig/merge_config.sh -m -O $(UBOOT_OUT)/ $(UBOOT_OUT)/.config $(UBOOT_FRAGMENTS) $(UBOOT_FRAGMENT_EMMC)
+	$(UMAKE) olddefconfig
+	$(UMAKE) KCFLAGS="$(UBOOT_KCFLAGS)"
+	cp $(UBOOT_BINARY) $@
+
+$(UBOOT_IDBLOADER): $(UBOOT_BINARY)
+	$(ROCKCHIP_FIRMWARE_DIR)/tools/mkimage -n rk3399 -T rksd -d $(ROCKCHIP_FIRMWARE_DIR)/bin/$(DDR_BLOB) $@
+	cat $(ROCKCHIP_FIRMWARE_DIR)/bin/$(MINILOADER_BLOB) >> $@
+
+$(UBOOT_TRUST): $(UBOOT_BINARY)
+	mkdir -p $(UBOOT_OUT)/bin
+	(cp -r $(RK_BIN_DIR) $(UBOOT_OUT)/bin && \
+	cp $(RKTRUST_DIR)/$(RKTRUST_INI) $(UBOOT_OUT) && \
+	cp $(ROCKCHIP_FIRMWARE_DIR)/$(TRUST_MERGER) $(UBOOT_OUT)/$(TRUST_MERGER) && \
+	cd $(UBOOT_OUT) && \
+	$(TRUST_MERGER) $(RKTRUST_INI))
+
+$(PRODUCT_OUT)/bootloader-deploy-emmc.img $(PRODUCT_OUT)/bootloader-sd.img $(PRODUCT_OUT)/bootloader-emmc.img: $(UBOOT_BINARY) $(UBOOT_BINARY_SD_EMMC) $(UBOOT_IDBLOADER) $(UBOOT_TRUST)
+	#Script for build uboot: https://github.com/armbian/build/blob/19a963189510a541a0486933eb8eaa1d7bc7f695/config/sources/families/include/rockchip64_common.inc#L180
+	$(ROCKCHIP_FIRMWARE_DIR)/tools/loaderimage --pack --uboot $(UBOOT_BINARY).$(subst .img,,$(subst $(PRODUCT_OUT)/bootloader-,,$@)) $(UBOOT_OUT)/uboot.img.$(subst .img,,$(subst $(PRODUCT_OUT)/bootloader-,,$@)) 0x200000
+	dd if=$(UBOOT_IDBLOADER) of=$@ seek=$$(( 64 - 64 ))
+	dd if=$(UBOOT_OUT)/uboot.img.$(subst .img,,$(subst $(PRODUCT_OUT)/bootloader-,,$@)) of=$@ seek=$$(( 16384 - 64 ))
+	dd if=$(UBOOT_TRUST) of=$@ seek=$$(( 24576 - 64 ))
+	dd if=/dev/null of=$@ bs=1 count=1 seek=$$(( 16384 * 1024 - 64 * 512 ))
 endif
 
 ifeq ($(PRODUCT_BOARD_PLATFORM),broadcom)
