@@ -92,7 +92,11 @@ gen_deploy() {
     prepare_disk $(( 256 )) # Default size - 256 MB
 
     echo "===> Add partitions"
-    add_part bootloader-$SUFFIX.img bootloader
+    if [ "$PLATFORM" = "rockchip" ] && [ "$SUFFIX" == "emmc" ]; then
+        add_part bootloader-deploy-emmc.img bootloader
+    else
+        add_part bootloader-$SUFFIX.img bootloader
+    fi
     add_part env.img uboot-env
     add_part boot.img recovery_boot
 
@@ -120,6 +124,11 @@ case $i in
     ;;
 esac
 done
+
+if [ "$PLATFORM" = "rockchip" ]; then
+    PART_START=$(( 64 * 512 ))
+    PTR=$PART_START
+fi
 
 if [[ -n $1 ]]; then
     SDIMG=$1
