@@ -12,6 +12,9 @@ DEPLOY_BOOTLOADER := \
 	$(PRODUCT_OUT)/env.img \
 
 ifneq ($(PRODUCT_HAS_EMMC),)
+ifeq ($(PRODUCT_BOARD_PLATFORM),rockchip)
+DEPLOY_BOOTLOADER += $(PRODUCT_OUT)/bootloader-deploy-emmc.img
+endif
 DEPLOY_BOOTLOADER += $(PRODUCT_OUT)/bootloader-emmc.img
 endif
 

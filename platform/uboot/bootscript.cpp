@@ -20,13 +20,23 @@ setenv loadaddr 0x50008000
 setenv dtboaddr 0x52008000
 #endif
 
+#ifdef platform_rockchip
+setenv dtbaddr 0x1fa00000
+setenv loadaddr 0x10008000
+setenv dtboaddr 0x12008000
+#endif
+
 setenv    main_fdt_id 0x100
 setenv overlay_fdt_id 0xFFF
 
 /* EMMC cards have 512k erase block size. Align partitions accordingly to avoid issues with erasing. */
 
 setenv partitions "uuid_disk=\${uuid_gpt_disk}"
+#ifdef platform_rockchip
+EXTENV(partitions, ";name=bootloader,start=32K,size=131040K,uuid=\${uuid_gpt_bootloader}")
+#else
 EXTENV(partitions, ";name=bootloader,start=128K,size=130944K,uuid=\${uuid_gpt_bootloader}")
+#endif
 EXTENV(partitions, ";name=uboot-env,size=512K,uuid=\${uuid_gpt_reserved}")
 EXTENV(partitions, ";name=recovery_boot,size=32M,uuid=\${uuid_gpt_boot_recovery}")
 EXTENV(partitions, ";name=misc,size=512K,uuid=\${uuid_gpt_misc}")
@@ -101,6 +111,13 @@ FUNC_BEGIN(bootcmd_start)
  cp.b \$dtb_start \$dtbaddr \$dtb_size &&
  fdt addr \$dtbaddr &&
 #endif
+
+#ifdef platform_rockchip
+ adtimg get dt --id=\$main_fdt_id dtb_start dtb_size main_fdt_index &&
+ cp.b \$dtb_start \$dtbaddr \$dtb_size &&
+ fdt addr \$dtbaddr &&
+#endif
+
 #ifdef platform_broadcom
 /* raspberrypi vc bootloader prepare fdt based on many factors. Use this fdt instead of dtb compiled by the kernel */
  fdt addr \${fdt_addr} &&

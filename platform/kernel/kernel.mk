@@ -9,6 +9,11 @@ ifeq ($(TARGET_PREBUILT_KERNEL),)
 ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
 KERNEL_SRC		:= kernel/glodroid-sunxi
 endif
+
+ifeq ($(PRODUCT_BOARD_PLATFORM),rockchip)
+KERNEL_SRC		:= kernel/glodroid-sunxi
+endif
+
 ifeq ($(PRODUCT_BOARD_PLATFORM),broadcom)
 KERNEL_SRC		:= kernel/glodroid-broadcom
 endif
