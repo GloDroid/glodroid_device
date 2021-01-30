@@ -115,21 +115,53 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.thermal@2.0-service.mock \
 
-# Graphics HAL
+# OpenGL driver
 PRODUCT_PACKAGES += \
     libGLES_mesa \
-    hwcomposer.drm \
-    gralloc.gbm \
-    android.hardware.graphics.allocator@2.0-impl \
-    android.hardware.graphics.allocator@2.0-service \
+
+# Composer passthrough HAL
+PRODUCT_PACKAGES += \
     android.hardware.graphics.composer@2.1-impl \
     android.hardware.graphics.composer@2.1-service \
+
+## Composer HAL for minigbm + minigbm gralloc0:
+#PRODUCT_PACKAGES += \
+#    android.hardware.graphics.allocator@2.0-impl \
+#    android.hardware.graphics.allocator@2.0-service \
+#    android.hardware.graphics.mapper@2.0-impl-2.1 \
+#    hwcomposer.drm_minigbm \
+#    gralloc.minigbm \
+#
+#PRODUCT_PROPERTY_OVERRIDES += \
+#    ro.hardware.gralloc=minigbm \
+#    ro.hardware.hwcomposer=drm_minigbm \
+##
+
+## Composer HAL for gralloc4 + minigbm gralloc4: (Require changes in manifest)
+#PRODUCT_PACKAGES += \
+#    android.hardware.graphics.allocator@4.0-service.minigbm \
+#    android.hardware.graphics.mapper@4.0-impl.minigbm \
+#    hwcomposer.drm \
+#
+#PRODUCT_PROPERTY_OVERRIDES += \
+#    ro.hardware.hwcomposer=drm \
+##
+
+## Composer HAL for libdrm_gralloc + gbm_gralloc (gralloc0):
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.allocator@2.0-service \
     android.hardware.graphics.mapper@2.0-impl-2.1 \
+    hwcomposer.drm \
+    gralloc.gbm \
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.gralloc=gbm \
+    ro.hardware.hwcomposer=drm \
+##
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=160 \
-    ro.hardware.gralloc=gbm \
-    ro.hardware.hwcomposer=drm \
 
 # Gatekeeper HAL
 PRODUCT_PACKAGES += \
