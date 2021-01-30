@@ -22,7 +22,7 @@ endif
 CLANG_ABS := $$(readlink -f $(CLANG))
 
 MAKE_COMMON := \
-    PATH=/usr/bin:/bin:$$PATH \
+    PATH=/usr/bin:/bin:/sbin:$$PATH \
     ARCH=$(TARGET_ARCH) \
     CROSS_COMPILE=$$(readlink -f $(CROSS_COMPILE)) \
     $(MAKE)
