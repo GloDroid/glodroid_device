@@ -57,6 +57,10 @@ char const* const GREEN_LED_FILE = "/sys/class/leds/green:indicator/brightness";
 
 char const* const LCD_FILE = "/sys/class/backlight/backlight/brightness";
 
+static char const* const MAX_BRIGHTNESS_FILE = "/sys/class/backlight/backlight/max_brightness";
+
+static int SYS_MAX_BRIGHTNESS = 0;        // Max brightness readed form system
+
 static int sys_write_int(int fd, int value) {
     char buffer[16];
     size_t bytes;
@@ -66,6 +70,26 @@ static int sys_write_int(int fd, int value) {
     if (bytes >= sizeof(buffer)) return -EINVAL;
     amount = write(fd, buffer, bytes);
     return amount == -1 ? -errno : 0;
+}
+
+static int sysfs_read_int(const char* name, int& value) {
+    uint8_t const BUFFER_SIZE = 16;
+    char buffer[BUFFER_SIZE] = {0};
+    ssize_t amount = -EINVAL;
+    int fd = open(name, O_RDONLY);
+    if (fd < 0) {
+        LOG(ERROR) << "COULD NOT OPEN LED_DEVICE" << name;
+        return amount;
+    }
+    do {
+        amount = read(fd, (void *)buffer, BUFFER_SIZE);
+        if (-EINVAL == amount) {
+            break;
+        }
+        value = atoi(buffer);
+    } while (false);
+    close(fd);
+    return amount;
 }
 
 class Lights : public BnLights {
@@ -96,6 +120,16 @@ class Lights : public BnLights {
 
         sys_write_int(fd, color);
         close(fd);
+    }
+
+    int convertBrightness(int current_brightness) {
+        uint32_t const MAX_BRIGHTNESS = 0xFF;   // Max brightness recived from api
+        uint32_t const MIN_BRIGHTNESS = 0x00;
+        const int max_shift = MAX_BRIGHTNESS - MIN_BRIGHTNESS;
+        int recived_brughtness_shift = max_shift - (MAX_BRIGHTNESS - (current_brightness & 0xFF));
+        int recived_brightness_persent = (recived_brughtness_shift * 100) / max_shift;
+        int calculated = (SYS_MAX_BRIGHTNESS * recived_brightness_persent) / 100;
+        return calculated > SYS_MAX_BRIGHTNESS ? SYS_MAX_BRIGHTNESS : calculated;
     }
 
   public:
@@ -133,7 +167,7 @@ class Lights : public BnLights {
                 writeLed(BLUE_LED_FILE, color ? 1 : 0);
                 break;
             case LightType::BACKLIGHT:
-                writeLed(LCD_FILE, (color >> 16) * 3);
+                writeLed(LCD_FILE, convertBrightness(state.color));
                 break;
         }
 
@@ -164,7 +198,9 @@ int main() {
         LOG(ERROR) << "Could not register" << instance;
         // should abort, but don't want crash loop for local testing
     }
-
+    if (-EINVAL == sysfs_read_int(MAX_BRIGHTNESS_FILE, SYS_MAX_BRIGHTNESS)) {
+        LOG(ERROR) << "COULD NOT OPEN LED_DEVICE" << MAX_BRIGHTNESS_FILE;
+    }
     ABinderProcess_joinThreadPool();
 
     return 1;  // should not reach
