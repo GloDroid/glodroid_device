@@ -1,1 +1,2 @@
 allow flags_health_check apexd_prop:file {open getattr map};
+allow flags_health_check adbd_prop:file {open getattr map};
