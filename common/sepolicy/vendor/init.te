@@ -1,1 +1,2 @@
 allow init kernel:system module_request;
+allow init proc:file write;
