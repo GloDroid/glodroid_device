@@ -5,3 +5,5 @@ genfscon sysfs /devices/platform/soc/1c10000.mmc/mmc_host/mmc1/mmc1:0001/mmc1:00
 # /sys/class/net for opi3
 genfscon sysfs /devices/platform/soc/5020000.ethernet/net/eth0                                    u:object_r:sysfs_net:s0
 genfscon sysfs /devices/platform/soc/4021000.mmc/mmc_host/mmc1/mmc1:0001/mmc1:0001:1/net/wlan0    u:object_r:sysfs_net:s0
+
+genfscon sysfs /devices/platform/soc/1c40000.gpu/uevent                                           u:object_r:sysfs_usermodehelper:s0
