@@ -17,7 +17,7 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a15
 
-BOARD_GPU_DRIVERS := kmsro panfrost
+BOARD_MESA3D_GALLIUM_DRIVERS := panfrost kmsro
 TARGET_BOARD_INFO_FILE := device/glodroid/opi4/board-info.txt
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_KERNEL_CMDLINE += earlyprintk console=ttyS2,1500000n8

@@ -117,7 +117,11 @@ PRODUCT_PACKAGES += \
 
 # OpenGL driver
 PRODUCT_PACKAGES += \
-    libGLES_mesa \
+    libEGL_mesa \
+    libGLESv1_CM_mesa \
+    libGLESv2_mesa \
+    libgallium_dri \
+    libglapi \
 
 # Composer passthrough HAL
 PRODUCT_PACKAGES += \
