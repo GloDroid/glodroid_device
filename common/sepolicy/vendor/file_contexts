@@ -6,7 +6,7 @@
 
 /vendor/lib(64)?/hw/gralloc.gbm.so                                              u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/libgbm.so                                                      u:object_r:same_process_hal_file:s0
-/vendor/lib(64)?/dri/gallium_dri.so                                             u:object_r:same_process_hal_file:s0
+/vendor/lib(64)?/dri/libgallium_dri.so                                          u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/hw/android.hardware.graphics.mapper@2.0-impl-2.1.so            u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/hw/android.hardware.graphics.mapper@4.0-impl.so                u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/libglapi.so                                                    u:object_r:same_process_hal_file:s0
