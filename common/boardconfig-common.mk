@@ -98,6 +98,8 @@ BOARD_MKBOOTIMG_ARGS  += --kernel_offset 0x80000 --second_offset 0x8800 --ramdis
 BOARD_MKBOOTIMG_ARGS  += --dtb_offset 0x3000000 --header_version $(BOARD_BOOT_HEADER_VERSION)
 TARGET_KERNEL_SOURCE  := kernel/glodroid
 
+BOARD_RAMDISK_USE_LZ4 := true
+
 # SELinux support
 #BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
 
