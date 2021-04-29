@@ -25,3 +25,8 @@ include $(CLEAR_VARS)
 LOCAL_MODULE                         := remove-Bluetooth
 EXECUTABLES.remove-Bluetooth.OVERRIDES := Bluetooth
 include $(BUILD_PHONY_PACKAGE)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE                         := remove-Launcher3QuickStep
+EXECUTABLES.remove-Launcher3QuickStep.OVERRIDES := Launcher3QuickStep
+include $(BUILD_PHONY_PACKAGE)

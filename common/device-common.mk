@@ -255,6 +255,12 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/glodroid/common/init.common.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.rc \
 
+
+################# GLODROID ADDITIONAL PACKAGES SECTION #########################
+
+PRODUCT_COPY_FILES += \
+    device/glodroid/common/preinstall.sh:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall.sh \
+
 # Prebuild .apk applications for non-lowram devices
 ifeq (,$(filter $(GLODROID_LOWRAM),))
 PRODUCT_PACKAGES += \
@@ -268,7 +274,16 @@ ifneq (,$(filter $(DEVICE_TYPE),tv))
 PRODUCT_PACKAGES += \
     Kodi \
 
+else
+PRODUCT_PACKAGES += \
+    shade-launcher3 \
+
+PRODUCT_PACKAGES += \
+    remove-Launcher3QuickStep \
+
 endif
+
+################################################################################
 
 # fstab
 PRODUCT_COPY_FILES += \
