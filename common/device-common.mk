@@ -262,7 +262,7 @@ PRODUCT_COPY_FILES += \
     device/glodroid/common/preinstall.sh:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall.sh \
 
 # Prebuild .apk applications for non-lowram devices
-ifeq (,$(filter $(GLODROID_LOWRAM),))
+ifeq (,$(filter $(GLODROID_LOWRAM),true))
 PRODUCT_PACKAGES += \
     FDroid \
     SkyTube \
