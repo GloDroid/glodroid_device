@@ -266,6 +266,7 @@ ifeq (,$(filter $(GLODROID_LOWRAM),))
 PRODUCT_PACKAGES += \
     FDroid \
     SkyTube \
+    fenix \
 
 endif
 
