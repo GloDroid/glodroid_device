@@ -24,16 +24,23 @@
      entries do not follow the convention, but all new entries should. -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- User activity timeout: Minimum screen off timeout in milliseconds.
+    <!-- Whether a software navigation bar should be shown. NOTE: in the future this may be
+         autodetected from the Configuration. -->
+    <bool name="config_showNavigationBar">true</bool>
 
-         Sets a lower bound for the {@link Settings.System#SCREEN_OFF_TIMEOUT} setting
-         which determines how soon the device will go to sleep when there is no
-         user activity.
+    <!-- User activity timeout: Maximum screen dim duration as a percentage of screen off timeout.
 
-         This value must be greater than zero, otherwise the device will immediately
-         fall asleep again as soon as it is awoken.
+         This resource is similar to config_maximumScreenDimDuration but the maximum
+         screen dim duration is defined as a ratio of the overall screen off timeout
+         instead of as an absolute value in milliseconds.  This is useful for reducing
+         the dim duration when the screen off timeout is very short.
 
-         Sleep is buggy, set to 10 hours on pinephone as a temporary workaround.
+         When computing the screen dim duration, the power manager uses the lesser
+         of the effective durations expressed by config_maximumScreenDimDuration and
+         config_maximumScreenDimRatio.
+
+         This value must be between 0% and 100%.  If the value is zero, the screen will not
+         dim before the device goes to sleep.
     -->
-    <integer name="config_minimumScreenOffTimeout">36000000</integer>
+    <fraction name="config_maximumScreenDimRatio">40%</fraction>
 </resources>

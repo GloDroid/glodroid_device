@@ -18,5 +18,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/glodroid/pinetab/audio.pinetab.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.pinetab.xml \
 
-DEVICE_PACKAGE_OVERLAYS += \
+DEVICE_PACKAGE_OVERLAYS := \
+    device/glodroid/overlays/common \
     device/glodroid/pinetab/overlay
