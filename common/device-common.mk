@@ -279,9 +279,6 @@ else
 PRODUCT_PACKAGES += \
     shade-launcher3 \
 
-PRODUCT_PACKAGES += \
-    remove-Launcher3QuickStep \
-
 endif
 
 ################################################################################
