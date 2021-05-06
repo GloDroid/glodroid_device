@@ -15,6 +15,8 @@ PRODUCT_HAS_EMMC := true
 UBOOT_DEFCONFIG := pinephone_defconfig
 ATF_PLAT        := sun50i_a64
 
+CRUST_FIRMWARE_DEFCONFIG := pinephone_defconfig
+
 KERNEL_DEFCONFIG := kernel/glodroid-sunxi/arch/arm64/configs/pinephone_defconfig
 KERNEL_FRAGMENTS := device/glodroid/pinephone/kernel.config
 

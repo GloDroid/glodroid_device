@@ -15,6 +15,8 @@ PRODUCT_HAS_EMMC := true
 UBOOT_DEFCONFIG := sopine_baseboard_defconfig
 ATF_PLAT        := sun50i_a64
 
+CRUST_FIRMWARE_DEFCONFIG := pinephone_defconfig
+
 KERNEL_DEFCONFIG := device/glodroid/platform/common/sunxi/sunxi64_defconfig
 KERNEL_FRAGMENTS := \
     device/glodroid/platform/common/sunxi/sunxi-common.config \

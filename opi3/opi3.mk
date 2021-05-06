@@ -16,6 +16,8 @@ PRODUCT_HAS_EMMC := true
 UBOOT_DEFCONFIG := orangepi_3_defconfig
 ATF_PLAT        := sun50i_h6
 
+CRUST_FIRMWARE_DEFCONFIG := orangepi_3_defconfig
+
 KERNEL_DEFCONFIG := device/glodroid/platform/common/sunxi/sunxi64_defconfig
 KERNEL_FRAGMENTS := \
     device/glodroid/platform/common/sunxi/sunxi-common.config \
