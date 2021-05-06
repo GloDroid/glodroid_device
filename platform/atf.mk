@@ -10,7 +10,7 @@ ifeq ($(TARGET_ARCH),arm64)
 LOCAL_PATH := $(call my-dir)
 
 #-------------------------------------------------------------------------------
-ATF_SRC		:= external/arm-trusted-firmware
+ATF_SRC		?= external/arm-trusted-firmware
 
 #-------------------------------------------------------------------------------
 M0_TRIPLE := arm-eabi

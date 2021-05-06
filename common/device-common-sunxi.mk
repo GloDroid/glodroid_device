@@ -5,3 +5,5 @@ PRODUCT_COPY_FILES += \
 
 UBOOT_FRAGMENTS += \
     device/glodroid/platform/common/sunxi/uboot.config
+
+ATF_SRC         := external/crust-firmware/arm-trusted-firmware
