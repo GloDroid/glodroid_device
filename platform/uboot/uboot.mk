@@ -30,17 +30,17 @@ UBOOT_KCFLAGS = \
     $(TARGET_BOOTLOADER_CFLAGS)
 
 ifeq ($(TARGET_ARCH),arm64)
-BL31_SET := BL31=$$(readlink -f $(ATF_BINARY))
+BL31_SET := BL31=$(AOSP_TOP_ABS)/$(ATF_BINARY)
 endif
 
 UMAKE := \
     PATH=/usr/bin:/bin:$$PATH \
     ARCH=$(TARGET_ARCH) \
-    CROSS_COMPILE=$$(readlink -f $(CROSS_COMPILE)) \
+    CROSS_COMPILE=$(AOSP_TOP_ABS)/$(CROSS_COMPILE) \
     $(BL31_SET) \
     $(MAKE) \
     -C $(UBOOT_SRC) \
-    O=$$(readlink -f $(UBOOT_OUT))
+    O=$(AOSP_TOP_ABS)/$(UBOOT_OUT)
 
 UBOOT_FRAGMENTS	+= device/glodroid/platform/common/uboot.config
 UBOOT_FRAGMENT_EMMC := $(UBOOT_OUT)/uboot-emmc.config

@@ -7,7 +7,7 @@ $(MODULE): $(MOD_SRC) $(KERNEL_OUT)/.config $(sort $(shell find -L $(MOD_SRC))) 
 	rm -rf $(dir $@)
 	mkdir -p $(dir $@)
 	cp -r $</* $(dir $@)
-	$(MAKE_COMMON) KSRC=$$(readlink -f $(KERNEL_OUT)) -C $(dir $@)
+	$(MAKE_COMMON) KSRC=$(AOSP_TOP_ABS)/$(KERNEL_OUT) -C $(dir $@)
 
 #-------------------------------------------------------------------------------
 include $(CLEAR_VARS)

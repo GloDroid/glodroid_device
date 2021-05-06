@@ -3,6 +3,8 @@
 # Copyright (C) 2020 Roman Stratiienko (r.stratiienko@gmail.com)
 PLATFORM_PATH := $(call my-dir)
 
+AOSP_TOP_ABS := $(realpath .)
+
 ifeq ($(TARGET_ARCH),arm)
 TRIPLE=arm-linux-gnueabihf
 CROSS_COMPILE := prebuilts/gcc/linux-x86/arm/gcc-linaro-$(TRIPLE)/bin/$(TRIPLE)-
@@ -19,12 +21,12 @@ ATF_BINARY	:= $(ATF_OUT)/$(ATF_PLAT)/debug/bl31.bin
 endif
 
 endif
-CLANG_ABS := $$(readlink -f $(CLANG))
+CLANG_ABS := $(AOSP_TOP_ABS)/$(CLANG)
 
 MAKE_COMMON := \
     PATH=/usr/bin:/bin:/sbin:$$PATH \
     ARCH=$(TARGET_ARCH) \
-    CROSS_COMPILE=$$(readlink -f $(CROSS_COMPILE)) \
+    CROSS_COMPILE=$(AOSP_TOP_ABS)/$(CROSS_COMPILE) \
     $(MAKE)
 
 include $(PLATFORM_PATH)/kernel/kernel.mk

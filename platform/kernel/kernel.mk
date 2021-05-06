@@ -63,7 +63,7 @@ GEN_DTBCFG		:= $(PRODUCT_OUT)/gen/DTBO/dtbo.cfg
 
 KMAKE := \
     $(MAKE_COMMON) \
-    -C $(KERNEL_SRC) O=$$(readlink -f $(KERNEL_OUT)) \
+    -C $(KERNEL_SRC) O=$(AOSP_TOP_ABS)/$(KERNEL_OUT) \
     DTC_FLAGS='--symbols' \
 
 #-------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ $(KERNEL_COMPRESSED): $(KERNEL_BINARY)
 
 $(KERNEL_MODULES_OUT): $(KERNEL_BINARY)
 	rm -rf $@
-	$(KMAKE) INSTALL_MOD_PATH=$$(readlink -f $@) modules_install
+	$(KMAKE) INSTALL_MOD_PATH=$(AOSP_TOP_ABS)/$@ modules_install
 
 $(TARGET_VENDOR_MODULES)/modules.dep : $(KERNEL_MODULES_OUT)
 	rm -rf $(TARGET_VENDOR_MODULES)/kernel
