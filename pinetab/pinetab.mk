@@ -18,6 +18,8 @@ ATF_PLAT        := sun50i_a64
 CRUST_FIRMWARE_DEFCONFIG := pinephone_defconfig
 
 KERNEL_DEFCONFIG := kernel/glodroid-sunxi/arch/arm64/configs/pinephone_defconfig
-KERNEL_FRAGMENTS := device/glodroid/pinetab/kernel.config
+KERNEL_FRAGMENTS := \
+    device/glodroid/platform/common/sunxi/a64_overlay.config \
+    device/glodroid/pinetab/kernel.config
 
 KERNEL_DTB_FILE := allwinner/sun50i-a64-pinetab.dtb
