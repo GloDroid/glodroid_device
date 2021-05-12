@@ -21,8 +21,10 @@ ATF_BINARY	:= $(ATF_OUT)/$(ATF_PLAT)/debug/bl31.bin
 endif
 
 ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
+ifneq ($(CRUST_FIRMWARE_DEFCONFIG),)
 CRUST_FIRMWARE_OUT := $(PRODUCT_OUT)/obj/CRUST_FIRMWARE_OBJ
 CRUST_FIRMWARE_BINARY := $(CRUST_FIRMWARE_OUT)/scp/scp.bin
+endif
 endif
 
 endif
