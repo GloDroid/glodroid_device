@@ -18,6 +18,7 @@ ATF_PLAT        := sun50i_h6
 
 CRUST_FIRMWARE_DEFCONFIG := orangepi_3_defconfig
 
+KERNEL_SRC       := kernel/glodroid-megous
 KERNEL_DEFCONFIG := device/glodroid/platform/common/sunxi/sunxi64_defconfig
 KERNEL_FRAGMENTS := \
     device/glodroid/platform/common/sunxi/sunxi-common.config \
