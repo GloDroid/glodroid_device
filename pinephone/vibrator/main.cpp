@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-#include "vibrator-impl/Vibrator.h"
-
 #include <android-base/logging.h>
 #include <android/binder_manager.h>
 #include <android/binder_process.h>
 
+#include "vibrator-impl/Vibrator.h"
+
+using aidl::android::hardware::vibrator::FFDevice;
 using aidl::android::hardware::vibrator::Vibrator;
+
+static const char* INPUT_PATH = "/sys/devices/platform/vibrator/input";
 
 int main() {
     ABinderProcess_setThreadPoolMaxThreadCount(0);
-    std::shared_ptr<Vibrator> vib = ndk::SharedRefBase::make<Vibrator>();
+    auto device = FFDevice::create(INPUT_PATH);
+    if (!device)
+        return EXIT_FAILURE;
+    std::shared_ptr<Vibrator> vib = ndk::SharedRefBase::make<Vibrator>(std::move(device));
 
     const std::string instance = std::string() + Vibrator::descriptor + "/default";
     binder_status_t status = AServiceManager_addService(vib->asBinder().get(), instance.c_str());

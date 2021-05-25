@@ -21,9 +21,6 @@ KERNEL_SRC       := kernel/glodroid-megous
 KERNEL_DEFCONFIG := $(KERNEL_SRC)/arch/arm64/configs/pinephone_defconfig
 KERNEL_FRAGMENTS := \
     device/glodroid/platform/common/sunxi/a64_overlay.config \
-    device/glodroid/pinephone/kernel.config
 
 KERNEL_DTB_FILE_PP11 := allwinner/sun50i-a64-pinephone-1.1.dtb
 KERNEL_DTB_FILE_PP12 := allwinner/sun50i-a64-pinephone-1.2.dtb
-
-ANDROID_DTS_OVERLAY := $(LOCAL_PATH)/android.dts
