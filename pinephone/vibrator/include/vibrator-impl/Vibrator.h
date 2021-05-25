@@ -18,6 +18,8 @@
 
 #include <aidl/android/hardware/vibrator/BnVibrator.h>
 
+#include "FFDevice.h"
+
 namespace aidl {
 namespace android {
 namespace hardware {
@@ -44,6 +46,11 @@ class Vibrator : public BnVibrator {
     ndk::ScopedAStatus getSupportedAlwaysOnEffects(std::vector<Effect>* _aidl_return) override;
     ndk::ScopedAStatus alwaysOnEnable(int32_t id, Effect effect, EffectStrength strength) override;
     ndk::ScopedAStatus alwaysOnDisable(int32_t id) override;
+
+    std::unique_ptr<FFDevice> ff_device;
+
+  public:
+    Vibrator(std::unique_ptr<FFDevice> ff_device) : ff_device(std::move(ff_device)) {}
 };
 
 }  // namespace vibrator

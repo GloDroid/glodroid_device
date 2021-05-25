@@ -14,49 +14,17 @@
  * limitations under the License.
  */
 
-#include <fcntl.h>
-
 #include "vibrator-impl/Vibrator.h"
 
 #include <android-base/logging.h>
+#include <fcntl.h>
+
 #include <thread>
 
 namespace aidl {
 namespace android {
 namespace hardware {
 namespace vibrator {
-
-static const char *STATE_PATH = "/sys/class/leds/vibrator/state";
-static const char *DURATION_PATH = "/sys/class/leds/vibrator/duration";
-static const char *ACTIVATE_PATH = "/sys/class/leds/vibrator/activate";
-
-static int fd_write_int(int fd, int value) {
-    char buffer[16];
-    size_t bytes;
-    ssize_t amount;
-
-    bytes = snprintf(buffer, sizeof(buffer), "%d\n", value);
-    if (bytes >= sizeof(buffer)) return -EINVAL;
-    amount = write(fd, buffer, bytes);
-    return amount == -1 ? -errno : 0;
-}
-
-static void sysfs_write_int(const char* path, int value) {
-    int fd = open(path, O_WRONLY);
-    if (fd < 0) {
-        LOG(ERROR) << "COULD NOT OPEN SYSFS ELEMENT: " << path;
-        return;
-    }
-
-    fd_write_int(fd, value);
-    close(fd);
-}
-
-static void vibrate(int duration_ms) {
-    sysfs_write_int(STATE_PATH, 1);
-    sysfs_write_int(DURATION_PATH, duration_ms);
-    sysfs_write_int(ACTIVATE_PATH, 1);
-}
 
 static constexpr int32_t kComposeDelayMaxMs = 1000;
 static constexpr int32_t kComposeSizeMax = 256;
@@ -72,14 +40,14 @@ ndk::ScopedAStatus Vibrator::getCapabilities(int32_t* _aidl_return) {
 
 ndk::ScopedAStatus Vibrator::off() {
     LOG(INFO) << "Vibrator off";
+    ff_device->off();
     return ndk::ScopedAStatus::ok();
 }
 
 ndk::ScopedAStatus Vibrator::on(int32_t timeoutMs,
                                 const std::shared_ptr<IVibratorCallback>& callback) {
     LOG(INFO) << "Vibrator on for timeoutMs: " << timeoutMs;
-
-    vibrate(timeoutMs);
+    ff_device->vibrate(timeoutMs);
 
     if (callback != nullptr) {
         std::thread([=] {
@@ -109,7 +77,7 @@ ndk::ScopedAStatus Vibrator::perform(Effect effect, EffectStrength strength,
 
     constexpr size_t kEffectMillis = 100;
 
-    vibrate(kEffectMillis);
+    ff_device->vibrate(kEffectMillis);
 
     if (callback != nullptr) {
         std::thread([=] {
@@ -197,7 +165,7 @@ ndk::ScopedAStatus Vibrator::compose(const std::vector<CompositeEffect>& composi
         LOG(INFO) << "Starting compose on another thread";
 
         for (auto& e : composite) {
-            vibrate(e.delayMs);
+            ff_device->vibrate(e.delayMs);
 
             if (e.delayMs) {
                 usleep(e.delayMs * 1000);

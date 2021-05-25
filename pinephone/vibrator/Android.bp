@@ -7,7 +7,7 @@ cc_library_static {
         "android.hardware.vibrator-ndk_platform",
     ],
     export_include_dirs: ["include"],
-    srcs: ["Vibrator.cpp"],
+    srcs: ["Vibrator.cpp", "FFDevice.cpp"],
     visibility: [
         ":__subpackages__",
         "//hardware/interfaces/tests/extension/vibrator:__subpackages__",
