@@ -20,4 +20,4 @@ TARGET_2ND_CPU_VARIANT := cortex-a15
 
 TARGET_BOARD_INFO_FILE := device/glodroid/opi3/board-info.txt
 
-BOARD_MESA3D_GALLIUM_DRIVERS := panfrost kmsro
+BOARD_MESA3D_GALLIUM_DRIVERS := panfrost

@@ -112,7 +112,7 @@ USE_OPENGL_RENDERER := true
 BOARD_USE_LEGACY_UI := true
 
 BOARD_MESA3D_USES_MESON_BUILD := true
-BOARD_MESA3D_GALLIUM_DRIVERS := lima kmsro
+BOARD_MESA3D_GALLIUM_DRIVERS := lima
 
 BOARD_USES_METADATA_PARTITION := true
 
@@ -131,5 +131,3 @@ DEVICE_MATRIX_FILE := device/glodroid/common/compatibility_matrix.xml
 BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/sepolicy/vendor
 
 BOARD_USES_GRALLOC_HANDLE := true
-# Required to build mesa starting from R
-BUILD_BROKEN_USES_BUILD_HOST_STATIC_LIBRARY := true
