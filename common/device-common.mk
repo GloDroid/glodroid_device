@@ -203,6 +203,10 @@ endif
 PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.5-external-service \
 
+#USB and USB Gadget HAL
+PRODUCT_PACKAGES += \
+    android.hardware.usb@1.3-service.glodroid \
+
 PRODUCT_COPY_FILES += \
     device/glodroid/common/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 
