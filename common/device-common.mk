@@ -213,7 +213,7 @@ PRODUCT_PACKAGES += \
 
 #USB and USB Gadget HAL
 PRODUCT_PACKAGES += \
-    android.hardware.usb@1.1-service.bonito \
+    android.hardware.usb@1.1-service.glodroid \
 
 PRODUCT_COPY_FILES += \
     device/glodroid/common/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml

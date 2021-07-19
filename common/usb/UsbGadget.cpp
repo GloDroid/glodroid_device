@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "android.hardware.usb.gadget@1.1-service.bonito"
+#define LOG_TAG "android.hardware.usb.gadget@1.1-service.glodroid"
 
 #include "UsbGadget.h"
 #include <dirent.h>
