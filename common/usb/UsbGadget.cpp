@@ -29,14 +29,14 @@
 constexpr int BUFFER_SIZE = 512;
 constexpr int MAX_FILE_PATH_LENGTH = 256;
 constexpr int EPOLL_EVENTS = 10;
-constexpr bool DEBUG = false;
+constexpr bool DEBUG = true;
 constexpr int DISCONNECT_WAIT_US = 100000;
 constexpr int PULL_UP_DELAY = 500000;
 
 #define BUILD_TYPE "ro.build.type"
 #define GADGET_PATH "/config/usb_gadget/g1/"
 #define PULLUP_PATH GADGET_PATH "UDC"
-#define GADGET_NAME "a600000.dwc3"
+#define GADGET_NAME "musb-hdrc.4.auto"
 #define PERSISTENT_BOOT_MODE "ro.bootmode"
 #define VENDOR_ID_PATH GADGET_PATH "idVendor"
 #define PRODUCT_ID_PATH GADGET_PATH "idProduct"
@@ -471,16 +471,20 @@ V1_0::Status UsbGadget::setupFunctions(
     ffsEnabled = true;
     ALOGI("setCurrentUsbFunctions mtp");
     if (!WriteStringToFile("1", DESC_USE_PATH)) return Status::ERROR;
+    ALOGI("WriteStringToFile mtp");
 
     if (inotify_add_watch(inotifyFd, "/dev/usb-ffs/mtp/", IN_ALL_EVENTS) == -1)
       return Status::ERROR;
+    ALOGI("inotify_add_watch mtp");
 
     if (linkFunction("ffs.mtp", i++)) return Status::ERROR;
+    ALOGI("linkFunction mtp");
 
     // Add endpoints to be monitored.
     mEndpointList.push_back("/dev/usb-ffs/mtp/ep1");
     mEndpointList.push_back("/dev/usb-ffs/mtp/ep2");
     mEndpointList.push_back("/dev/usb-ffs/mtp/ep3");
+    ALOGI("push_back mtp");
   } else if (((functions & GadgetFunction::PTP) != 0)) {
     ffsEnabled = true;
     ALOGI("setCurrentUsbFunctions ptp");
@@ -538,12 +542,16 @@ V1_0::Status UsbGadget::setupFunctions(
     ALOGI("setCurrentUsbFunctions Adb");
     if (!WriteStringToFile("1", DESC_USE_PATH))
       return Status::ERROR;
+    ALOGI("WriteStringToFIle Adb");
     if (inotify_add_watch(inotifyFd, "/dev/usb-ffs/adb/", IN_ALL_EVENTS) == -1)
       return Status::ERROR;
+    ALOGI("inotify_add_watch Adb");
 
     if (linkFunction("ffs.adb", i++)) return Status::ERROR;
+    ALOGI("linkFunction Adb");
     mEndpointList.push_back("/dev/usb-ffs/adb/ep1");
     mEndpointList.push_back("/dev/usb-ffs/adb/ep2");
+    ALOGI("push_back Adb");
     ALOGI("Service started");
   }
 

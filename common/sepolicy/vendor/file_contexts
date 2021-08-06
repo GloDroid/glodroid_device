@@ -18,7 +18,7 @@
 
 /vendor/bin/hw/android\.hardware\.graphics\.allocator@4\.0-service\.minigbm     u:object_r:hal_graphics_allocator_default_exec:s0
 
-/vendor/bin/hw/android\.hardware\.usb@1\.1-service.bonito                       u:object_r:hal_usb_default_exec:s0
+/vendor/bin/hw/android\.hardware\.usb@1\.1-service.glodroid                     u:object_r:hal_usb_default_exec:s0
 
 /dev/block/zram0                                                                u:object_r:swap_block_device:s0
 

@@ -1,0 +1,6 @@
+allow hal_usb_default configfs:dir { search write add_name read open remove_name };
+allow hal_usb_default configfs:file { create write open unlink };
+allow hal_usb_default configfs:lnk_file { create unlink };
+
+allow hal_usb_default functionfs:dir { search read watch watch_reads };
+allow hal_usb_default functionfs:file read;
