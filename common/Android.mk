@@ -1,6 +1,3 @@
-include device/linaro/hikey/libmemtrack/Android.mk
-
-
 include $(CLEAR_VARS)
 LOCAL_MODULE                                       := remove-BlockedNumberProvider
 EXECUTABLES.remove-BlockedNumberProvider.OVERRIDES := BlockedNumberProvider
