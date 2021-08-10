@@ -26,5 +26,5 @@ set -x
 ./fastboot flash boot_a boot.img
 ./fastboot flash dtbo_a boot_dtbo.img
 ./fastboot flash super  super.img
-./fastboot --wipe-and-use-fbe
+./fastboot -w
 ./fastboot reboot
