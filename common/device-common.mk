@@ -43,7 +43,7 @@ $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-he
 endif
 endif
 
-PRODUCT_SHIPPING_API_LEVEL := 30
+PRODUCT_SHIPPING_API_LEVEL := 31
 
 # Set custom settings
 DEVICE_PACKAGE_OVERLAYS := device/linaro/hikey/overlay
@@ -102,8 +102,8 @@ PRODUCT_PACKAGES += \
 # Boot control
 PRODUCT_PACKAGES += \
     bootctrl.default \
-    android.hardware.boot@1.1-impl \
-    android.hardware.boot@1.1-service \
+    android.hardware.boot@1.2-impl \
+    android.hardware.boot@1.2-service \
 
 # Thermal HAL
 PRODUCT_PACKAGES += \
