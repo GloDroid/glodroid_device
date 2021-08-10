@@ -75,10 +75,12 @@ $(KERNEL_OUT)/.config: $(KERNEL_DEFCONFIG) $(KERNEL_FRAGMENTS) $(sort $(shell fi
 
 $(KERNEL_BINARY): $(sort $(shell find -L $(KERNEL_SRC))) $(KERNEL_OUT)/.config
 	$(KMAKE) $(KERNEL_TARGET) dtbs modules
+	touch $@
 
 $(KERNEL_COMPRESSED): $(KERNEL_BINARY)
 	rm -f $@
 	prebuilts/misc/linux-x86/lz4/lz4c -c1 $< $@
+	touch $@
 
 # Modules
 
