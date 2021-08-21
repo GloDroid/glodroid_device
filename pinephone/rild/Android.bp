@@ -17,7 +17,7 @@ package {
 }
 
 cc_binary {
-    name: "libcuttlefish-rild",
+    name: "libpinephone-rild",
     vendor: true,
     cflags: [
         "-DRIL_SHLIB",
@@ -26,7 +26,7 @@ cc_binary {
         "-Wextra",
     ],
     srcs: [
-        "rild_cuttlefish.c",
+        "rild_pinephone.c",
     ],
     include_dirs: [
         "device/google/cuttlefish",
@@ -38,7 +38,7 @@ cc_binary {
         "liblog",
         "libril-modem-lib",
     ],
-    init_rc: ["rild_cuttlefish.rc"],
+    init_rc: ["rild_pinephone.rc"],
     relative_install_path: "hw",
     overrides: ["rild"],
 }
