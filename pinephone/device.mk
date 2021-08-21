@@ -66,3 +66,12 @@ DEVICE_PACKAGE_OVERLAYS := \
 # Disable scaling to avoid UI glitches.
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.hwc.drm.scale_with_gpu=1 \
+
+# Modem packages and configuration
+PRODUCT_PACKAGES += \
+    libpinephone-ril-2 \
+    libpinephone-rild \
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.boot.modem_simulator_ports=-1 \
+    vendor.rild.libargs=-d/dev/ttyUSB2 \
