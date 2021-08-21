@@ -332,7 +332,7 @@ static pthread_cond_t s_state_cond = PTHREAD_COND_INITIALIZER;
 static int s_port = -1;
 static const char * s_device_path = NULL;
 static int          s_device_socket = 0;
-static uint32_t s_modem_simulator_port = -1;
+static int32_t      s_modem_simulator_port = -1;
 
 /* trigger change to this with s_state_cond */
 static int s_closed = 0;
@@ -1298,10 +1298,8 @@ static void requestSignalStrength(void *data __unused, size_t datalen __unused, 
     err = at_tok_start(&line);
     if (err < 0) goto error;
 
-    for (count = 0; count < maxNumOfElements; count++) {
-        err = at_tok_nextint(&line, &(response[count]));
-        if (err < 0 && count < minNumOfElements) goto error;
-    }
+    err = at_tok_nextint(&line, &(response[0]));
+    err = at_tok_nextint(&line, &(response[1]));
 
     RIL_onRequestComplete(t, RIL_E_SUCCESS, response, sizeof(response));
 
@@ -3922,7 +3920,7 @@ static void requestSetSmsBroadcastConfig(void *data, size_t datalen,
 
     snprintf(cmd, sizeof(cmd), "AT+CSCB=%d,\"%s\",\"%s\"",
             (*pGsmBci[0]).selected ? 0 : 1, channel, languageId);
-    int err = at_send_command_singleline( cmd, "+CSCB:", &p_response);
+    int err = at_send_command( cmd, &p_response);
 
     if (err < 0 || p_response->success == 0) {
         RIL_onRequestComplete(t, RIL_E_GENERIC_FAILURE, NULL, 0);
@@ -5234,12 +5232,15 @@ static void getIccId(char *iccid, int size) {
         RLOGE("iccid buffer is null");
         return;
     }
-    err = at_send_command_numeric("AT+CICCID", &p_response);
+    err = at_send_command_singleline("AT+QCCID", "+QCCID:", &p_response);
     if (err < 0 || p_response->success == 0) {
         goto error;
     }
 
-    snprintf(iccid, size, "%s", p_response->p_intermediates->line);
+    char *line = p_response->p_intermediates->line;
+    at_tok_start(&line);
+
+    snprintf(iccid, size, "%s", line);
 
 error:
     at_response_free(p_response);
@@ -5662,7 +5663,8 @@ static void initializeCallback(void *param __unused)
     at_send_command("AT+COLP=0", NULL);
 
     /*  HEX character set */
-    at_send_command("AT+CSCS=\"HEX\"", NULL);
+    at_send_command("AT+CSCS=\"GSM\"", NULL);
+//    HEX isn't suportedby QC25 Use GSM (default)
 
     /*  USSD unsolicited */
     at_send_command("AT+CUSD=1", NULL);
