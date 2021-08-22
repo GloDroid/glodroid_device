@@ -131,3 +131,7 @@ DEVICE_MATRIX_FILE := device/glodroid/common/compatibility_matrix.xml
 BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/sepolicy/vendor
 
 BOARD_USES_GRALLOC_HANDLE := true
+
+BOARD_LIBCAMERA_USES_MESON_BUILD := true
+BOARD_LIBCAMERA_IPAS :=
+BOARD_LIBCAMERA_PIPELINES := simple
