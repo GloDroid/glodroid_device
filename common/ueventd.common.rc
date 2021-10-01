@@ -22,3 +22,6 @@ modalias_handling enabled
 /dev/video*                                            0660    system       camera
 /dev/media*                                            0660    system       camera
 /dev/v4l-subdev*                                       0660    system       camera
+
+/dev/dma_heap/system                                   0666    system       graphics
+/dev/dma_heap/linux,cma                                0666    system       graphics

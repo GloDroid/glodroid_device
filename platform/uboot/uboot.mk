@@ -173,10 +173,10 @@ endif
 ifeq ($(PRODUCT_BOARD_PLATFORM),broadcom)
 BOOT_FILES := \
     $(RPI_FIRMWARE_DIR)/boot/bootcode.bin \
-    $(RPI_FIRMWARE_DIR)/boot/start.elf \
-    $(RPI_FIRMWARE_DIR)/boot/start4.elf \
-    $(RPI_FIRMWARE_DIR)/boot/fixup.dat \
-    $(RPI_FIRMWARE_DIR)/boot/fixup4.dat \
+    $(RPI_FIRMWARE_DIR)/boot/start_x.elf \
+    $(RPI_FIRMWARE_DIR)/boot/start4x.elf \
+    $(RPI_FIRMWARE_DIR)/boot/fixup_x.dat \
+    $(RPI_FIRMWARE_DIR)/boot/fixup4x.dat \
     $(RPI_FIRMWARE_DIR)/boot/bcm2710-rpi-3-b.dtb \
     $(RPI_FIRMWARE_DIR)/boot/bcm2710-rpi-3-b-plus.dtb \
     $(PRODUCT_OUT)/obj/KERNEL_OBJ/arch/$(TARGET_ARCH)/boot/dts/$(KERNEL_DTB_FILE) \

@@ -13,3 +13,15 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     device/glodroid/rpi4/audio.rpi4.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.rpi4.xml \
+
+# Camera
+PRODUCT_PACKAGES += ipa_rpi ipa_rpi.so.sign
+
+LIBCAMERA_CFGS := \
+    imx219.json imx219_noir.json imx290.json imx378.json imx477.json imx477_noir.json \
+    meson.build ov5647.json ov5647_noir.json ov9281.json se327m12.json uncalibrated.json
+
+PRODUCT_COPY_FILES += $(foreach cfg,$(LIBCAMERA_CFGS),external/libcamera/src/ipa/raspberrypi/data/$(cfg):$(TARGET_COPY_OUT_VENDOR)/etc/libcamera/ipa/raspberrypi/$(cfg)$(space))
+
+PRODUCT_COPY_FILES += \
+    device/glodroid/rpi4/camera_hal.yaml:$(TARGET_COPY_OUT_VENDOR)/etc/libcamera/camera_hal.yaml \
