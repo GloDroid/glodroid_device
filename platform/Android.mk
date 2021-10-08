@@ -36,6 +36,7 @@ MAKE_COMMON := \
     CROSS_COMPILE=$(AOSP_TOP_ABS)/$(CROSS_COMPILE) \
     $(MAKE)
 
+include $(PLATFORM_PATH)/fstab/fstab.mk
 include $(PLATFORM_PATH)/kernel/kernel.mk
 include $(PLATFORM_PATH)/uboot/uboot.mk
 include $(PLATFORM_PATH)/tools/tools.mk

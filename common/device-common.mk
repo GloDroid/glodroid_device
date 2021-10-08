@@ -283,10 +283,7 @@ endif
 
 ################################################################################
 
-# fstab
-PRODUCT_COPY_FILES += \
-    device/glodroid/common/fstab:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(TARGET_PRODUCT) \
-    device/glodroid/common/fstab:$(TARGET_COPY_OUT_RECOVERY)/root/first_stage_ramdisk/fstab.$(TARGET_PRODUCT) \
+PRODUCT_PACKAGES += fstab
 
 # Init RC files
 PRODUCT_COPY_FILES += \
