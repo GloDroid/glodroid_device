@@ -43,7 +43,7 @@ EXTENV(partitions, ";name=misc,size=512K,uuid=\${uuid_gpt_misc}")
 EXTENV(partitions, ";name=boot_a,size=32M,uuid=\${uuid_gpt_boot_a}")
 EXTENV(partitions, ";name=dtbo_a,size=8M,uuid=\${uuid_gpt_dtbo_a}")
 EXTENV(partitions, ";name=vbmeta_a,size=512K,uuid=\${uuid_gpt_vbmeta_a}")
-EXTENV(partitions, ";name=super,size=1400M,uuid=\${uuid_gpt_super}")
+EXTENV(partitions, ";name=super,size=1800M,uuid=\${uuid_gpt_super}")
 EXTENV(partitions, ";name=metadata,size=16M,uuid=\${uuid_gpt_metadata}")
 EXTENV(partitions, ";name=userdata,size=-,uuid=\${uuid_gpt_userdata}")
 
