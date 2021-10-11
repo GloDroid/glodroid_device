@@ -85,7 +85,10 @@ PRODUCT_PACKAGES += libGLES_android
 
 PRODUCT_PACKAGES += \
     android.hardware.media.c2@1.0-service \
-    android.hardware.media.omx@1.0-service \
+
+# Create input surface on the framework side
+PRODUCT_VENDOR_PROPERTIES += \
+    debug.stagefright.c2inputsurface=-1 \
 
 # fastbootd
 PRODUCT_PACKAGES += \
