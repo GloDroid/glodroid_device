@@ -1,0 +1,1 @@
+allow mediaprovider functionfs:file ioctl;
