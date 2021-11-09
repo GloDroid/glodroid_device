@@ -22,6 +22,6 @@ KERNEL_FRAGMENTS := \
 
 KERNEL_DTB_FILE := broadcom/bcm2711-rpi-4-b.dtb
 
-SYSFS_MMC0_PATH := emmc2bus/fe340000.emmc2
+SYSFS_MMC0_PATH := emmc2bus/fe340000.mmc
 
 RPI_CONFIG := $(LOCAL_PATH)/config.txt
