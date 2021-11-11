@@ -25,3 +25,8 @@ modalias_handling enabled
 
 /dev/dma_heap/system                                   0666    system       graphics
 /dev/dma_heap/linux,cma                                0666    system       graphics
+
+/dev/video10                                           0600    media        media
+/dev/video11                                           0600    media        media
+/dev/video12                                           0600    media        media
+/dev/video18                                           0600    media        media
