@@ -61,19 +61,21 @@ MKDTBOIMG		:= $(HOST_OUT_EXECUTABLES)/mkdtboimg.py
 
 GEN_DTBCFG		:= $(PRODUCT_OUT)/gen/DTBO/dtbo.cfg
 
+KERNEL_SRC_FILES        := $(sort $(shell find -L $(KERNEL_SRC) -not -path '*/\.git/*'))
+
 KMAKE := \
     $(MAKE_COMMON) \
     -C $(KERNEL_SRC) O=$(AOSP_TOP_ABS)/$(KERNEL_OUT) \
     DTC_FLAGS='--symbols' \
 
 #-------------------------------------------------------------------------------
-$(KERNEL_OUT)/.config: $(KERNEL_DEFCONFIG) $(KERNEL_FRAGMENTS) $(sort $(shell find -L $(KERNEL_SRC)))
+$(KERNEL_OUT)/.config: $(KERNEL_DEFCONFIG) $(KERNEL_FRAGMENTS) $(KERNEL_SRC_FILES)
 	cp $(KERNEL_DEFCONFIG) $(KERNEL_OUT)/.config
 	$(KMAKE) olddefconfig
 	PATH=/usr/bin:/bin:$$PATH $(KERNEL_SRC)/scripts/kconfig/merge_config.sh -m -O $(KERNEL_OUT)/ $(KERNEL_OUT)/.config $(KERNEL_FRAGMENTS)
 	$(KMAKE) olddefconfig
 
-$(KERNEL_BINARY): $(sort $(shell find -L $(KERNEL_SRC))) $(KERNEL_OUT)/.config
+$(KERNEL_BINARY): $(KERNEL_SRC_FILES) $(KERNEL_OUT)/.config
 	$(KMAKE) $(KERNEL_TARGET) dtbs modules
 	touch $@
 
