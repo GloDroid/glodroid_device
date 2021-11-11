@@ -22,4 +22,8 @@ product                             /product        ext4    ro,barrier=1,discard
 /dev/block/by-name/userdata         /data           ext4    noatime,nosuid,nodev,barrier=1        wait,check,latemount,quota,formattable,__FILE_ENCRYPT__,keydirectory=/metadata/vold/metadata_encryption
 
 // USB storage
+#ifdef platform_broadcom
+/devices/platform/scb/<ALL>.pcie/<ALL>/<ALL>/<ALL>/usb<ALL>    auto   auto    defaults            voldmanaged=usb:auto,encryptable=userdata
+#else
 /devices/platform/soc/<ALL>/usb<ALL>                  auto            auto    defaults            voldmanaged=usb:auto,encryptable=userdata
+#endif
