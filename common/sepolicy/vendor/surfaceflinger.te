@@ -1,3 +1,1 @@
-allow surfaceflinger device:chr_file getattr;
-allow surfaceflinger device:dir { open read };
-
+gpu_access(surfaceflinger)

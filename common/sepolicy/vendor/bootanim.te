@@ -1,2 +1,1 @@
-allow bootanim device:dir { open read };
-
+gpu_access(bootanim)
