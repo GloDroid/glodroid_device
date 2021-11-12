@@ -29,12 +29,17 @@ endif
 
 endif
 CLANG_ABS := $(AOSP_TOP_ABS)/$(CLANG)
+LLD_ABS := $(AOSP_TOP_ABS)/$(LLVM_PREBUILTS_PATH)/ld.lld
 
 MAKE_COMMON := \
     PATH=/usr/bin:/bin:/sbin:$$PATH \
     ARCH=$(TARGET_ARCH) \
     CROSS_COMPILE=$(AOSP_TOP_ABS)/$(CROSS_COMPILE) \
     $(MAKE)
+
+ifeq ($(BUILD_KERNEL_USING_GCC),)
+MAKE_COMMON_CLANG := CC=$(CLANG_ABS) HOSTCC=$(CLANG_ABS) LD=$(LLD_ABS)
+endif
 
 include $(PLATFORM_PATH)/fstab/fstab.mk
 include $(PLATFORM_PATH)/kernel/kernel.mk

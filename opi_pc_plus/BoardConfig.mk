@@ -17,3 +17,6 @@ TARGET_SUPPORTS_32_BIT_APPS := true
 TARGET_SUPPORTS_64_BIT_APPS := false
 
 TARGET_BOARD_INFO_FILE := device/glodroid/opi_pc_plus/board-info.txt
+
+# Unfortunately WIFI out-of-tree module has an issue when building using CLANG.
+BUILD_KERNEL_USING_GCC := true

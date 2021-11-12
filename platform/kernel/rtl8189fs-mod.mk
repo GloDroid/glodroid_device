@@ -8,7 +8,7 @@ $(MODULE): $(MOD_SRC) $(KERNEL_OUT)/.config $(MOD_SRC_FILES) $(PRODUCT_OUT)/kern
 	rm -rf $(dir $@)
 	mkdir -p $(dir $@)
 	cp -r $</* $(dir $@)
-	$(MAKE_COMMON) KSRC=$(AOSP_TOP_ABS)/$(KERNEL_OUT) -C $(dir $@)
+	$(MAKE_COMMON) $(MAKE_COMMON_CLANG) KSRC=$(AOSP_TOP_ABS)/$(KERNEL_OUT) -C $(dir $@)
 
 #-------------------------------------------------------------------------------
 include $(CLEAR_VARS)

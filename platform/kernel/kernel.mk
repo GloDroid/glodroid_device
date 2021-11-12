@@ -64,7 +64,7 @@ GEN_DTBCFG		:= $(PRODUCT_OUT)/gen/DTBO/dtbo.cfg
 KERNEL_SRC_FILES        := $(sort $(shell find -L $(KERNEL_SRC) -not -path '*/\.git/*'))
 
 KMAKE := \
-    $(MAKE_COMMON) \
+    $(MAKE_COMMON) $(MAKE_COMMON_CLANG) \
     -C $(KERNEL_SRC) O=$(AOSP_TOP_ABS)/$(KERNEL_OUT) \
     DTC_FLAGS='--symbols' \
 
