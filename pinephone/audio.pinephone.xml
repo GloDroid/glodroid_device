@@ -1,15 +1,30 @@
 <audiohal>
     <mixer name="PinePhone">
         <init>
-            <ctl name="AIF1 DA0 Playback Volume" val="160" />
-            <ctl name="DAC Playback Volume" val="160" />
-            <ctl name="Line Out Playback Volume" val="15" />
+            <!-- AIF1 Digital input (SoC) -->
+
+            <!-- Enable AIF1 I2S/PCM slot 0 to mixer source -->
             <ctl name="AIF1 Slot 0 Digital DAC Playback Switch" val="1"/>
+            <!-- Default Digital-to-analog digital playback volume -->
+            <ctl name="AIF1 DA0 Playback Volume" val="160" />
+
+            <!-- Digital-to-analog converter (DAC) -->
+
+            <!-- Enable DAC -->
             <ctl name="DAC Playback Switch" val="1"/>
+            <!-- Default DAC volume -->
+            <ctl name="DAC Playback Volume" val="160" />
+
+            <!-- Loudspeaker -->
+
+            <!-- Loudspeaker mono playback route  -->
             <ctl name="Line Out Source Playback Route" val="Mono Differential"/>
+            <!-- Default loudspeaker volume -->
+            <ctl name="Line Out Playback Volume" val="15" />
         </init>
     </mixer>
 
+    <!-- AUDIO_DEVICE_OUT_SPEAKER -->
     <device name="speaker">
         <path name="on">
             <ctl name="Line Out Playback Switch" val="1"/>
