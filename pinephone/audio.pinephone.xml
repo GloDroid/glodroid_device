@@ -20,7 +20,7 @@
             <!-- Loudspeaker mono playback route  -->
             <ctl name="Line Out Source Playback Route" val="Mono Differential"/>
             <!-- Default loudspeaker volume -->
-            <ctl name="Line Out Playback Volume" val="15" />
+            <ctl name="Line Out Playback Volume" val="30" />
         </init>
     </mixer>
 
