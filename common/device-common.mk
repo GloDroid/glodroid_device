@@ -113,6 +113,9 @@ PRODUCT_PACKAGES += \
     libgallium_dri \
     libglapi \
 
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.opengles.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml
+
 # Composer passthrough HAL
 PRODUCT_PACKAGES += \
     android.hardware.graphics.composer@2.1-impl \
