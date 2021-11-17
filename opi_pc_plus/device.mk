@@ -15,3 +15,8 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi.opi_pc_plus.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/wifi.opi_pc_plus.rc \
+
+# Checked by android.opengl.cts.OpenGlEsVersionTest#testOpenGlEsVersion. Required to run correct set of dEQP tests.
+# 131072 == 0x00020000 == GLES v2.0
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.opengles.version=131072

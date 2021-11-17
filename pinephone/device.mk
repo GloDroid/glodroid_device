@@ -75,3 +75,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.boot.modem_simulator_ports=-1 \
     vendor.rild.libargs=-d/dev/ttyUSB2 \
+
+# Checked by android.opengl.cts.OpenGlEsVersionTest#testOpenGlEsVersion. Required to run correct set of dEQP tests.
+# 131072 == 0x00020000 == GLES v2.0
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.opengles.version=131072

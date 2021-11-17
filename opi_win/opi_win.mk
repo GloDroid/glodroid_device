@@ -21,3 +21,8 @@ KERNEL_FRAGMENTS += \
     device/glodroid/platform/common/sunxi/sunxi-common.config \
 
 KERNEL_DTB_FILE := allwinner/sun50i-a64-orangepi-win.dtb
+
+# Checked by android.opengl.cts.OpenGlEsVersionTest#testOpenGlEsVersion. Required to run correct set of dEQP tests.
+# 131072 == 0x00020000 == GLES v2.0
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.opengles.version=131072

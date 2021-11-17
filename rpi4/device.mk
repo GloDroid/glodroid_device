@@ -14,6 +14,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/glodroid/rpi4/audio.rpi4.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.rpi4.xml \
 
+# Checked by android.opengl.cts.OpenGlEsVersionTest#testOpenGlEsVersion. Required to run correct set of dEQP tests.
+# 196609 == 0x00030001 == GLES v3.1
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.opengles.version=196609
+
 # Camera
 PRODUCT_PACKAGES += ipa_rpi ipa_rpi.so.sign
 
