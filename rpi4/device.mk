@@ -14,6 +14,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/glodroid/rpi4/audio.rpi4.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.rpi4.xml \
 
+# Disable suspend. During running some VTS device suspends, which sometimed causes kernel to crash in WIFI driver and reboot.
+PRODUCT_COPY_FILES += \
+    device/glodroid/common/no_suspend.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/no_suspend.rpi4.rc \
+
 # Checked by android.opengl.cts.OpenGlEsVersionTest#testOpenGlEsVersion. Required to run correct set of dEQP tests.
 # 196609 == 0x00030001 == GLES v3.1
 PRODUCT_VENDOR_PROPERTIES += \
