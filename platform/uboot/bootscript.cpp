@@ -40,7 +40,7 @@ EXTENV(partitions, ";name=bootloader,start=128K,size=130944K,uuid=\${uuid_gpt_bo
 EXTENV(partitions, ";name=uboot-env,size=512K,uuid=\${uuid_gpt_reserved}")
 EXTENV(partitions, ";name=recovery_boot,size=32M,uuid=\${uuid_gpt_boot_recovery}")
 EXTENV(partitions, ";name=misc,size=512K,uuid=\${uuid_gpt_misc}")
-EXTENV(partitions, ";name=boot_a,size=32M,uuid=\${uuid_gpt_boot_a}")
+EXTENV(partitions, ";name=boot,size=32M,uuid=\${uuid_gpt_boot}")
 EXTENV(partitions, ";name=dtbo_a,size=8M,uuid=\${uuid_gpt_dtbo_a}")
 EXTENV(partitions, ";name=vbmeta_a,size=512K,uuid=\${uuid_gpt_vbmeta_a}")
 EXTENV(partitions, ";name=super,size=1800M,uuid=\${uuid_gpt_super}")
@@ -146,8 +146,8 @@ FUNC_BEGIN(bootcmd_block)
  run bootcmd_bcb &&
  if test STRESC(${androidrecovery}) != STRESC(true);
  then
-  part start mmc \$mmc_bootdev boot_a boot_start &&
-  part size mmc \$mmc_bootdev boot_a boot_size
+  part start mmc \$mmc_bootdev boot boot_start &&
+  part size mmc \$mmc_bootdev boot boot_size
  else
   part start mmc \$mmc_bootdev recovery_boot boot_start &&
   part size mmc \$mmc_bootdev recovery_boot boot_size

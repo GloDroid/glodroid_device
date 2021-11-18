@@ -75,7 +75,7 @@ gen_sd() {
     add_part env.img uboot-env
     add_part boot.img recovery_boot
     add_part misc.img misc
-    add_part boot.img boot_a
+    add_part boot.img boot
     add_part boot_dtbo.img dtbo_a
     add_part metadata.img metadata
     add_part super.img super

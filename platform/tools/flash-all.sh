@@ -23,7 +23,7 @@ set -x
 
 ./fastboot reboot-fastboot
 
-./fastboot flash boot_a boot.img
+./fastboot flash boot   boot.img
 ./fastboot flash dtbo_a boot_dtbo.img
 ./fastboot flash super  super.img
 
