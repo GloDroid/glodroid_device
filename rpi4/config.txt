@@ -1,4 +1,6 @@
 dtparam=audio=on
+dtparam=krnbt=on
+dtparam=uart1=on
 
 [all]
 start_x=1
@@ -11,7 +13,6 @@ armstub=bl31.bin
 camera_auto_detect=1
 
 dtoverlay=dwc2
-dtoverlay=uart0
 dtoverlay=vc4-kms-v3d
 
 max_framebuffers=2
