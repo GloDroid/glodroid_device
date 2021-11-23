@@ -26,3 +26,8 @@ DEVICE_PACKAGE_OVERLAYS := \
 # 131072 == 0x00020000 == GLES v2.0
 PRODUCT_VENDOR_PROPERTIES += \
     ro.opengles.version=131072
+
+# Disable suspend. Crust or device has some issues and get stuck at clock setup.
+# ISSUE: https://gitlab.com/pine64-org/linux/-/issues/35
+PRODUCT_COPY_FILES += \
+    device/glodroid/common/no_suspend.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/no_suspend.pinetab.rc \
