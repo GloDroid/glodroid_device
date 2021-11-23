@@ -16,3 +16,6 @@ dtoverlay=dwc2
 dtoverlay=vc4-kms-v3d
 
 max_framebuffers=2
+
+# Automatically load overlays for detected DSI displays
+display_auto_detect=1
