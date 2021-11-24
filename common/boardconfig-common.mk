@@ -93,12 +93,7 @@ BOARD_KERNEL_BASE     := 0x2000000
 endif
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_CMDLINE  := androidboot.hardware=$(TARGET_PRODUCT)
-ifeq ($(TARGET_IS_64_BIT),true)
-BOARD_MKBOOTIMG_ARGS  += --kernel_offset 0x200000
-else
-BOARD_MKBOOTIMG_ARGS  += --kernel_offset 0x80000
-endif
-BOARD_MKBOOTIMG_ARGS  += --second_offset 0x8800 --ramdisk_offset 0x3300000
+BOARD_MKBOOTIMG_ARGS  += --kernel_offset 0x80000 --second_offset 0x8800 --ramdisk_offset 0x3300000
 BOARD_MKBOOTIMG_ARGS  += --dtb_offset 0x3000000 --header_version $(BOARD_BOOT_HEADER_VERSION)
 TARGET_KERNEL_SOURCE  := kernel/glodroid
 
