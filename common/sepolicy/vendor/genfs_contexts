@@ -5,3 +5,15 @@ genfscon sysfs /devices/platform/soc/1c10000.mmc/mmc_host/mmc1/mmc1:0001/mmc1:00
 # /sys/class/net for opi3
 genfscon sysfs /devices/platform/soc/5020000.ethernet/net/eth0                                    u:object_r:sysfs_net:s0
 genfscon sysfs /devices/platform/soc/4021000.mmc/mmc_host/mmc1/mmc1:0001/mmc1:0001:1/net/wlan0    u:object_r:sysfs_net:s0
+
+# GPU:
+genfscon sysfs /devices/platform/gpu                                                              u:object_r:sysfs_gpu:s0
+## RPI4:
+genfscon sysfs /devices/platform/v3dbus/fec00000.v3d                                              u:object_r:sysfs_gpu:s0
+
+# RTC-TEST:
+genfscon sysfs /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/wakeup/wakeup0  u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/rtc-test.1/wakeup/wakeup1                                        u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/rtc-test.1/rtc/rtc1/alarmtimer.0.auto/wakeup/wakeup2             u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/rtc-test.2/wakeup/wakeup3                                        u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.1/wakeup/wakeup6  u:object_r:sysfs_wakeup:s0

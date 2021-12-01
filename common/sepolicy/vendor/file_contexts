@@ -4,8 +4,6 @@
 /dev/dri/card0                                                                  u:object_r:gpu_device:s0
 /dev/dri/card1                                                                  u:object_r:gpu_device:s0
 
-/dev/block/mmcblk0p7                                                            u:object_r:userdata_block_device:s0
-
 /vendor/lib(64)?/dri/libgallium_dri\.so                                         u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/libglapi\.so                                                   u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/libdrm\.so                                                     u:object_r:same_process_hal_file:s0
@@ -19,18 +17,24 @@
 # Minigbm
 /vendor/bin/hw/android\.hardware\.graphics\.allocator@4\.0-service\.minigbm_gbm_mesa     u:object_r:hal_graphics_allocator_default_exec:s0
 /vendor/lib(64)?/hw/android\.hardware\.graphics\.mapper@4\.0-impl\.minigbm_gbm_mesa\.so  u:object_r:same_process_hal_file:s0
+/vendor/lib(64)?/hw/gralloc\.minigbm_gbm_mesa\.so                                        u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/libminigbm_gralloc_gbm_mesa\.so                                         u:object_r:same_process_hal_file:s0
 
 /dev/block/zram0                                                                u:object_r:swap_block_device:s0
 
-/dev/block/by-name/boot_[ab]                        u:object_r:boot_block_device:s0
-/dev/block/by-name/product_[ab]                     u:object_r:system_block_device:s0
-/dev/block/by-name/product                          u:object_r:system_block_device:s0
-/dev/block/by-name/system_[ab]                      u:object_r:system_block_device:s0
-/dev/block/by-name/system                           u:object_r:system_block_device:s0
-/dev/block/by-name/vendor_[ab]                      u:object_r:system_block_device:s0
-/dev/block/by-name/vendor                           u:object_r:system_block_device:s0
-/dev/block/by-name/userdata                         u:object_r:userdata_block_device:s0
-/dev/block/by-name/metadata                         u:object_r:metadata_block_device:s0
-/dev/block/by-name/super                            u:object_r:super_block_device:s0
-/dev/block/by-name/misc                             u:object_r:misc_block_device:s0
+# RPI4: emmc2bus/fe340000.mmc
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/metadata               u:object_r:metadata_block_device:s0
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/super                  u:object_r:super_block_device:s0
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/userdata               u:object_r:userdata_block_device:s0
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/misc                   u:object_r:misc_block_device:s0
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/boot(_[ab])?           u:object_r:boot_block_device:s0
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/dtbo(_[ab])?           u:object_r:boot_block_device:s0
+
+# RPI4 camera and ISP
+/dev/video0                                                                     u:object_r:camera_device:s0
+/dev/video13                                                                    u:object_r:camera_device:s0
+/dev/video14                                                                    u:object_r:camera_device:s0
+/dev/video15                                                                    u:object_r:camera_device:s0
+/dev/video16                                                                    u:object_r:camera_device:s0
+/dev/media1                                                                     u:object_r:camera_device:s0
+/dev/media2                                                                     u:object_r:camera_device:s0
