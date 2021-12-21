@@ -35,3 +35,18 @@ PRODUCT_COPY_FILES += $(foreach cfg,$(LIBCAMERA_CFGS),external/libcamera/src/ipa
 
 PRODUCT_COPY_FILES += \
     device/glodroid/rpi4/camera_hal.yaml:$(TARGET_COPY_OUT_VENDOR)/etc/libcamera/camera_hal.yaml \
+
+# Vulkan
+PRODUCT_PACKAGES += \
+    vulkan.broadcom
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.vulkan.level-1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level.xml \
+    frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
+    frameworks/native/data/etc/android.software.vulkan.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
+
+PRODUCT_VENDOR_PROPERTIES +=    \
+    ro.hardware.vulkan=broadcom \
+
+# It is the only way to set ro.hwui.use_vulkan=true
+#TARGET_USES_VULKAN = true
