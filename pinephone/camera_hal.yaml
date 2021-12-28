@@ -1,8 +1,0 @@
-cameras:
-  "/base/i2c-csi/front-camera@3c":
-    location: front
-    rotation: 0
-
-  "/base/i2c-csi/rear-camera@4c":
-    location: back
-    rotation: 0

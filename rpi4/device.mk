@@ -33,9 +33,6 @@ LIBCAMERA_CFGS := \
 
 PRODUCT_COPY_FILES += $(foreach cfg,$(LIBCAMERA_CFGS),external/libcamera/src/ipa/raspberrypi/data/$(cfg):$(TARGET_COPY_OUT_VENDOR)/etc/libcamera/ipa/raspberrypi/$(cfg)$(space))
 
-PRODUCT_COPY_FILES += \
-    device/glodroid/rpi4/camera_hal.yaml:$(TARGET_COPY_OUT_VENDOR)/etc/libcamera/camera_hal.yaml \
-
 # Vulkan
 PRODUCT_PACKAGES += \
     vulkan.broadcom
