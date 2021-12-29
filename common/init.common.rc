@@ -50,7 +50,7 @@ on zygote-start
     mkdir /data/vendor/wifi/wpa 0770 wifi wifi
     mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
 
-service preinstall /system/bin/sh /vendor/etc/preinstall.sh
+service preinstall /system/bin/sh /vendor/etc/preinstall/preinstall.sh
     user root
     group root
     seclabel u:r:init:s0

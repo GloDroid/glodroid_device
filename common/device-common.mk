@@ -265,7 +265,16 @@ PRODUCT_COPY_FILES += \
 ################# GLODROID ADDITIONAL PACKAGES SECTION #########################
 
 PRODUCT_COPY_FILES += \
-    device/glodroid/common/preinstall.sh:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall.sh \
+    device/glodroid/common/preinstall.sh:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/preinstall.sh \
+    prebuilts/applications/fdroid.apk:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/fdroid.apk_ \
+    prebuilts/applications/shade-launcher3.apk:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/shade-launcher3.apk_ \
+    prebuilts/applications/skytube.apk:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/skytube.apk_ \
+
+ifeq ($(TARGET_ARCH),arm)
+PRODUCT_COPY_FILES += prebuilts/applications/fenix-arm.apk:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/fenix.apk_
+else
+PRODUCT_COPY_FILES += prebuilts/applications/fenix-arm64.apk:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/fenix.apk_
+endif
 
 # Prebuild .apk applications for non-lowram devices
 ifeq (,$(filter $(GLODROID_LOWRAM),true))
