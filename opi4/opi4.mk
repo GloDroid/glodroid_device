@@ -17,7 +17,7 @@ UBOOT_DEFCONFIG := orangepi-rk3399_defconfig
 ATF_PLAT        := rk3399
 
 # Variable for uboot: https://github.com/armbian/build/blob/19a963189510a541a0486933eb8eaa1d7bc7f695/config/sources/families/rk3399.conf#L36
-DDR_BLOB := rk33/rk3399_ddr_933MHz_v1.24.bin
+DDR_BLOB := rk33/rk3399_ddr_933MHz_v1.25.bin
 MINILOADER_BLOB := rk33/rk3399_miniloader_v1.26.bin
 RKTRUST_INI := RK3399TRUST.ini
 RK33_BIN := bin/rk33
