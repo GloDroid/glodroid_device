@@ -81,7 +81,7 @@ $(KERNEL_BINARY): $(KERNEL_SRC_FILES) $(KERNEL_OUT)/.config
 
 $(KERNEL_COMPRESSED): $(KERNEL_BINARY)
 	rm -f $@
-	prebuilts/misc/linux-x86/lz4/lz4c -c1 $< $@
+	PATH=/usr/bin:/bin:/sbin:$$PATH lz4c -c1 $< $@
 	touch $@
 
 # Modules
