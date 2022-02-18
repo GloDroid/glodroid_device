@@ -1,13 +1,5 @@
 <compatibility-matrix version="1.0" type="device">
     <hal format="hidl" optional="false">
-        <name>android.frameworks.displayservice</name>
-        <version>1.0</version>
-        <interface>
-            <name>IDisplayService</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl" optional="false">
         <name>android.frameworks.sensorservice</name>
         <version>1.0</version>
         <interface>
