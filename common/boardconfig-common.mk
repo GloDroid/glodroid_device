@@ -54,8 +54,8 @@ BOARD_USES_VENDORIMAGE := true
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 #BOARD_VENDORIMAGE_PARTITION_SIZE := $(shell echo $$(( 2 * 1024 * 1024 * 1024 )))
 
-# Boot image 32 MiB
-BOARD_BOOTIMAGE_PARTITION_SIZE := $(shell echo $$(( 32 * 1024 * 1024 )))
+# Boot image 64 MiB
+BOARD_BOOTIMAGE_PARTITION_SIZE := $(shell echo $$(( 64 * 1024 * 1024 )))
 BOARD_DTBOIMG_PARTITION_SIZE := $(shell echo $$(( 512 * 1024 )))
 
 # Root image

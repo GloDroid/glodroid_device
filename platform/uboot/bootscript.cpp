@@ -38,9 +38,9 @@ EXTENV(partitions, ";name=bootloader,start=32K,size=131040K,uuid=\${uuid_gpt_boo
 EXTENV(partitions, ";name=bootloader,start=128K,size=130944K,uuid=\${uuid_gpt_bootloader}")
 #endif
 EXTENV(partitions, ";name=uboot-env,size=512K,uuid=\${uuid_gpt_reserved}")
-EXTENV(partitions, ";name=recovery_boot,size=32M,uuid=\${uuid_gpt_boot_recovery}")
+EXTENV(partitions, ";name=recovery_boot,size=64M,uuid=\${uuid_gpt_boot_recovery}")
 EXTENV(partitions, ";name=misc,size=512K,uuid=\${uuid_gpt_misc}")
-EXTENV(partitions, ";name=boot,size=32M,uuid=\${uuid_gpt_boot}")
+EXTENV(partitions, ";name=boot,size=64M,uuid=\${uuid_gpt_boot}")
 EXTENV(partitions, ";name=dtbo_a,size=8M,uuid=\${uuid_gpt_dtbo_a}")
 EXTENV(partitions, ";name=vbmeta_a,size=512K,uuid=\${uuid_gpt_vbmeta_a}")
 EXTENV(partitions, ";name=super,size=1800M,uuid=\${uuid_gpt_super}")
