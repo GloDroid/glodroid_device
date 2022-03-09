@@ -19,12 +19,12 @@ set -x
 ./fastboot flash bootloader      bootloader__SUFFIX__.img
 ./fastboot flash uboot-env       env.img
 ./fastboot flash recovery_boot   boot.img
+./fastboot flash dtbo_a          boot_dtbo.img
 ./fastboot erase misc
 
 ./fastboot reboot-fastboot
 
 ./fastboot flash boot   boot.img
-./fastboot flash dtbo_a boot_dtbo.img
 ./fastboot flash super  super.img
 
 ./fastboot format:ext4 userdata
