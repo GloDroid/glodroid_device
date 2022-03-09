@@ -1,4 +1,4 @@
-/* SPDX Apache */
+/* SPDX-License-Identifier: Apache-2.0 */
 /* (c) 2020 Roman Stratiienko r.stratiienko@gmail.com */
 
 #define N(...) __VA_ARGS__
