@@ -1121,6 +1121,11 @@ static void requestGetCurrentCalls(void *data __unused, size_t datalen __unused,
             continue;
         }
 
+        // Skip PS LTE calls
+        if (!p_calls[countValidCalls].isVoice && p_calls[countValidCalls].toa == 128) {
+            continue;
+        }
+
 #ifdef WORKAROUND_ERRONEOUS_ANSWER
         if (p_calls[countValidCalls].state == RIL_CALL_INCOMING
             || p_calls[countValidCalls].state == RIL_CALL_WAITING
