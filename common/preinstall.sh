@@ -10,5 +10,7 @@ if [ "${first_run}" != "false" ]; then
 
    pm install -g "/vendor/etc/preinstall/fdroid.apk_"
 
+   pm install -g "/vendor/etc/preinstall/shade-launcher3.apk_"
+
    setprop persist.glodroid.first_run false
 fi
