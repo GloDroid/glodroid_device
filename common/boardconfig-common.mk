@@ -58,6 +58,11 @@ BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_BOOTIMAGE_PARTITION_SIZE := $(shell echo $$(( 64 * 1024 * 1024 )))
 BOARD_DTBOIMG_PARTITION_SIZE := $(shell echo $$(( 512 * 1024 )))
 
+# DKLM partition
+BOARD_USES_VENDOR_DLKMIMAGE := true
+BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
+TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
+
 # Root image
 TARGET_COPY_OUT_ROOT := root
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
@@ -72,10 +77,10 @@ BOARD_SUPER_PARTITION_SIZE := $(shell echo $$(( 1800 * 1024 * 1024 )))
 BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
 BOARD_SUPER_PARTITION_GROUPS := glodroid_dynamic_partitions
 BOARD_GLODROID_DYNAMIC_PARTITIONS_SIZE := $(shell echo $$(( $(BOARD_SUPER_PARTITION_SIZE) - (10 * 1024 * 1024) )))
-BOARD_GLODROID_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext vendor product
+BOARD_GLODROID_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext vendor product vendor_dlkm
 
 AB_OTA_UPDATER := true
-AB_OTA_PARTITIONS += boot system system_ext vendor product
+AB_OTA_PARTITIONS += boot system system_ext vendor product vendor_dlkm
 
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 

@@ -37,7 +37,7 @@ endif
 KERNEL_OUT		:= $(PRODUCT_OUT)/obj/KERNEL_OBJ
 KERNEL_MODULES_OUT 	:= $(PRODUCT_OUT)/obj/KERNEL_MODULES
 KERNEL_VERSION_FILE     := $(KERNEL_OUT)/include/config/kernel.release
-TARGET_VENDOR_MODULES   := $(TARGET_OUT_VENDOR)/lib/modules
+TARGET_VENDOR_MODULES   := $(TARGET_OUT_VENDOR_DLKM)/lib/modules
 
 KERNEL_BOOT_DIR		:= arch/$(TARGET_ARCH)/boot
 ifeq ($(TARGET_ARCH),arm64)
@@ -96,9 +96,9 @@ $(TARGET_VENDOR_MODULES)/modules.dep : $(KERNEL_MODULES_OUT)
 	mkdir -p $(TARGET_VENDOR_MODULES)
 	D1=$</lib/modules/$$(cat $(KERNEL_VERSION_FILE)); \
 	    cp -r $${D1}/modules.dep $${D1}/modules.order $${D1}/modules.alias $${D1}/kernel $(TARGET_VENDOR_MODULES)
-	D2=/vendor/lib/modules/kernel/; sed -e"s|^kernel/|$${D2}|; s| kernel/| $${D2}|g" -i $(TARGET_VENDOR_MODULES)/modules.dep
+	D2=/vendor_dlkm/lib/modules/kernel/; sed -e"s|^kernel/|$${D2}|; s| kernel/| $${D2}|g" -i $(TARGET_VENDOR_MODULES)/modules.dep
 
-$(PRODUCT_OUT)/vendor.img: $(TARGET_VENDOR_MODULES)/modules.dep
+$(PRODUCT_OUT)/vendor_dlkm.img: $(TARGET_VENDOR_MODULES)/modules.dep
 
 #-------------------------------------------------------------------------------
 $(ANDROID_DTBO): $(ANDROID_DTS_OVERLAY)

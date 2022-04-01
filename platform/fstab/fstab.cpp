@@ -15,6 +15,7 @@ system                              /system         ext4    ro,barrier=1,discard
 system_ext                          /system_ext     ext4    ro,barrier=1,discard                  wait,first_stage_mount,logical,slotselect
 vendor                              /vendor         ext4    ro,barrier=1,discard                  wait,first_stage_mount,logical,slotselect
 product                             /product        ext4    ro,barrier=1,discard                  wait,first_stage_mount,logical,slotselect
+vendor_dlkm                         /vendor_dlkm    ext4    ro,noatime,errors=panic               wait,first_stage_mount,logical,slotselect
 
 /dev/block/by-name/metadata         /metadata       ext4    noatime,nosuid,nodev,discard,sync     wait,check,formattable,first_stage_mount
 /dev/block/by-name/misc             /misc           emmc    defaults                              defaults
