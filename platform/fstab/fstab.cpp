@@ -11,14 +11,15 @@
 #define __FILE_ENCRYPT__ fileencryption=aes-256-xts:aes-256-cts
 #endif
 
-system                              /system         ext4    ro,barrier=1,discard,errors=continue  wait,first_stage_mount,logical
-system_ext                          /system_ext     ext4    ro,barrier=1,discard                  wait,first_stage_mount,logical
-vendor                              /vendor         ext4    ro,barrier=1,discard                  wait,first_stage_mount,logical
-product                             /product        ext4    ro,barrier=1,discard                  wait,first_stage_mount,logical
+system                              /system         ext4    ro,barrier=1,discard                  wait,first_stage_mount,logical,slotselect
+system_ext                          /system_ext     ext4    ro,barrier=1,discard                  wait,first_stage_mount,logical,slotselect
+vendor                              /vendor         ext4    ro,barrier=1,discard                  wait,first_stage_mount,logical,slotselect
+product                             /product        ext4    ro,barrier=1,discard                  wait,first_stage_mount,logical,slotselect
+
 /dev/block/by-name/metadata         /metadata       ext4    noatime,nosuid,nodev,discard,sync     wait,check,formattable,first_stage_mount
 /dev/block/by-name/misc             /misc           emmc    defaults                              defaults
 /dev/block/by-name/pst              /persistent     emmc    defaults                              defaults
-/dev/block/by-name/boot             /boot           emmc    defaults                              defaults
+/dev/block/by-name/boot             /boot           emmc    defaults                              defaults,slotselect
 /dev/block/by-name/userdata         /data           ext4    noatime,nosuid,nodev,barrier=1        wait,check,latemount,quota,formattable,__FILE_ENCRYPT__,keydirectory=/metadata/vold/metadata_encryption
 
 // USB storage

@@ -74,6 +74,9 @@ BOARD_SUPER_PARTITION_GROUPS := glodroid_dynamic_partitions
 BOARD_GLODROID_DYNAMIC_PARTITIONS_SIZE := $(shell echo $$(( $(BOARD_SUPER_PARTITION_SIZE) - (10 * 1024 * 1024) )))
 BOARD_GLODROID_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext vendor product
 
+AB_OTA_UPDATER := true
+AB_OTA_PARTITIONS += boot system system_ext vendor product
+
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 
 # Kernel build rules
