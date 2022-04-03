@@ -28,3 +28,7 @@ genfscon sysfs /devices/platform/rtc-test.1/wakeup                              
 genfscon sysfs /devices/platform/rtc-test.1/rtc/rtc1/alarmtimer.0.auto/wakeup/wakeup2             u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/rtc-test.1/rtc/rtc1/alarmtimer.0.auto/wakeup                     u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/rtc-test.2/wakeup                                                u:object_r:sysfs_wakeup:s0
+
+# RPI4 required by 'atest netd_integration_test'
+genfscon sysfs /devices/platform/scb/fd580000.ethernet/net/eth0/mtu                               u:object_r:sysfs_net:s0
+genfscon sysfs /devices/platform/soc/fe300000.mmcnr/mmc_host/mmc1/mmc1:0001/mmc1:0001:1/net/wlan0/mtu u:object_r:sysfs_net:s0
