@@ -32,3 +32,16 @@ genfscon sysfs /devices/platform/rtc-test.2/wakeup                              
 # RPI4 required by 'atest netd_integration_test'
 genfscon sysfs /devices/platform/scb/fd580000.ethernet/net/eth0/mtu                               u:object_r:sysfs_net:s0
 genfscon sysfs /devices/platform/soc/fe300000.mmcnr/mmc_host/mmc1/mmc1:0001/mmc1:0001:1/net/wlan0/mtu u:object_r:sysfs_net:s0
+
+# Pinephone reported by 'atest SuspendSepolicyTests'
+genfscon sysfs /devices/platform/soc/1f00000.rtc/wakeup                                           u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc/1f00000.rtc/rtc/rtc0/alarmtimer.0.auto/wakeup                u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc/1f03400.rsb/sunxi-rsb-3a3/axp221-pek/wakeup                  u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc/1f03400.rsb/sunxi-rsb-3a3/axp20x-battery-power-supply/power_supply/axp20x-battery/wakeup3 u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc/1f03400.rsb/sunxi-rsb-3a3/axp20x-usb-power-supply/power_supply/axp20x-usb/wakeup4 u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc/1c19000.usb/musb-hdrc.2.auto/wakeup                          u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc/1c28c00.serial/serial1/serial1-0/wakeup                      u:object_r:sysfs_wakeup:s0
+
+# Pinephone required by 'atest netd_integration_test'
+genfscon sysfs /devices/platform/soc/1c10000.mmc/mmc_host/mmc1/mmc1:0001/mmc1:0001:1/net/wlan0/mtu u:object_r:sysfs_net:s0
+genfscon sysfs /devices/platform/soc/1c1b000.usb/usb3/3-1/3-1:1.4/net/wwan0/mtu                   u:object_r:sysfs_net:s0
