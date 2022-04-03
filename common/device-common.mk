@@ -300,6 +300,9 @@ endif
 
 PRODUCT_PACKAGES += fstab
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/fstab.zram:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.zram \
+
 # Init RC files
 PRODUCT_COPY_FILES += \
     device/glodroid/common/ueventd.common.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
