@@ -19,3 +19,6 @@ PRODUCT_COPY_FILES += \
 # 131072 == 0x00020000 == GLES v2.0
 PRODUCT_VENDOR_PROPERTIES += \
     ro.opengles.version=131072
+
+PRODUCT_COPY_FILES += \
+    device/glodroid/common/no_animation.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/no_animation.rc \

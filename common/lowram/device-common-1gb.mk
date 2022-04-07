@@ -14,6 +14,7 @@ PRODUCT_PROPERTY_OVERRIDES += ro.config.low_ram=true
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.lowram.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.lowram.rc \
+    device/glodroid/common/no_animation.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/no_animation.rc \
 
 LOCAL_PATH := device/glodroid/common
 include $(LOCAL_PATH)/device-common.mk

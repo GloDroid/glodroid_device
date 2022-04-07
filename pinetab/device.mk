@@ -30,3 +30,4 @@ PRODUCT_VENDOR_PROPERTIES += \
 # ISSUE: https://gitlab.com/pine64-org/linux/-/issues/35
 PRODUCT_COPY_FILES += \
     device/glodroid/common/no_suspend.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/no_suspend.pinetab.rc \
+    device/glodroid/common/no_animation.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/no_animation.pinetab.rc \

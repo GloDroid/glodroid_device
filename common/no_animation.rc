@@ -1,0 +1,3 @@
+on property:sys.boot_completed=1
+    wait /path-does-not-exist 20
+    exec u:object_r:system_file:s0 -- /system/bin/settings put global animator_duration_scale 0
