@@ -57,9 +57,8 @@ PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl:64 \
     android.hardware.sensors@1.0-service
 
-DEVICE_PACKAGE_OVERLAYS := \
-    device/glodroid/overlays/common \
-    device/glodroid/pinephone/overlay
+PRODUCT_PACKAGES += \
+    glodroid_pinephone_overlay_frameworks_base_core \
 
 # SUNXI has broken drm/sun4i DE2 kernel driver.
 # Disable scaling to avoid UI glitches.

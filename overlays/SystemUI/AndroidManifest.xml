@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.android.systemui.glodroid.overlay">
+
+    <application android:hasCode="false" />
+
+    <overlay
+      android:targetPackage="com.android.systemui"
+      android:isStatic="true"
+      android:priority="1"
+      />
+</manifest>

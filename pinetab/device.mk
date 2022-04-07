@@ -18,9 +18,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/glodroid/pinetab/audio.pinetab.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.pinetab.xml \
 
-DEVICE_PACKAGE_OVERLAYS := \
-    device/glodroid/overlays/common \
-    device/glodroid/pinetab/overlay
+PRODUCT_PACKAGES += \
+    glodroid_pinetab_overlay_frameworks_base_core \
 
 # Checked by android.opengl.cts.OpenGlEsVersionTest#testOpenGlEsVersion. Required to run correct set of dEQP tests.
 # 131072 == 0x00020000 == GLES v2.0
