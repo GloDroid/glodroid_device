@@ -114,20 +114,7 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.composer@2.4-impl \
     android.hardware.graphics.composer@2.4-service \
 
-## Composer HAL for minigbm + minigbm gralloc0:
-#PRODUCT_PACKAGES += \
-#    android.hardware.graphics.allocator@2.0-impl \
-#    android.hardware.graphics.allocator@2.0-service \
-#    android.hardware.graphics.mapper@2.0-impl-2.1 \
-#    hwcomposer.drm_minigbm \
-#    gralloc.minigbm \
-#
-#PRODUCT_PROPERTY_OVERRIDES += \
-#    ro.hardware.gralloc=minigbm \
-#    ro.hardware.hwcomposer=drm_minigbm \
-##
-
-## Composer HAL for gralloc4 + minigbm gralloc4: (Require changes in manifest)
+## Composer HAL for gralloc4 + minigbm gralloc4
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@4.0-service.minigbm_gbm_mesa \
     android.hardware.graphics.mapper@4.0-impl.minigbm_gbm_mesa \
@@ -135,19 +122,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.hardware.hwcomposer=drm \
-##
-
-## Composer HAL for libdrm_gralloc + gbm_gralloc (gralloc0):
-#PRODUCT_PACKAGES += \
-#    android.hardware.graphics.allocator@2.0-impl \
-#    android.hardware.graphics.allocator@2.0-service \
-#    android.hardware.graphics.mapper@2.0-impl-2.1 \
-#    hwcomposer.drm \
-#    gralloc.gbm \
-#
-#PRODUCT_PROPERTY_OVERRIDES += \
-#    ro.hardware.gralloc=gbm \
-#    ro.hardware.hwcomposer=drm \
 ##
 
 PRODUCT_PROPERTY_OVERRIDES += \
