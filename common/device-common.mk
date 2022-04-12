@@ -243,26 +243,6 @@ else
 PRODUCT_COPY_FILES += prebuilts/applications/fenix-arm64.apk:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/fenix.apk_
 endif
 
-# Prebuild .apk applications for non-lowram devices
-ifeq (,$(filter $(GLODROID_LOWRAM),true))
-PRODUCT_PACKAGES += \
-    FDroid \
-    SkyTube \
-    fenix \
-
-endif
-
-# Prebuild .apk applications for Android TV
-ifneq (,$(filter $(DEVICE_TYPE),tv))
-PRODUCT_PACKAGES += \
-    Kodi \
-
-else
-PRODUCT_PACKAGES += \
-    shade-launcher3 \
-
-endif
-
 ################################################################################
 
 PRODUCT_PACKAGES += fstab
