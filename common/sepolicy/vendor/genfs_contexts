@@ -22,6 +22,7 @@ genfscon sysfs /devices/platform/soc/5000400.serial/serial0/serial0-0/wakeup    
 genfscon sysfs /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/wakeup    u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/wakeup/wakeup0  u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.1/wakeup/wakeup6  u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.4/wakeup          u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/rtc-test.1/wakeup/wakeup1                                        u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/rtc-test.2/wakeup/wakeup3                                        u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/rtc-test.1/wakeup                                                u:object_r:sysfs_wakeup:s0
