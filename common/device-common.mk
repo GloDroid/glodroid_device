@@ -131,9 +131,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0-service.software \
 
-# Keymaster HAL
+# Keymint HAL
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@4.1-service
+    android.hardware.security.keymint-service
 
 # PowerHAL
 PRODUCT_PACKAGES += \
