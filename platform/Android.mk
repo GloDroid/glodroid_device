@@ -1,6 +1,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # Copyright (C) 2020 Roman Stratiienko (r.stratiienko@gmail.com)
+
+ifeq ($(BOARD_USES_GLODROID_MAKE_TARGETS),true)
+
 PLATFORM_PATH := $(call my-dir)
 
 AOSP_TOP_ABS := $(realpath .)
@@ -51,4 +54,6 @@ ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
 ifneq ($(CRUST_FIRMWARE_DEFCONFIG),)
 include $(PLATFORM_PATH)/crust.mk
 endif
+endif
+
 endif
