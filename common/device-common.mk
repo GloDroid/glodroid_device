@@ -43,7 +43,7 @@ $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-he
 endif
 endif
 
-PRODUCT_SHIPPING_API_LEVEL := 31
+PRODUCT_SHIPPING_API_LEVEL := 32
 
 # Add wifi-related packages
 PRODUCT_PACKAGES += libwpa_client wpa_supplicant hostapd wificond
@@ -134,6 +134,10 @@ PRODUCT_PACKAGES += \
 # Keymint HAL
 PRODUCT_PACKAGES += \
     android.hardware.security.keymint-service
+
+# Identity Credential HAL
+PRODUCT_PACKAGES += \
+    android.hardware.identity-service.example
 
 # PowerHAL
 PRODUCT_PACKAGES += \
