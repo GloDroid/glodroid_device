@@ -274,10 +274,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.recovery.glodroid.rc:recovery/root/init.recovery.$(TARGET_PRODUCT).rc \
 
-# Tools
-PRODUCT_COPY_FILES += \
-    device/glodroid/platform/tools/flash-all.sh:flash-all.sh \
-
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
