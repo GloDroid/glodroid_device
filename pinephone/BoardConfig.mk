@@ -20,5 +20,4 @@ TARGET_2ND_CPU_VARIANT := cortex-a15
 
 TARGET_BOARD_INFO_FILE := device/glodroid/pinephone/board-info.txt
 
-DEVICE_MANIFEST_FILE += device/glodroid/pinephone/manifest.xml
 BOARD_VENDOR_SEPOLICY_DIRS += device/glodroid/pinephone/sepolicy/vendor
