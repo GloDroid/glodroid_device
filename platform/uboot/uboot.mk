@@ -22,8 +22,6 @@ UBOOT_OUT := $(PRODUCT_OUT)/obj/UBOOT_OBJ
 
 UBOOT_SRC_FILES := $(sort $(shell find -L $(UBOOT_SRC) -not -path '*/\.git/*'))
 
-SYSFS_MMC0_PATH ?= soc/1c0f000.mmc
-SYSFS_MMC1_PATH ?= soc/1c11000.mmc
 UBOOT_EMMC_DEV_INDEX := 1
 UBOOT_SD_DEV_INDEX := 0
 
@@ -57,6 +55,8 @@ UBOOT_FRAGMENT_SD := $(UBOOT_OUT)/uboot-sd.config
 
 #-------------------------------------------------------------------------------
 ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
+SYSFS_MMC0_PATH ?= soc/1c0f000.mmc
+SYSFS_MMC1_PATH ?= soc/1c11000.mmc
 UBOOT_FRAGMENTS	+= device/glodroid/platform/common/sunxi/uboot.config
 UBOOT_BINARY := $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
 endif
@@ -82,8 +82,8 @@ RK_BIN_DIR := $(ROCKCHIP_FIRMWARE_DIR)/$(RK33_BIN)
 RKTRUST_DIR := $(ROCKCHIP_FIRMWARE_DIR)/RKTRUST
 UBOOT_EMMC_DEV_INDEX := 0
 UBOOT_SD_DEV_INDEX := 1
-SYSFS_MMC0_PATH := fe330000.sdhci
-SYSFS_MMC1_PATH := fe320000.mmc
+SYSFS_MMC0_PATH ?= fe330000.sdhci
+SYSFS_MMC1_PATH ?= fe320000.mmc
 endif
 
 $(UBOOT_FRAGMENT_EMMC):
