@@ -19,5 +19,6 @@ M0_COMPILE := M0_CROSS_COMPILE=$(AOSP_TOP_ABS)/prebuilts/gcc/linux-x86/arm/gcc-l
 
 $(ATF_BINARY): $(ATF_SRC_FILES)
 	$(M0_COMPILE) $(MAKE_COMMON) -C $(ATF_SRC) BUILD_BASE=$(AOSP_TOP_ABS)/$(ATF_OUT) PLAT=$(ATF_PLAT) DEBUG=1 bl31
+	touch -c $(ATF_BINARY)
 
 endif
