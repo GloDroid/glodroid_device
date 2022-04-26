@@ -16,11 +16,13 @@
 
 include build/make/target/board/BoardConfigMainlineCommon.mk
 
-AB_OTA_UPDATER := false
-
 TARGET_NO_KERNEL := false
 
-BOARD_USES_RECOVERY_AS_BOOT := true
+BOARD_USES_GENERIC_KERNEL_IMAGE := true
+BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
+BOARD_MOVE_GSI_AVB_KEYS_TO_VENDOR_BOOT := true
+BOARD_USES_RECOVERY_AS_BOOT :=
+BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE :=
 
 # generic wifi
 WPA_SUPPLICANT_VERSION := VER_0_8_X
@@ -57,6 +59,7 @@ BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 # Boot image 64 MiB
 BOARD_BOOTIMAGE_PARTITION_SIZE := $(shell echo $$(( 64 * 1024 * 1024 )))
 BOARD_DTBOIMG_PARTITION_SIZE := $(shell echo $$(( 512 * 1024 )))
+BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := $(shell echo $$(( 32 * 1024 * 1024 )))
 
 # DKLM partition
 BOARD_USES_VENDOR_DLKMIMAGE := true
@@ -66,9 +69,6 @@ TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 # Root image
 TARGET_COPY_OUT_ROOT := root
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
-
-# Recovery image
-TARGET_COPY_OUT_RECOVERY := recovery
 
 BOARD_EXT4_SHARE_DUP_BLOCKS := true
 
@@ -80,7 +80,7 @@ BOARD_GLODROID_DYNAMIC_PARTITIONS_SIZE := $(shell echo $$(( $(BOARD_SUPER_PARTIT
 BOARD_GLODROID_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext vendor product vendor_dlkm
 
 AB_OTA_UPDATER := true
-AB_OTA_PARTITIONS += boot system system_ext vendor product vendor_dlkm
+AB_OTA_PARTITIONS += boot system system_ext vendor product vendor_dlkm vendor_boot
 
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 
@@ -88,7 +88,7 @@ TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 BOARD_INCLUDE_RECOVERY_DTBO := true
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_PREBUILT_DTBIMAGE_DIR := device/glodroid/platform/kernel
-BOARD_BOOT_HEADER_VERSION := 2
+BOARD_BOOT_HEADER_VERSION := 4
 ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
 BOARD_KERNEL_BASE     := 0x40000000
 endif

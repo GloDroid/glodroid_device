@@ -11,18 +11,21 @@
 #ifdef platform_broadcom
 setenv dtbaddr 0x1fa00000
 setenv loadaddr 0x10008000
+setenv vloadaddr 0x13008000
 setenv dtboaddr 0x12008000
 #endif
 
 #ifdef platform_sunxi
 setenv dtbaddr 0x5fa00000
 setenv loadaddr 0x50008000
+setenv vloadaddr 0x53008000
 setenv dtboaddr 0x52008000
 #endif
 
 #ifdef platform_rockchip
 setenv dtbaddr 0x1fa00000
 setenv loadaddr 0x10008000
+setenv vloadaddr 0x13008000
 setenv dtboaddr 0x12008000
 #endif
 
@@ -38,18 +41,22 @@ EXTENV(partitions, ";name=bootloader,start=32K,size=131040K,uuid=\${uuid_gpt_boo
 EXTENV(partitions, ";name=bootloader,start=128K,size=130944K,uuid=\${uuid_gpt_bootloader}")
 #endif
 EXTENV(partitions, ";name=uboot-env,size=512K,uuid=\${uuid_gpt_reserved}")
-EXTENV(partitions, ";name=recovery_boot,size=64M,uuid=\${uuid_gpt_boot_recovery}")
 EXTENV(partitions, ";name=misc,size=512K,uuid=\${uuid_gpt_misc}")
-EXTENV(partitions, ";name=boot,size=64M,uuid=\${uuid_gpt_boot}")
+EXTENV(partitions, ";name=boot_a,size=64M,uuid=\${uuid_gpt_boot_a}")
+EXTENV(partitions, ";name=boot_b,size=64M,uuid=\${uuid_gpt_boot_b}")
+EXTENV(partitions, ";name=vendor_boot_a,size=32M,uuid=\${uuid_gpt_vendor_boot_a}")
+EXTENV(partitions, ";name=vendor_boot_b,size=32M,uuid=\${uuid_gpt_vendor_boot_b}")
 EXTENV(partitions, ";name=dtbo_a,size=8M,uuid=\${uuid_gpt_dtbo_a}")
+EXTENV(partitions, ";name=dtbo_b,size=8M,uuid=\${uuid_gpt_dtbo_b}")
 EXTENV(partitions, ";name=vbmeta_a,size=512K,uuid=\${uuid_gpt_vbmeta_a}")
+EXTENV(partitions, ";name=vbmeta_b,size=512K,uuid=\${uuid_gpt_vbmeta_b}")
 EXTENV(partitions, ";name=super,size=1800M,uuid=\${uuid_gpt_super}")
 EXTENV(partitions, ";name=metadata,size=16M,uuid=\${uuid_gpt_metadata}")
 EXTENV(partitions, ";name=userdata,size=-,uuid=\${uuid_gpt_userdata}")
 
 setenv bootargs " init=/init rootwait ro androidboot.boottime=223.708 androidboot.selinux=permissive"
 EXTENV(bootargs, " androidboot.revision=1.0 androidboot.board_id=0x1234567 androidboot.serialno=${serial#}")
-EXTENV(bootargs, " androidboot.slot_suffix=_a firmware_class.path=/vendor/etc/firmware")
+EXTENV(bootargs, " firmware_class.path=/vendor/etc/firmware")
 EXTENV(bootargs, " androidboot.verifiedbootstate=orange ${debug_bootargs} printk.devkmsg=on")
 
 FUNC_BEGIN(enter_fastboot)
@@ -72,6 +79,9 @@ FUNC_END()
 FUNC_BEGIN(bootcmd_bcb)
  /* ab_select is used as counter of failed boot attempts. After 14 failed boot attempt fallback to fastboot. */
  ab_select slot_name mmc \${mmc_bootdev}#misc || run enter_fastboot ;
+
+ FEXTENV(bootargs, " androidboot.slot_suffix=_\$slot_name") ;
+
  bcb load $mmc_bootdev misc ;
  /* Handle $ adb reboot bootloader */
  bcb test command = bootonce-bootloader && bcb clear command && bcb store && run enter_fastboot ;
@@ -95,9 +105,9 @@ FUNC_BEGIN(bootcmd_start)
  then
   FEXTENV(bootargs, " androidboot.force_normal_boot=1") ;
  fi;
- abootimg addr \$loadaddr
- abootimg get recovery_dtbo dtbo_addr
- adtimg addr \${dtbo_addr}
+ abootimg addr \$loadaddr \$vloadaddr
+
+ adtimg addr \${dtboaddr}
 #ifdef platform_sunxi
 #ifdef device_pinephone
 /* Select proper DTS version for PinePhone (v1.1 or v1.2) */
@@ -148,16 +158,19 @@ FUNC_BEGIN(bootcmd_block)
  fi;
 #endif
  run bootcmd_bcb &&
- if test STRESC(${androidrecovery}) != STRESC(true);
- then
-  part start mmc \$mmc_bootdev boot boot_start &&
-  part size mmc \$mmc_bootdev boot boot_size
- else
-  part start mmc \$mmc_bootdev recovery_boot boot_start &&
-  part size mmc \$mmc_bootdev recovery_boot boot_size
- fi;
+ part start mmc \$mmc_bootdev boot_\$slot_name boot_start &&
+ part size  mmc \$mmc_bootdev boot_\$slot_name boot_size
+
+ part start mmc \$mmc_bootdev vendor_boot_\$slot_name vendor_boot_start &&
+ part size  mmc \$mmc_bootdev vendor_boot_\$slot_name vendor_boot_size
+
+ part start mmc \$mmc_bootdev dtbo_\$slot_name dtbo_start &&
+ part size  mmc \$mmc_bootdev dtbo_\$slot_name dtbo_size
+
  mmc dev \$mmc_bootdev &&
  mmc read \$loadaddr \$boot_start \$boot_size
+ mmc read \$vloadaddr \$vendor_boot_start \$vendor_boot_size
+ mmc read \$dtboaddr \$dtbo_start \$dtbo_size
 FUNC_END()
 
 FUNC_BEGIN(bootcmd)
@@ -167,3 +180,5 @@ FUNC_BEGIN(bootcmd)
 FUNC_END()
 
 run bootcmd
+
+reset

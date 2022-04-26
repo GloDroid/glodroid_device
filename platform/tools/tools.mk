@@ -25,6 +25,7 @@ DEPLOY_FILES := \
 	$(PRODUCT_OUT)/deploy-sd.img \
 	$(PRODUCT_OUT)/boot.img \
 	$(PRODUCT_OUT)/boot_dtbo.img \
+	$(PRODUCT_OUT)/vendor_boot.img \
 	$(PRODUCT_OUT)/super.img \
 	$(PRODUCT_OUT)/deploy-gpt.img \
 
