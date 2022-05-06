@@ -50,6 +50,8 @@ EXTENV(partitions, ";name=dtbo_a,size=8M,uuid=\${uuid_gpt_dtbo_a}")
 EXTENV(partitions, ";name=dtbo_b,size=8M,uuid=\${uuid_gpt_dtbo_b}")
 EXTENV(partitions, ";name=vbmeta_a,size=512K,uuid=\${uuid_gpt_vbmeta_a}")
 EXTENV(partitions, ";name=vbmeta_b,size=512K,uuid=\${uuid_gpt_vbmeta_b}")
+EXTENV(partitions, ";name=vbmeta_system_a,size=512K,uuid=\${uuid_gpt_vbmeta_system_a}")
+EXTENV(partitions, ";name=vbmeta_system_b,size=512K,uuid=\${uuid_gpt_vbmeta_system_b}")
 EXTENV(partitions, ";name=super,size=1800M,uuid=\${uuid_gpt_super}")
 EXTENV(partitions, ";name=metadata,size=16M,uuid=\${uuid_gpt_metadata}")
 EXTENV(partitions, ";name=userdata,size=-,uuid=\${uuid_gpt_userdata}")
@@ -57,7 +59,7 @@ EXTENV(partitions, ";name=userdata,size=-,uuid=\${uuid_gpt_userdata}")
 setenv bootargs " init=/init rootwait ro androidboot.boottime=223.708 androidboot.selinux=permissive"
 EXTENV(bootargs, " androidboot.revision=1.0 androidboot.board_id=0x1234567 androidboot.serialno=${serial#}")
 EXTENV(bootargs, " firmware_class.path=/vendor/etc/firmware")
-EXTENV(bootargs, " androidboot.verifiedbootstate=orange ${debug_bootargs} printk.devkmsg=on")
+EXTENV(bootargs, " ${debug_bootargs} printk.devkmsg=on")
 
 FUNC_BEGIN(enter_fastboot)
  setenv fastboot_fail 0
@@ -89,6 +91,24 @@ FUNC_BEGIN(bootcmd_bcb)
  bcb test command = boot-fastboot && setenv androidrecovery true ;
  /* Handle $ adb reboot recovery (Android 11+) */
  bcb test command = boot-recovery && setenv androidrecovery true ;
+FUNC_END()
+
+FUNC_BEGIN(avb_verify)
+ avb init \$mmc_bootdev; avb verify _\$slot_name;
+FUNC_END()
+
+FUNC_BEGIN(bootcmd_avb)
+#ifdef TODO_AVB_DISABLED
+ EXTENV(bootargs, " androidboot.verifiedbootstate=orange ")
+#else
+ if run avb_verify; then
+  echo AVB verification OK. Continue boot;
+  EXTENV(bootargs, " ${avb_bootargs} ")
+ else
+  echo AVB verification failed;
+  reset;
+ fi;
+#endif
 FUNC_END()
 
 FUNC_BEGIN(bootcmd_prepare_env)
@@ -157,7 +177,15 @@ FUNC_BEGIN(bootcmd_block)
   setenv androidrecovery true ;
  fi;
 #endif
- run bootcmd_bcb &&
+ run bootcmd_bcb
+ if test STRESC(\$androidrecovery) = STRESC("true");
+ then
+  /* Always unlock device for fastbootd and recovery modes, otherwise fastbootd flashing won't work. TODO: Support conditional lock/unlock */
+  EXTENV(bootargs, " androidboot.verifiedbootstate=orange ");
+ else
+  run bootcmd_avb;
+ fi;
+
  part start mmc \$mmc_bootdev boot_\$slot_name boot_start &&
  part size  mmc \$mmc_bootdev boot_\$slot_name boot_size
 

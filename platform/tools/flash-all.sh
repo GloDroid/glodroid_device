@@ -21,6 +21,8 @@ set -x
 ./fastboot flash boot            boot.img
 ./fastboot flash vendor_boot     vendor_boot.img
 ./fastboot flash dtbo_a          boot_dtbo.img
+./fastboot flash vbmeta_a        vbmeta.img
+./fastboot flash vbmeta_system_a vbmeta_system.img
 ./fastboot erase misc
 
 ./fastboot reboot-fastboot
