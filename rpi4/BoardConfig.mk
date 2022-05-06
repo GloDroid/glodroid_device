@@ -18,8 +18,6 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a15
 
-TARGET_BOARD_INFO_FILE := device/glodroid/rpi4/board-info.txt
-
 BOARD_MESA3D_GALLIUM_DRIVERS := vc4 v3d
 BOARD_MESA3D_VULKAN_DRIVERS := broadcom
 
