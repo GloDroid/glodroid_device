@@ -25,3 +25,10 @@ modalias_handling enabled
 
 /dev/dma_heap/system                                   0666    system       graphics
 /dev/dma_heap/linux,cma                                0666    system       graphics
+
+# Power HAL devfreq
+/sys/devices/platform*                        min_freq 0664    system       system
+/sys/devices/platform*                        max_freq 0644    system       system
+# Power HAL cpufreq
+/sys/devices/system  *                scaling_min_freq 0664    system       system
+/sys/devices/system  *                scaling_max_freq 0644    system       system
