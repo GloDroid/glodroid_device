@@ -2,6 +2,26 @@
 #
 # Copyright (C) 2020 Roman Stratiienko (r.stratiienko@gmail.com)
 
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+
+$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_system.mk)
+#PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := relaxed
+
+#
+# All components inherited here go to system_ext image (same as GSI system_ext)
+#
+#$(call inherit-product, $(SRC_TARGET_DIR)/product/handheld_system_ext.mk)
+#$(call inherit-product, $(SRC_TARGET_DIR)/product/telephony_system_ext.mk)
+
+#
+# All components inherited here go to product image (same as GSI product)
+#
+$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_product.mk)
+
+# Exclude features that are not available on AOSP devices.
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/aosp_excluded_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/aosp_excluded_hardware.xml
+
 $(call inherit-product, device/glodroid/common/device-common.mk)
 $(call inherit-product, device/glodroid/common/device-common-sunxi.mk)
 $(call inherit-product, device/glodroid/common/bluetooth/bluetooth.mk)
