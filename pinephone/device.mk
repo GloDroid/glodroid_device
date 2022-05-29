@@ -59,11 +59,6 @@ PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl:64 \
     android.hardware.sensors@1.0-service
 
-# SUNXI has broken drm/sun4i DE2 kernel driver.
-# Disable scaling to avoid UI glitches.
-PRODUCT_PROPERTY_OVERRIDES += \
-    vendor.hwc.drm.scale_with_gpu=1 \
-
 # Modem packages and configuration
 PRODUCT_PACKAGES += \
     libpinephone-ril-2 \
