@@ -59,6 +59,7 @@ service preinstall /system/bin/sh /vendor/etc/preinstall/preinstall.sh
     oneshot
 
 on property:sys.boot_completed=1
+    write /proc/sys/kernel/printk 3
     start preinstall
 
 service bugreport /system/bin/dumpstate -d -p -B -z \
