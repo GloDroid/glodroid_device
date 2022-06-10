@@ -12,3 +12,6 @@ ATF_SRC         := external/crust-firmware/arm-trusted-firmware
 PRODUCT_PROPERTY_OVERRIDES := \
     ro.crypto.volume.options=adiantum \
     ro.crypto.volume.metadata.encryption=adiantum \
+
+PRODUCT_PACKAGES += \
+    glodroid_overlay_frameworks_base_core_slow_gpu \
