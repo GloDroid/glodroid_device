@@ -12,6 +12,8 @@ PRODUCT_MODEL := opi_pc_plus
 PRODUCT_MANUFACTURER := xunlong
 PRODUCT_HAS_EMMC := true
 
+CRUST_FIRMWARE_DEFCONFIG := orangepi_pc_plus_defconfig
+
 UBOOT_DEFCONFIG := orangepi_pc_plus_defconfig
 KERNEL_SRC       := kernel/glodroid-stable
 KERNEL_DEFCONFIG := $(KERNEL_SRC)/arch/arm/configs/sunxi_defconfig

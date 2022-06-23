@@ -12,6 +12,8 @@ PRODUCT_BRAND := OrangePI
 PRODUCT_MODEL := opi_pc2
 PRODUCT_MANUFACTURER := xunlong
 
+CRUST_FIRMWARE_DEFCONFIG := orangepi_pc2_defconfig
+
 UBOOT_DEFCONFIG := orangepi_pc2_defconfig
 
 # ATF is not used
