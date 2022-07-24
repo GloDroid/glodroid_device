@@ -45,6 +45,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/power.rpi4.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/power.rpi4.rc \
+    $(LOCAL_PATH)/snd.rpi4.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/snd.rpi4.rc     \
 
 # Checked by android.opengl.cts.OpenGlEsVersionTest#testOpenGlEsVersion. Required to run correct set of dEQP tests.
 # 196609 == 0x00030001 == GLES v3.1
