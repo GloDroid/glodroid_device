@@ -47,7 +47,8 @@ UMAKE := \
     $(CRUST_FIRMWARE_SET) \
     $(MAKE) \
     -C $(UBOOT_SRC) \
-    O=$(AOSP_TOP_ABS)/$(UBOOT_OUT)
+    O=$(AOSP_TOP_ABS)/$(UBOOT_OUT) \
+    -j$(NUMPROC)
 
 UBOOT_FRAGMENTS	+= device/glodroid/platform/common/uboot.config
 UBOOT_FRAGMENT_EMMC := $(UBOOT_OUT)/uboot-emmc.config

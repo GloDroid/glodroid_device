@@ -76,7 +76,7 @@ $(KERNEL_OUT)/.config: $(KERNEL_DEFCONFIG) $(KERNEL_FRAGMENTS) $(KERNEL_SRC_FILE
 	$(KMAKE) olddefconfig
 
 $(KERNEL_BINARY): $(KERNEL_SRC_FILES) $(KERNEL_OUT)/.config
-	$(KMAKE) $(KERNEL_TARGET) dtbs modules
+	$(KMAKE) $(KERNEL_TARGET) dtbs modules -j$(NUMPROC)
 	touch $@
 
 $(KERNEL_COMPRESSED): $(KERNEL_BINARY)

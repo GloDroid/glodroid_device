@@ -4,6 +4,8 @@
 
 ifeq ($(BOARD_USES_GLODROID_MAKE_TARGETS),true)
 
+NUMPROC := $(shell grep -c ^processor /proc/cpuinfo)
+
 PLATFORM_PATH := $(call my-dir)
 
 AOSP_TOP_ABS := $(realpath .)
