@@ -47,7 +47,7 @@ $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-he
 endif
 endif
 
-PRODUCT_SHIPPING_API_LEVEL := 32
+PRODUCT_SHIPPING_API_LEVEL := 33
 
 # Add wifi-related packages
 PRODUCT_PACKAGES += libwpa_client wpa_supplicant hostapd wificond
@@ -249,7 +249,7 @@ PRODUCT_COPY_FILES += \
 
 # Init RC files
 PRODUCT_COPY_FILES += \
-    device/glodroid/common/ueventd.common.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
+    device/glodroid/common/ueventd.common.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc \
 
 # Build and run only ART
 PRODUCT_RUNTIMES := runtime_libart_default
