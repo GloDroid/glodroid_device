@@ -131,6 +131,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=160 \
 
+# USB HAL
+PRODUCT_PACKAGES += \
+    android.hardware.usb-service.example \
+
 # Gatekeeper HAL
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0-service.software \
