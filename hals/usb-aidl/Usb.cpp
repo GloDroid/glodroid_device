@@ -517,6 +517,25 @@ Status getPortStatusHelper(std::vector<PortStatus> *currentPortStatus) {
 
         return Status::SUCCESS;
     }
+
+    currentPortStatus->resize(1);
+    (*currentPortStatus)[0].portName = "port";
+    (*currentPortStatus)[0].canChangeMode = false;
+    (*currentPortStatus)[0].canChangeDataRole = false;
+    (*currentPortStatus)[0].canChangePowerRole = false;
+    (*currentPortStatus)[0].currentPowerRole = PortPowerRole::SINK;
+    (*currentPortStatus)[0].currentDataRole = PortDataRole::DEVICE;
+    (*currentPortStatus)[0].currentMode = PortMode::DRP;
+    (*currentPortStatus)[0].supportedModes.push_back(PortMode::DRP);
+    (*currentPortStatus)[0].usbDataStatus.push_back(UsbDataStatus::ENABLED);
+
+    ALOGI("Fake USB port: canChangeMode:%d canChagedata:%d canChangePower:%d "
+          "usbDataEnabled:%d",
+          (*currentPortStatus)[i].canChangeMode, (*currentPortStatus)[i].canChangeDataRole,
+          (*currentPortStatus)[i].canChangePowerRole, 0);
+
+    return Status::SUCCESS;
+
 done:
     return Status::ERROR;
 }
