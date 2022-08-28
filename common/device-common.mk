@@ -131,9 +131,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=160 \
 
-# USB HAL
+# USB and Gadget HALs
 PRODUCT_PACKAGES += \
-    android.hardware.usb-service.example \
+    android.hardware.usb-service.glodroid \
+    android.hardware.usb.gadget@1.2-glodroid-service \
 
 # Gatekeeper HAL
 PRODUCT_PACKAGES += \
@@ -260,7 +261,6 @@ PRODUCT_RUNTIMES := runtime_libart_default
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/drm.rc \
-    device/glodroid/common/init.common.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.usb.rc \
 
 # Vendor seccomp policy files:
 PRODUCT_COPY_FILES += \

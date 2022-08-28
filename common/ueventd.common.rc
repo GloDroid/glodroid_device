@@ -32,3 +32,6 @@ modalias_handling enabled
 # Power HAL cpufreq
 /sys/devices/system  *                scaling_min_freq 0664    system       system
 /sys/devices/system  *                scaling_max_freq 0644    system       system
+
+# USB Gadget HAL v1.2
+/sys/class/udc*                          current_speed 0644    system       system
