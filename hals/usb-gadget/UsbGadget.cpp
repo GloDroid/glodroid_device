@@ -34,10 +34,20 @@ namespace V1_2 {
 namespace implementation {
 
 UsbGadget::UsbGadget() {
-    if (access(OS_DESC_PATH, R_OK) != 0) {
-        ALOGE("configfs setup not done yet");
-        abort();
+    for (int i = 0; i < 10; i++) {
+        if (access(OS_DESC_PATH, R_OK) == 0)
+            break;
+
+        ALOGE("configfs setup not done yet (attempt: %i/10)", i + 1);
+        sleep(1);
     }
+
+    mUsbController = GetProperty(kUsbController, "");
+
+    if (mUsbController.empty())
+        ALOGE("Failed to read controller name");
+
+    mMonitorFfs = std::make_unique<MonitorFfs>(mUsbController.c_str());
 }
 
 void currentFunctionsAppliedCallback(bool functionsApplied, void* payload) {
@@ -56,7 +66,7 @@ Return<void> UsbGadget::getCurrentUsbFunctions(const sp<V1_0::IUsbGadgetCallback
 
 Return<void> UsbGadget::getUsbSpeed(const sp<V1_2::IUsbGadgetCallback>& callback) {
     std::string current_speed;
-    if (ReadFileToString(SPEED_PATH, &current_speed)) {
+    if (ReadFileToString("/sys/class/udc/" + mUsbController + "/current_speed", &current_speed)) {
         current_speed = Trim(current_speed);
         ALOGI("current USB speed is %s", current_speed.c_str());
         if (current_speed == "low-speed")
@@ -101,8 +111,8 @@ Return<void> UsbGadget::getUsbSpeed(const sp<V1_2::IUsbGadgetCallback>& callback
 V1_0::Status UsbGadget::tearDownGadget() {
     if (resetGadget() != V1_0::Status::SUCCESS) return V1_0::Status::ERROR;
 
-    if (monitorFfs.isMonitorRunning()) {
-        monitorFfs.reset();
+    if (mMonitorFfs->isMonitorRunning()) {
+        mMonitorFfs->reset();
     } else {
         ALOGI("mMonitor not running");
     }
@@ -117,7 +127,7 @@ Return<Status> UsbGadget::reset() {
 
     usleep(kDisconnectWaitUs);
 
-    if (!WriteStringToFile(kGadgetName, PULLUP_PATH)) {
+    if (!WriteStringToFile(mUsbController, PULLUP_PATH)) {
         ALOGI("Gadget cannot be pulled up");
         return Status::ERROR;
     }
@@ -194,33 +204,33 @@ V1_0::Status UsbGadget::setupFunctions(uint64_t functions,
     bool ffsEnabled = false;
     int i = 0;
 
-    if (addGenericAndroidFunctions(&monitorFfs, functions, &ffsEnabled, &i) !=
+    if (addGenericAndroidFunctions(mMonitorFfs.get(), functions, &ffsEnabled, &i) !=
         V1_0::Status::SUCCESS)
         return V1_0::Status::ERROR;
 
     if ((functions & V1_2::GadgetFunction::ADB) != 0) {
         ffsEnabled = true;
-        if (addAdb(&monitorFfs, &i) != V1_0::Status::SUCCESS) return V1_0::Status::ERROR;
+        if (addAdb(mMonitorFfs.get(), &i) != V1_0::Status::SUCCESS) return V1_0::Status::ERROR;
     }
 
     // Pull up the gadget right away when there are no ffs functions.
     if (!ffsEnabled) {
-        if (!WriteStringToFile(kGadgetName, PULLUP_PATH)) return V1_0::Status::ERROR;
+        if (!WriteStringToFile(mUsbController, PULLUP_PATH)) return V1_0::Status::ERROR;
         mCurrentUsbFunctionsApplied = true;
         if (callback) callback->setCurrentUsbFunctionsCb(functions, V1_0::Status::SUCCESS);
         return V1_0::Status::SUCCESS;
     }
 
-    monitorFfs.registerFunctionsAppliedCallback(&currentFunctionsAppliedCallback, this);
+    mMonitorFfs->registerFunctionsAppliedCallback(&currentFunctionsAppliedCallback, this);
     // Monitors the ffs paths to pull up the gadget when descriptors are written.
     // Also takes of the pulling up the gadget again if the userspace process
     // dies and restarts.
-    monitorFfs.startMonitor();
+    mMonitorFfs->startMonitor();
 
     if (kDebug) ALOGI("Mainthread in Cv");
 
     if (callback) {
-        bool pullup = monitorFfs.waitForPullUp(timeout);
+        bool pullup = mMonitorFfs->waitForPullUp(timeout);
         Return<void> ret = callback->setCurrentUsbFunctionsCb(
                 functions, pullup ? V1_0::Status::SUCCESS : V1_0::Status::ERROR);
         if (!ret.isOk()) ALOGE("setCurrentUsbFunctionsCb error %s", ret.description().c_str());

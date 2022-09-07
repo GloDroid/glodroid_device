@@ -35,6 +35,8 @@
 #include <string>
 #include <thread>
 
+constexpr char kUsbController[] = "sys.usb.controller";
+
 namespace android {
 namespace hardware {
 namespace usb {
@@ -67,11 +69,6 @@ using ::android::hardware::usb::gadget::setVidPid;
 using ::android::hardware::usb::gadget::unlinkFunctions;
 using ::std::string;
 
-constexpr char kGadgetName[] = "11110000.usb";
-static MonitorFfs monitorFfs(kGadgetName);
-
-#define UDC_PATH "/sys/class/udc/11110000.usb/"
-#define SPEED_PATH UDC_PATH "current_speed"
 
 struct UsbGadget : public IUsbGadget {
     UsbGadget();
@@ -96,6 +93,10 @@ struct UsbGadget : public IUsbGadget {
     V1_0::Status tearDownGadget();
     V1_0::Status setupFunctions(uint64_t functions, const sp<V1_0::IUsbGadgetCallback>& callback,
                                 uint64_t timeout);
+
+    std::string mUsbController;
+
+    std::unique_ptr<MonitorFfs> mMonitorFfs;
 };
 
 }  // namespace implementation
