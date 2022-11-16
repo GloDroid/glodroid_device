@@ -189,7 +189,7 @@ PRODUCT_COPY_FILES += \
 
 #Camera HAL
 PRODUCT_PACKAGES += \
-    camera.libcamera \
+    camera.libcamera libcamera libcamera-base libcamera-cam lc-compliance \
     android.hardware.camera.provider@2.5-service_64 \
 
 PRODUCT_PROPERTY_OVERRIDES += ro.hardware.camera=libcamera
