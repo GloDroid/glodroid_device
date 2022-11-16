@@ -10,7 +10,7 @@ ifeq ($(TARGET_ARCH),arm64)
 LOCAL_PATH := $(call my-dir)
 
 #-------------------------------------------------------------------------------
-ATF_SRC         ?= external/arm-trusted-firmware
+ATF_SRC         ?= glodroid/bootloader/atf
 ATF_SRC_FILES   := $(sort $(shell find -L $(ATF_SRC) -not -path '*/\.git/*'))
 
 #-------------------------------------------------------------------------------

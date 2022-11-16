@@ -14,7 +14,7 @@ PRODUCT_MANUFACTURER := xunlong
 CRUST_FIRMWARE_DEFCONFIG := orangepi_pc_defconfig
 
 UBOOT_DEFCONFIG := orangepi_pc_defconfig
-KERNEL_SRC       := kernel/glodroid-stable
+KERNEL_SRC       := glodroid/kernel/stable
 KERNEL_DEFCONFIG := $(KERNEL_SRC)/arch/arm/configs/sunxi_defconfig
 KERNEL_FRAGMENTS += \
     device/glodroid/platform/common/sunxi/sunxi-common.config \

@@ -27,7 +27,7 @@ RK33_BIN := bin/rk33
 
 KERNEL_FRAGMENTS := $(LOCAL_PATH)/kernel.config
 
-KERNEL_SRC       := kernel/glodroid-megous-edge
+KERNEL_SRC       := glodroid/kernel/megous-edge
 KERNEL_DEFCONFIG := $(KERNEL_SRC)/arch/arm64/configs/pinephone_pro_defconfig
 
 KERNEL_DTB_FILE := rockchip/rk3399-pinephone-pro.dtb

@@ -17,7 +17,7 @@ ATF_PLAT        := sun50i_a64
 
 CRUST_FIRMWARE_DEFCONFIG := pinephone_defconfig
 
-KERNEL_SRC       := kernel/glodroid-megous
+KERNEL_SRC       := glodroid/kernel/megous
 KERNEL_DEFCONFIG := $(KERNEL_SRC)/arch/arm64/configs/pinephone_defconfig
 KERNEL_FRAGMENTS := \
     device/glodroid/platform/common/sunxi/a64_overlay.config \

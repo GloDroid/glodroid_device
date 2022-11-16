@@ -12,8 +12,8 @@ PRODUCT_PROPERTY_OVERRIDES += qemu.sf.lcd_density=151
 
 # Firmware
 PRODUCT_COPY_FILES += \
-    kernel/firmware/rtlbt/rtl8723cs_xx_fw:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtl_bt/rtl8723cs_xx_fw.bin \
-    kernel/firmware/rtlbt/rtl8723cs_xx_config:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtl_bt/rtl8723cs_xx_config-pinetab.bin \
+    glodroid/kernel-firmware/armbian/rtlbt/rtl8723cs_xx_fw:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtl_bt/rtl8723cs_xx_fw.bin \
+    glodroid/kernel-firmware/armbian/rtlbt/rtl8723cs_xx_config:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtl_bt/rtl8723cs_xx_config-pinetab.bin \
 
 PRODUCT_COPY_FILES += \
     device/glodroid/pinetab/audio.pinetab.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.pinetab.xml \

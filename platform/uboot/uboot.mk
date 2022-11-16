@@ -17,7 +17,7 @@
 #-------------------------------------------------------------------------------
 BSP_UBOOT_PATH := $(call my-dir)
 
-UBOOT_SRC := external/u-boot
+UBOOT_SRC := glodroid/bootloader/u-boot
 UBOOT_OUT := $(PRODUCT_OUT)/obj/UBOOT_OBJ
 
 UBOOT_SRC_FILES := $(sort $(shell find -L $(UBOOT_SRC) -not -path '*/\.git/*'))
@@ -65,7 +65,7 @@ endif
 ifeq ($(PRODUCT_BOARD_PLATFORM),broadcom)
 UBOOT_FRAGMENTS	+= device/glodroid/platform/common/broadcom/uboot.config
 UBOOT_BINARY := $(UBOOT_OUT)/u-boot.bin
-RPI_FIRMWARE_DIR := vendor/raspberry/firmware
+RPI_FIRMWARE_DIR := glodroid/bootloader/raspberry-fw
 endif
 
 ifeq ($(PRODUCT_BOARD_PLATFORM),rockchip)
@@ -77,7 +77,7 @@ UBOOT_TRUST := $(UBOOT_OUT)/trust.img
 UBOOT_BINARY_SD_EMMC := $(UBOOT_BINARY).deploy-emmc
 BOOTLOADER_SD_FOR_EMMC := $(PRODUCT_OUT)/bootloader-deploy-emmc.img
 BOOTLOADER_EMMC := $(PRODUCT_OUT)/bootloader-emmc.img
-ROCKCHIP_FIRMWARE_DIR := vendor/rockchip/rkbin
+ROCKCHIP_FIRMWARE_DIR := glodroid/bootloader/rockchip-rkbin
 TRUST_MERGER := tools/trust_merger
 RK_BIN_DIR := $(ROCKCHIP_FIRMWARE_DIR)/$(RK33_BIN)
 RKTRUST_DIR := $(ROCKCHIP_FIRMWARE_DIR)/RKTRUST

@@ -6,7 +6,7 @@ PRODUCT_COPY_FILES += \
 UBOOT_FRAGMENTS += \
     device/glodroid/platform/common/sunxi/uboot.config
 
-ATF_SRC         := external/crust-firmware/arm-trusted-firmware
+ATF_SRC         := glodroid/bootloader/crust-atf
 
 # Sunxi has no hardware AES-XTS supportm which is required by FBE, adiantum is a fast software impl. from Google
 PRODUCT_PROPERTY_OVERRIDES := \

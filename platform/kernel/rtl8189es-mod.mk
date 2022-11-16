@@ -1,7 +1,7 @@
 
 MODULES_DIR := $(TARGET_OUT_VENDOR_DLKM)/lib/modules
 MODULE := $(PRODUCT_OUT)/obj/RTL8189es-MOD/8189es.ko
-MOD_SRC := kernel/glodroid-modules/rtl8189es
+MOD_SRC := glodroid/kernel-modules/rtl8189es
 MOD_SRC_FILES := $(sort $(shell find -L $(MOD_SRC) -not -path '*/\.git/*'))
 
 $(MODULE): $(MOD_SRC) $(KERNEL_OUT)/.config $(MOD_SRC_FILES) $(PRODUCT_OUT)/kernel

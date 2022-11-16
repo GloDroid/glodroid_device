@@ -7,7 +7,7 @@
 #-------------------------------------------------------------------------------
 LOCAL_PATH := $(call my-dir)
 
-CRUST_FIRMWARE_SRC    ?= external/crust-firmware/crust
+CRUST_FIRMWARE_SRC    ?= glodroid/bootloader/crust-firmware
 OR1K_TOOLCHAIN_PREFIX := prebuilts/gcc/linux-x86/or1k/gcc-linux-or1k/bin/or1k-linux-
 OR1K_COMPILE          := CROSS_COMPILE=$(AOSP_TOP_ABS)/$(OR1K_TOOLCHAIN_PREFIX)
 

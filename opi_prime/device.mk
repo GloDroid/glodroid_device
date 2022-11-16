@@ -8,9 +8,9 @@ $(call inherit-product, device/glodroid/common/bluetooth/no-bluetooth.mk)
 
 # Firmware
 PRODUCT_COPY_FILES += \
-        kernel/firmware/rtlwifi/rtl8723bs_nic.bin:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtlwifi/rtl8723bs_nic.bin \
-        kernel/firmware/rtlwifi/rtl8723bs_wowlan.bin:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtlwifi/rtl8723bs_wowlan.bin \
-        kernel/firmware/rtlwifi/rtl8723bs_ap_wowlan.bin:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtlwifi/rtl8723bs_ap_wowlan.bin \
+        glodroid/kernel-firmware/armbian/rtlwifi/rtl8723bs_nic.bin:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtlwifi/rtl8723bs_nic.bin \
+        glodroid/kernel-firmware/armbian/rtlwifi/rtl8723bs_wowlan.bin:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtlwifi/rtl8723bs_wowlan.bin \
+        glodroid/kernel-firmware/armbian/rtlwifi/rtl8723bs_ap_wowlan.bin:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/rtlwifi/rtl8723bs_ap_wowlan.bin \
 
 PRODUCT_COPY_FILES += \
     device/glodroid/opi_plus2e/audio.opi_plus2e.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.opi_prime.xml \

@@ -7,15 +7,15 @@ ifeq ($(TARGET_PREBUILT_KERNEL),)
 
 #-------------------------------------------------------------------------------
 ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
-KERNEL_SRC		?= kernel/glodroid-stable
+KERNEL_SRC		?= glodroid/kernel/stable
 endif
 
 ifeq ($(PRODUCT_BOARD_PLATFORM),rockchip)
-KERNEL_SRC		?= kernel/glodroid-stable
+KERNEL_SRC		?= glodroid/kernel/stable
 endif
 
 ifeq ($(PRODUCT_BOARD_PLATFORM),broadcom)
-KERNEL_SRC		?= kernel/glodroid-broadcom
+KERNEL_SRC		?= glodroid/kernel/broadcom
 endif
 
 KERNEL_FRAGMENTS	:= \
