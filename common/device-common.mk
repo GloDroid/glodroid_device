@@ -47,6 +47,9 @@ $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-he
 endif
 endif
 
+# Add extra FOSS applications that is installed after first boot
+$(call inherit-product, glodroid/apks/glodroid-apks.mk)
+
 PRODUCT_SHIPPING_API_LEVEL := 33
 
 # Add wifi-related packages
@@ -235,18 +238,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/glodroid/common/init.common.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.common.rc \
 
-
-################# GLODROID ADDITIONAL PACKAGES SECTION #########################
-
-PRODUCT_COPY_FILES += \
-    device/glodroid/common/preinstall.sh:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/preinstall.sh        \
-    glodroid/apks/fdroid.apk:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/fdroid.apk_all                   \
-    glodroid/apks/shade-launcher3.apk:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/shade-launcher3.apk_all \
-    glodroid/apks/skytube.apk:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/skytube.apk_all                 \
-    glodroid/apks/fenix-arm.apk:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/fenix.apk_arm                 \
-    glodroid/apks/fenix-arm64.apk:$(TARGET_COPY_OUT_VENDOR)/etc/preinstall/fenix.apk_arm64             \
-
-################################################################################
 
 PRODUCT_PACKAGES += fstab
 
