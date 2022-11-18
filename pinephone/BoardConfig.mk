@@ -4,6 +4,7 @@
 
 include device/glodroid/common/boardconfig-common.mk
 include device/glodroid/common/bluetooth/boardconfig.mk
+include device/glodroid/common/modem_manager/board_mm.mk
 
 # Architecture
 TARGET_ARCH := arm64

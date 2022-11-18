@@ -1,0 +1,29 @@
+From 53466c8ee69b57ee96320ffda2b824ee954c511e Mon Sep 17 00:00:00 2001
+From: Roman Stratiienko <r.stratiienko@gmail.com>
+Date: Fri, 2 Dec 2022 18:54:23 +0200
+Subject: [PATCH] GLODROID: Fix build on Android
+
+ld.lld: error: undefined symbol: le16toh
+>>> referenced by mm-port-serial-qcdm.c:327 (../src/src/mm-port-serial-qcdm.c:327)
+>>>               libport.a.p/mm-port-serial-qcdm.c.o:(parse_unsolicited) in archive src/libport.a
+
+Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+---
+ src/mm-port-serial-qcdm.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/mm-port-serial-qcdm.c b/src/mm-port-serial-qcdm.c
+index 08f24303..aed09c80 100644
+--- a/src/mm-port-serial-qcdm.c
++++ b/src/mm-port-serial-qcdm.c
+@@ -21,6 +21,7 @@
+ 
+ #include <ModemManager.h>
+ #include <mm-errors-types.h>
++#include <sys/endian.h>
+ 
+ #include "mm-port-serial-qcdm.h"
+ #include "libqcdm/src/com.h"
+-- 
+2.37.2
+

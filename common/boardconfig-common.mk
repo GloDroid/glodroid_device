@@ -179,5 +179,8 @@ BOARD_MESA3D_BUILD_LIBGBM := true
 BOARD_BUILD_AOSPEXT_FFMPEG := true
 BOARD_FFMPEG_SRC_DIR := glodroid/vendor/ffmpeg
 
+BOARD_BUILD_AOSPEXT_MMRADIO := true
+BOARD_MMRADIO_SRC_DIR := glodroid/vendor/mm-radio
+
 # Enable GloDroid-specific build targets
 BOARD_USES_GLODROID_MAKE_TARGETS := true

@@ -25,6 +25,7 @@ PRODUCT_COPY_FILES += \
 $(call inherit-product, device/glodroid/common/device-common.mk)
 $(call inherit-product, device/glodroid/common/device-common-sunxi.mk)
 $(call inherit-product, device/glodroid/common/bluetooth/bluetooth.mk)
+$(call inherit-product, device/glodroid/common/modem_manager/device_mm.mk)
 
 PRODUCT_PROPERTY_OVERRIDES += qemu.sf.lcd_density=269
 
