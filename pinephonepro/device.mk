@@ -68,15 +68,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     device/glodroid/pinephone/modem.pinephone.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/modem.pinephonepro.rc \
 
-# Modem packages and configuration
-PRODUCT_PACKAGES += \
-    libpinephone-ril-2 \
-    libpinephone-rild \
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.boot.modem_simulator_ports=-1 \
-    vendor.rild.libargs=-d/dev/ttyUSB2 \
-
 PRODUCT_COPY_FILES += \
     device/glodroid/pinephonepro/audio.pinephonepro.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.pinephonepro.xml \
 

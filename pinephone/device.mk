@@ -59,15 +59,6 @@ PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl:64 \
     android.hardware.sensors@1.0-service
 
-# Modem packages and configuration
-PRODUCT_PACKAGES += \
-    libpinephone-ril-2 \
-    libpinephone-rild \
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.boot.modem_simulator_ports=-1 \
-    vendor.rild.libargs=-d/dev/ttyUSB2 \
-
 # Checked by android.opengl.cts.OpenGlEsVersionTest#testOpenGlEsVersion. Required to run correct set of dEQP tests.
 # 131072 == 0x00020000 == GLES v2.0
 PRODUCT_VENDOR_PROPERTIES += \
