@@ -1,0 +1,175 @@
+From 67093d7fd55465cbe2d38dee81b81603abb3efd0 Mon Sep 17 00:00:00 2001
+From: Roman Stratiienko <r.stratiienko@gmail.com>
+Date: Mon, 2 Jan 2023 01:39:47 +0200
+Subject: [PATCH 13/15] drm_hwcomposer: Add sunxi-drm compositor
+
+- Disable unsupported scaling ratios
+
+Change-Id: I1a00000bc5d2df12545bb606766906198b61f154
+Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+---
+ Android.bp                     |  1 +
+ compositor/CompositorBase.cpp  |  2 ++
+ compositor/CompositorSunxi.cpp | 64 ++++++++++++++++++++++++++++++++++
+ compositor/CompositorSunxi.h   | 33 ++++++++++++++++++
+ meson.build                    |  1 +
+ 5 files changed, 101 insertions(+)
+ create mode 100644 compositor/CompositorSunxi.cpp
+ create mode 100644 compositor/CompositorSunxi.h
+
+diff --git a/Android.bp b/Android.bp
+index 7b4ffe1e35c7d4..0a90ba3827bfa8 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -61,6 +61,7 @@ filegroup {
+ 
+         "compositor/CompositorBase.cpp",
+         "compositor/CompositorClassic.cpp",
++        "compositor/CompositorSunxi.cpp",
+         "compositor/DrmKmsPlan.cpp",
+         "compositor/FlatteningController.cpp",
+ 
+diff --git a/compositor/CompositorBase.cpp b/compositor/CompositorBase.cpp
+index 74d5914643f098..29d2a732b746c1 100644
+--- a/compositor/CompositorBase.cpp
++++ b/compositor/CompositorBase.cpp
+@@ -19,6 +19,7 @@
+ #include "CompositorBase.h"
+ 
+ #include "CompositorClassic.h"
++#include "CompositorSunxi.h"
+ #include "bufferinfo/BufferInfoGetter.h"
+ #include "utils/properties.h"
+ 
+@@ -30,6 +31,7 @@ const std::map<std::string,
+     kCompositors = {
+         {"kirin", CompositorClient::CreateInstance},
+         {"mediatek-drm", CompositorClient::CreateInstance},
++        {"sun4i-drm", CompositorSunxi::CreateInstance},
+         {"generic", CompositorGeneric::CreateInstance},
+         {"client", CompositorClient::CreateInstance},
+ };
+diff --git a/compositor/CompositorSunxi.cpp b/compositor/CompositorSunxi.cpp
+new file mode 100644
+index 00000000000000..a91c04b1dedde2
+--- /dev/null
++++ b/compositor/CompositorSunxi.cpp
+@@ -0,0 +1,64 @@
++/*
++ * Copyright (C) 2020 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++#include "CompositorSunxi.h"
++
++namespace android {
++
++auto CompositorSunxi::CreateInstance(DrmDisplayPipeline &pipe,
++                                     CompositorCallbacks &cbks)
++    -> std::unique_ptr<CompositorBase> {
++  return std::unique_ptr<CompositorBase>(new CompositorSunxi(pipe, cbks));
++}
++
++void CompositorSunxi::SelectClientLayers(FEComposition &comp) {
++  int client_start = -1;
++  size_t client_size = 0;
++
++  auto layers = GetOrderedLayers(comp, &client_start, &client_size);
++
++  bool most_bottom = true;
++
++  for (auto &fl : layers) {
++    auto src_width = fl.second->layer_data.pi.source_crop.right -
++                     fl.second->layer_data.pi.source_crop.left;
++    auto src_height = fl.second->layer_data.pi.source_crop.bottom -
++                      fl.second->layer_data.pi.source_crop.top;
++    auto dst_width = fl.second->layer_data.pi.display_frame.right -
++                     fl.second->layer_data.pi.display_frame.left;
++    auto dst_height = fl.second->layer_data.pi.display_frame.bottom -
++                      fl.second->layer_data.pi.display_frame.top;
++
++    auto width_ratio = src_width / dst_width;
++    auto height_ratio = src_height / dst_height;
++
++    /* VI layer scaler can support downscale up to 16x  */
++    constexpr float kViMaxRatio = 15.0;
++    auto fits_vi_layer = std::max(width_ratio, height_ratio) <= kViMaxRatio;
++
++    constexpr float kUiMaxRatio = 3.8;
++    auto fits_ui_layer = std::max(width_ratio, height_ratio) <= kUiMaxRatio;
++    //  bool fits_ui_layer = !ld.pi.RequireScalingOrPhasing();
++
++    if ((!fits_vi_layer && most_bottom) || (!fits_ui_layer && !most_bottom))
++      fl.second->use_client = true;
++
++    most_bottom = false;
++  }
++
++  CompositorGeneric::SelectClientLayers(comp);
++}
++
++}  // namespace android
+diff --git a/compositor/CompositorSunxi.h b/compositor/CompositorSunxi.h
+new file mode 100644
+index 00000000000000..17d8fd160c2dab
+--- /dev/null
++++ b/compositor/CompositorSunxi.h
+@@ -0,0 +1,33 @@
++/*
++ * Copyright (C) 2020 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++#pragma once
++
++#include "CompositorClassic.h"
++
++namespace android {
++
++class CompositorSunxi : public CompositorGeneric {
++ public:
++  using CompositorGeneric::CompositorGeneric;
++
++  static auto CreateInstance(DrmDisplayPipeline &pipe,
++                             CompositorCallbacks &cbks)
++      -> std::unique_ptr<CompositorBase>;
++
++  void SelectClientLayers(FEComposition &comp) override;
++};
++}  // namespace android
+diff --git a/meson.build b/meson.build
+index c5f3c8b1858242..08df62a34ebbc1 100644
+--- a/meson.build
++++ b/meson.build
+@@ -14,6 +14,7 @@ src_common = files(
+     'compositor/FlatteningController.cpp',
+     'compositor/CompositorBase.cpp',
+     'compositor/CompositorClassic.cpp',
++    'compositor/CompositorSunxi.cpp',
+ )
+ 
+ srcs_hwc2_device = [
+-- 
+2.37.2
+

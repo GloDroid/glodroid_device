@@ -126,10 +126,10 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@4.0-service.minigbm_gbm_mesa \
     android.hardware.graphics.mapper@4.0-impl.minigbm_gbm_mesa \
     libgbm_mesa_wrapper \
-    hwcomposer.drm \
+    hwcomposer.drm2 \
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.hardware.hwcomposer=drm \
+    ro.hardware.hwcomposer=drm2 \
 ##
 
 PRODUCT_PROPERTY_OVERRIDES += \

@@ -183,5 +183,9 @@ BOARD_FFMPEG_SRC_DIR := glodroid/vendor/ffmpeg
 BOARD_BUILD_AOSPEXT_MMRADIO := true
 BOARD_MMRADIO_SRC_DIR := glodroid/vendor/mm-radio
 
+BOARD_BUILD_AOSPEXT_DRMHWCOMPOSER := true
+BOARD_DRMHWCOMPOSER_SRC_DIR := glodroid/vendor/drm_hwcomposer
+BOARD_DRMHWCOMPOSER_PATCHES_DIRS += device/glodroid/patches/vendor/drm_hwcomposer
+
 # Enable GloDroid-specific build targets
 BOARD_USES_GLODROID_MAKE_TARGETS := true

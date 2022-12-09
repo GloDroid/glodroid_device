@@ -1,0 +1,389 @@
+From ae580dc9d6aa5f1916205df3e2935cc80813f3b4 Mon Sep 17 00:00:00 2001
+From: Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+Date: Thu, 20 Jan 2022 10:46:42 +0200
+Subject: [PATCH 12/15] drm_hwcomposer: Support relaxed requirements for the
+ most bottom plane
+
+1. Some of DRM/KMS drivers has no planes with formats which Android does require,
+   but in some cases it's possible to modify the format of the buffer,
+   making such planes usable without any drawbacks.
+
+2. Another use-case is blend mode support. Android does require premultiplied
+   blending mode support for all planes, but such requirement can be made
+   optional for the most bottom plane without any drawbacks.
+
+Signed-off-by: Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+---
+ compositor/DrmKmsPlan.cpp           |  2 +-
+ docs/features/drmhwc-feature-001.md | 39 ++++++++++++++++++++
+ drm/DrmAtomicStateManager.cpp       |  7 +++-
+ drm/DrmFbImporter.cpp               | 57 +++++++++++++++++------------
+ drm/DrmFbImporter.h                 | 22 ++++++++++-
+ drm/DrmPlane.cpp                    | 39 +++++++++++++++++---
+ drm/DrmPlane.h                      | 19 +++++++---
+ 7 files changed, 145 insertions(+), 40 deletions(-)
+ create mode 100644 docs/features/drmhwc-feature-001.md
+
+diff --git a/compositor/DrmKmsPlan.cpp b/compositor/DrmKmsPlan.cpp
+index 6289b848de4d38..d16ff88bf3c0e3 100644
+--- a/compositor/DrmKmsPlan.cpp
++++ b/compositor/DrmKmsPlan.cpp
+@@ -42,7 +42,7 @@ auto DrmKmsPlan::CreateDrmKmsPlan(DrmDisplayPipeline &pipe,
+ 
+       plane = *avail_planes.begin();
+       avail_planes.erase(avail_planes.begin());
+-    } while (!plane->Get()->IsValidForLayer(&dhl));
++    } while (!plane->Get()->IsValidForLayer(&dhl, z_pos == 0));
+ 
+     LayerToPlaneJoining joining = {
+         .layer = std::move(dhl),
+diff --git a/docs/features/drmhwc-feature-001.md b/docs/features/drmhwc-feature-001.md
+new file mode 100644
+index 00000000000000..cf62d032ddd16b
+--- /dev/null
++++ b/docs/features/drmhwc-feature-001.md
+@@ -0,0 +1,39 @@
++
++## Feature
++
++Support relaxed requirements for the most bottom plane
++
++## Description:
++
++1. Some of DRM/KMS drivers has no planes with formats which Android does require,
++   but in some cases it's possible to modify the format of the buffer,
++   making such planes usable without any drawbacks.
++
++2. Another use-case is blend mode support. Android does require premultiplied blending mode support for all planes,
++   but such requirement can be made optional for the most bottom plane without any drawbacks.
++
++## Known use-cases:
++
++### 1. sun4i/drm mainline driver kernel 5.4+
++
++DE2.0 SUN4I-VI-0 plane has no format with alpha channel due to hardware limitations
++
++|Layer|Plane# [int. name]|Buffer format|Resolved format|ZPOS|
++|---|---|---|---|---|
++|DEVICE|0 [SUN4I-UI-0]|DRM_FORMAT_ABGR8888| - |1|
++|DEVICE|1 [SUN4I-VI-0]|DRM_FORMAT_ABGR8888|DRM_FORMAT_XBGR8888|0|
++|DEVICE|2 [SUN4I-UI-1]|DRM_FORMAT_ABGR8888| - |2|
++|DEVICE|3 [SUN4I-UI-2]|DRM_FORMAT_ABGR8888| - |3|
++
++With this feature we are able to use SUN4I-VI-0 as most bottom plane (zpos=0)
++
++## Test
++
++1. Modify kernel driver and remove all alpha-enabled formats from drm/kms driver.
++2. Ensure android boots with UI in CLIENT mode
++
++Kernel must not support DRM_FORMAT_ABGR8888 after changes made.
++
++|Layer|Plane|Buffer format|Resolved format|
++|---|---|---|---|
++|CLIENT|0|DRM_FORMAT_ABGR8888|DRM_FORMAT_XBGR8888|
+diff --git a/drm/DrmAtomicStateManager.cpp b/drm/DrmAtomicStateManager.cpp
+index 45837a7e061a45..a045334452a309 100644
+--- a/drm/DrmAtomicStateManager.cpp
++++ b/drm/DrmAtomicStateManager.cpp
+@@ -112,6 +112,8 @@ auto DrmAtomicStateManager::CommitFrame(AtomicCommitArgs &args) -> int {
+   if (args.composition) {
+     new_frame_state.used_planes.clear();
+ 
++    bool most_bottom = true;
++
+     for (auto &joining : args.composition->plan) {
+       DrmPlane *plane = joining.plane->Get();
+       LayerData &layer = joining.layer;
+@@ -123,10 +125,11 @@ auto DrmAtomicStateManager::CommitFrame(AtomicCommitArgs &args) -> int {
+       auto &v = unused_planes;
+       v.erase(std::remove(v.begin(), v.end(), joining.plane), v.end());
+ 
+-      if (plane->AtomicSetState(*pset, layer, joining.z_pos, crtc->GetId()) !=
+-          0) {
++      if (plane->AtomicSetState(*pset, layer, joining.z_pos, crtc->GetId(),
++                                most_bottom) != 0) {
+         return -EINVAL;
+       }
++      most_bottom = false;
+     }
+   }
+ 
+diff --git a/drm/DrmFbImporter.cpp b/drm/DrmFbImporter.cpp
+index f0be32f03e6077..d5a3c51c1f3eb2 100644
+--- a/drm/DrmFbImporter.cpp
++++ b/drm/DrmFbImporter.cpp
+@@ -41,7 +41,7 @@ auto DrmFbIdHandle::CreateInstance(BufferInfo *bo, GemHandle first_gem_handle,
+   ATRACE_NAME("Import dmabufs and register FB");
+ 
+   // NOLINTNEXTLINE(cppcoreguidelines-owning-memory): priv. constructor usage
+-  std::shared_ptr<DrmFbIdHandle> local(new DrmFbIdHandle(drm));
++  std::shared_ptr<DrmFbIdHandle> local(new DrmFbIdHandle(drm, *bo));
+ 
+   local->gem_handles_[0] = first_gem_handle;
+   int32_t err = 0;
+@@ -68,47 +68,56 @@ auto DrmFbIdHandle::CreateInstance(BufferInfo *bo, GemHandle first_gem_handle,
+   if (!drm.HasAddFb2ModifiersSupport() && has_modifiers) {
+     ALOGE("No ADDFB2 with modifier support. Can't import modifier %" PRIu64,
+           bo->modifiers[0]);
+-    local.reset();
+-    return local;
++    return {};
+   }
+ 
+-  /* Create framebuffer object */
+-  if (!has_modifiers) {
+-    err = drmModeAddFB2(drm.GetFd(), bo->width, bo->height, bo->format,
+-                        local->gem_handles_.data(), &bo->pitches[0],
+-                        &bo->offsets[0], &local->fb_id_, 0);
+-  } else {
+-    err = drmModeAddFB2WithModifiers(drm.GetFd(), bo->width, bo->height,
+-                                     bo->format, local->gem_handles_.data(),
+-                                     &bo->pitches[0], &bo->offsets[0],
+-                                     &bo->modifiers[0], &local->fb_id_,
+-                                     DRM_MODE_FB_MODIFIERS);
+-  }
++  err = local->CreateFb(bo->format, &local->fb_id_);
+   if (err != 0) {
+     ALOGE("could not create drm fb %d", err);
+-    local.reset();
++    return {};
+   }
+ 
+   return local;
+ }
+ 
++/* Creates framebuffer object */
++auto DrmFbIdHandle::CreateFb(uint32_t fourcc, uint32_t *out_fb_id) -> int {
++  auto has_modifiers = bo_.modifiers[0] != DRM_FORMAT_MOD_NONE &&
++                       bo_.modifiers[0] != DRM_FORMAT_MOD_INVALID;
++
++  /* Create framebuffer object */
++  if (!has_modifiers) {
++    return drmModeAddFB2(drm_->GetFd(), bo_.width, bo_.height, fourcc,
++                         gem_handles_.data(), &bo_.pitches[0], &bo_.offsets[0],
++                         out_fb_id, 0);
++  }
++
++  return drmModeAddFB2WithModifiers(drm_->GetFd(), bo_.width, bo_.height,
++                                    fourcc, gem_handles_.data(),
++                                    &bo_.pitches[0], &bo_.offsets[0],
++                                    &bo_.modifiers[0], out_fb_id,
++                                    DRM_MODE_FB_MODIFIERS);
++}
++
+ DrmFbIdHandle::~DrmFbIdHandle() {
+   // NOLINTNEXTLINE(misc-const-correctness)
+   ATRACE_NAME("Close FB and dmabufs");
+ 
+   /* Destroy framebuffer object */
+   if (drmModeRmFB(drm_->GetFd(), fb_id_) != 0) {
+-    ALOGE("Failed to rm fb");
++    ALOGE("Failed to remove framebuffer fb_id=%i", fb_id_);
+   }
+ 
+-  /* Close GEM handles.
+-   *
+-   * WARNING: TODO(nobody):
+-   * From Linux side libweston relies on libgbm to get KMS handle and never
+-   * closes it (handle is closed by libgbm on buffer destruction)
+-   * Probably we should offer similar approach to users (at least on user
+-   * request via system properties)
++  /* Destroy framebuffer created for resolved formats
++   * Feature: docs/features/drmhwc-feature-001.md
+    */
++  for (auto &rf : fb_id_resolved_format_) {
++    if (drmModeRmFB(drm_->GetFd(), rf.second) != 0) {
++      ALOGE("Failed to remove framebuffer fb_id=%i", rf.second);
++    }
++  }
++
++  /* Close GEM handles */
+   struct drm_gem_close gem_close {};
+   for (size_t i = 0; i < gem_handles_.size(); i++) {
+     /* Don't close invalid handle. Close handle only once in cases
+diff --git a/drm/DrmFbImporter.h b/drm/DrmFbImporter.h
+index 9a7c335a7d0ed9..d8592c375e10fe 100644
+--- a/drm/DrmFbImporter.h
++++ b/drm/DrmFbImporter.h
+@@ -48,12 +48,32 @@ class DrmFbIdHandle {
+     return fb_id_;
+   }
+ 
++  /* Feature: docs/features/drmhwc-feature-001.md */
++  auto GetFbIdForFormat [[nodiscard]] (uint32_t fourcc) -> uint32_t {
++    if (fb_id_resolved_format_.count(fourcc) == 0) {
++      uint32_t fb_id{};
++      auto err = CreateFb(fourcc, &fb_id);
++      if (err == 0) {
++        fb_id_resolved_format_[fourcc] = fb_id;
++      } else {
++        return 0;
++      }
++    }
++    return fb_id_resolved_format_[fourcc];
++  }
++
+  private:
+-  explicit DrmFbIdHandle(DrmDevice &drm) : drm_(&drm){};
++  explicit DrmFbIdHandle(DrmDevice &drm, BufferInfo &bo)
++      : drm_(&drm), bo_(bo){};
+ 
+   DrmDevice *const drm_;
+ 
++  const BufferInfo bo_;
++
++  auto CreateFb(uint32_t fourcc, uint32_t *out_fb_id) -> int;
++
+   uint32_t fb_id_{};
++  std::map<uint32_t /*fourcc*/, uint32_t /*fb_id*/> fb_id_resolved_format_{};
+   std::array<GemHandle, kBufferMaxPlanes> gem_handles_{};
+ };
+ 
+diff --git a/drm/DrmPlane.cpp b/drm/DrmPlane.cpp
+index 4d038405fc4a7a..a8ae1e8da63085 100644
+--- a/drm/DrmPlane.cpp
++++ b/drm/DrmPlane.cpp
+@@ -142,6 +142,12 @@ int DrmPlane::Init() {
+     }
+   }
+ 
++  /* Feature: docs/features/drmhwc-feature-001.md */
++  AddToFormatResolutionTable(DRM_FORMAT_ABGR8888, DRM_FORMAT_XBGR8888);
++  AddToFormatResolutionTable(DRM_FORMAT_ARGB8888, DRM_FORMAT_XRGB8888);
++  AddToFormatResolutionTable(DRM_FORMAT_RGBA8888, DRM_FORMAT_RGBX8888);
++  AddToFormatResolutionTable(DRM_FORMAT_BGRA8888, DRM_FORMAT_BGRX8888);
++
+   return 0;
+ }
+ 
+@@ -166,7 +172,7 @@ bool DrmPlane::IsCrtcSupported(const DrmCrtc &crtc) const {
+   return ((1 << crtc.GetIndexInResArray()) & plane_->possible_crtcs) != 0;
+ }
+ 
+-bool DrmPlane::IsValidForLayer(LayerData *layer) {
++bool DrmPlane::IsValidForLayer(LayerData *layer, bool most_bottom) {
+   if (layer == nullptr || !layer->bi) {
+     ALOGE("%s: Invalid parameters", __func__);
+     return false;
+@@ -189,14 +195,17 @@ bool DrmPlane::IsValidForLayer(LayerData *layer) {
+     return false;
+   }
+ 
+-  if (blending_enum_map_.count(layer->bi->blend_mode) == 0 &&
+-      layer->bi->blend_mode != BufferBlendMode::kNone &&
+-      layer->bi->blend_mode != BufferBlendMode::kPreMult) {
++  if (blending_enum_map_.count(layer->bi->blend_mode) == 0 && !most_bottom) {
+     ALOGV("Blending is not supported on plane %d", GetId());
+     return false;
+   }
+ 
++  /* Feature: docs/features/drmhwc-feature-001.md */
+   auto format = layer->bi->format;
++  if (most_bottom && BottomLayerFormatResolutionTable_.count(format) != 0) {
++    format = BottomLayerFormatResolutionTable_[format];
++  }
++
+   if (!IsFormatSupported(format)) {
+     ALOGV("Plane %d does not supports %c%c%c%c format", GetId(), format,
+           format >> 8, format >> 16, format >> 24);
+@@ -211,6 +220,14 @@ bool DrmPlane::IsFormatSupported(uint32_t format) const {
+          std::end(formats_);
+ }
+ 
++/* Feature: docs/features/drmhwc-feature-001.md */
++void DrmPlane::AddToFormatResolutionTable(uint32_t original_fourcc,
++                                          uint32_t resolved_fourcc) {
++  if (!IsFormatSupported(original_fourcc)) {
++    BottomLayerFormatResolutionTable_[original_fourcc] = resolved_fourcc;
++  }
++}
++
+ bool DrmPlane::HasNonRgbFormat() const {
+   return std::find_if_not(std::begin(formats_), std::end(formats_),
+                           [](uint32_t format) {
+@@ -243,7 +260,8 @@ static int To1616FixPt(float in) {
+ }
+ 
+ auto DrmPlane::AtomicSetState(drmModeAtomicReq &pset, LayerData &layer,
+-                              uint32_t zpos, uint32_t crtc_id) -> int {
++                              uint32_t zpos, uint32_t crtc_id, bool most_bottom)
++    -> int {
+   if (!layer.fb || !layer.bi) {
+     ALOGE("%s: Invalid arguments", __func__);
+     return -EINVAL;
+@@ -265,10 +283,19 @@ auto DrmPlane::AtomicSetState(drmModeAtomicReq &pset, LayerData &layer,
+     return -EINVAL;
+   }
+ 
++  uint32_t fb_id = layer.fb->GetFbId();
++
++  /* Feature: docs/features/drmhwc-feature-001.md */
++  if (most_bottom &&
++      BottomLayerFormatResolutionTable_.count(layer.bi->format) != 0) {
++    fb_id = layer.fb->GetFbIdForFormat(
++        BottomLayerFormatResolutionTable_[layer.bi->format]);
++  }
++
+   auto &disp = layer.pi.display_frame;
+   auto &src = layer.pi.source_crop;
+   if (!crtc_property_.AtomicSet(pset, crtc_id) ||
+-      !fb_property_.AtomicSet(pset, layer.fb->GetFbId()) ||
++      !fb_property_.AtomicSet(pset, fb_id) ||
+       !crtc_x_property_.AtomicSet(pset, disp.left) ||
+       !crtc_y_property_.AtomicSet(pset, disp.top) ||
+       !crtc_w_property_.AtomicSet(pset, disp.right - disp.left) ||
+diff --git a/drm/DrmPlane.h b/drm/DrmPlane.h
+index c26a3cc1ef6c3a..1b60253769d96c 100644
+--- a/drm/DrmPlane.h
++++ b/drm/DrmPlane.h
+@@ -32,24 +32,23 @@ struct LayerData;
+ 
+ class DrmPlane : public PipelineBindable<DrmPlane> {
+  public:
+-  DrmPlane(const DrmPlane &) = delete;
+-  DrmPlane &operator=(const DrmPlane &) = delete;
+-
+   static auto CreateInstance(DrmDevice &dev, uint32_t plane_id)
+       -> std::unique_ptr<DrmPlane>;
+ 
++  DrmPlane(const DrmPlane &) = delete;
++  DrmPlane &operator=(const DrmPlane &) = delete;
++
+   bool IsCrtcSupported(const DrmCrtc &crtc) const;
+-  bool IsValidForLayer(LayerData *layer);
++  bool IsValidForLayer(LayerData *layer, bool most_bottom);
+ 
+   auto GetType() const {
+     return type_;
+   }
+ 
+-  bool IsFormatSupported(uint32_t format) const;
+   bool HasNonRgbFormat() const;
+ 
+   auto AtomicSetState(drmModeAtomicReq &pset, LayerData &layer, uint32_t zpos,
+-                      uint32_t crtc_id) -> int;
++                      uint32_t crtc_id, bool most_bottom) -> int;
+   auto AtomicDisablePlane(drmModeAtomicReq &pset) -> int;
+   auto &GetZPosProperty() const {
+     return zpos_property_;
+@@ -71,8 +70,16 @@ class DrmPlane : public PipelineBindable<DrmPlane> {
+   auto GetPlaneProperty(const char *prop_name, DrmProperty &property,
+                         Presence presence = Presence::kMandatory) -> bool;
+ 
++  bool IsFormatSupported(uint32_t format) const;
++
+   uint32_t type_{};
+ 
++  /* Feature: docs/features/drmhwc-feature-001.md */
++  std::map<uint32_t /*ReqDrmFormat*/, uint32_t /*ResolvedDrmFormat*/>
++      BottomLayerFormatResolutionTable_;
++  void AddToFormatResolutionTable(uint32_t original_fourcc,
++                                  uint32_t resolved_fourcc);
++
+   std::vector<uint32_t> formats_;
+ 
+   DrmProperty crtc_property_;
+-- 
+2.37.2
+

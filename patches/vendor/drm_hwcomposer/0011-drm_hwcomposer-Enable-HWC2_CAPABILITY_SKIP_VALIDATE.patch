@@ -1,0 +1,347 @@
+From 4be4bdd4e7aa6fb436710a9e8dfb3da915675081 Mon Sep 17 00:00:00 2001
+From: Roman Stratiienko <r.stratiienko@gmail.com>
+Date: Sun, 1 Jan 2023 21:25:25 +0200
+Subject: [PATCH 11/15] drm_hwcomposer: Enable HWC2_CAPABILITY_SKIP_VALIDATE
+
+Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+---
+ compositor/CompositorBase.h      |  6 ++--
+ compositor/CompositorClassic.cpp | 47 ++++++++++++++-------------
+ compositor/CompositorClassic.h   |  7 ++--
+ drm/DrmAtomicStateManager.cpp    |  6 ++--
+ drm/DrmAtomicStateManager.h      |  1 +
+ hwc2_device/HwcDisplay.cpp       | 55 +++++++++++++++++++++++++-------
+ hwc2_device/HwcDisplay.h         |  4 +++
+ hwc2_device/hwc2_device.cpp      |  6 ++--
+ 8 files changed, 87 insertions(+), 45 deletions(-)
+
+diff --git a/compositor/CompositorBase.h b/compositor/CompositorBase.h
+index b0af72d693e726..d43089fd77fe2e 100644
+--- a/compositor/CompositorBase.h
++++ b/compositor/CompositorBase.h
+@@ -36,9 +36,9 @@ struct CompositorBase {
+   static auto FindAndCreate(DrmDisplayPipeline &pipe, CompositorCallbacks &cbks)
+       -> std::unique_ptr<CompositorBase>;
+ 
+-  virtual void ValidateComposition(FEComposition &comp);
+-  virtual auto PresentComposition(FEComposition &comp, AtomicCommitArgs &a_args)
+-      -> int;
++  virtual auto PresentComposition(FEComposition &comp, AtomicCommitArgs &a_args) -> int;
++  virtual void SelectClientLayers(FEComposition &comp);
++
+   virtual auto Dump() -> std::string;
+ 
+   CompositorBase() = default;
+diff --git a/compositor/CompositorClassic.cpp b/compositor/CompositorClassic.cpp
+index 65eefd69ff2e62..2a79a445c47d2e 100644
+--- a/compositor/CompositorClassic.cpp
++++ b/compositor/CompositorClassic.cpp
+@@ -27,7 +27,7 @@ auto CompositorClient::CreateInstance(DrmDisplayPipeline &pipe,
+   return std::unique_ptr<CompositorBase>(new CompositorClient(pipe, cbks));
+ }
+ 
+-void CompositorClient::ValidateComposition(FEComposition &comp) {
++void CompositorClient::SelectClientLayers(FEComposition &comp) {
+   for (auto &fl : comp.fe_layers) {
+     fl.second->use_client = true;
+   }
+@@ -56,28 +56,18 @@ CompositorGeneric::~CompositorGeneric() {
+     flatcon_->StopThread();
+ }
+ 
+-void CompositorGeneric::ValidateComposition(FEComposition &comp) {
++void CompositorGeneric::SelectClientLayers(FEComposition &comp) {
+   int client_start = -1;
+   size_t client_size = 0;
+ 
+-  stat_.total_frames++;
+-
+   auto layers = GetOrderedLayers(comp, &client_start, &client_size);
+ 
+-  if (flatcon_) {
+-    bool should_flatten = false;
+-    if (layers.size() <= 1)
+-      flatcon_->Disable();
+-    else
+-      should_flatten = flatcon_->NewFrame();
+-
+-    if (should_flatten) {
+-      stat_.frames_flattened++;
+-      client_start = 0;
+-      client_size = layers.size();
+-      MarkClient(layers, client_start, client_size);
+-      return;
+-    }
++  if (flatcon_ && flatcon_->ShouldFlatten()) {
++    stat_.frames_flattened++;
++    client_start = 0;
++    client_size = layers.size();
++    MarkClient(layers, client_start, client_size);
++    return;
+   }
+ 
+   ExtendClientRange(layers, std::ref(client_start), std::ref(client_size));
+@@ -86,7 +76,10 @@ void CompositorGeneric::ValidateComposition(FEComposition &comp) {
+ 
+   auto testing_needed = client_start != 0 || client_size != layers.size();
+ 
+-  AtomicCommitArgs a_args = {.test_only = true};
++  AtomicCommitArgs a_args = {
++      .test_only = true,
++      .allow_fail = true,
++  };
+ 
+   if (testing_needed && PresentComposition(comp, a_args) != 0) {
+     stat_.failed_validate++;
+@@ -128,7 +121,7 @@ auto CompositorGeneric::PresentComposition(FEComposition &comp,
+        * imported. For example when non-contiguous buffer is imported into
+        * contiguous-only DRM/KMS driver.
+        */
+-      if (!a_args.test_only)
++      if (!a_args.test_only && !a_args.allow_fail)
+         stat_.failed_present++;
+       return -EINVAL;
+     }
+@@ -141,7 +134,7 @@ auto CompositorGeneric::PresentComposition(FEComposition &comp,
+   current_plan_ = DrmKmsPlan::CreateDrmKmsPlan(*pipe_,
+                                                std::move(composition_layers));
+   if (!current_plan_) {
+-    if (!a_args.test_only) {
++    if (!a_args.allow_fail) {
+       ALOGE("Failed to create DrmKmsPlan");
+       stat_.failed_present++;
+     }
+@@ -153,13 +146,23 @@ auto CompositorGeneric::PresentComposition(FEComposition &comp,
+   auto ret = pipe_->atomic_state_manager->ExecuteAtomicCommit(a_args);
+ 
+   if (ret != 0) {
+-    if (!a_args.test_only) {
++    if (!a_args.allow_fail) {
+       ALOGE("Failed to apply the frame composition ret=%d", ret);
+       stat_.failed_present++;
+     }
+     return ret;
+   }
+ 
++  if (!a_args.test_only)
++    stat_.total_frames++;
++
++  if (flatcon_ && !a_args.test_only) {
++    if (layers.size() <= 1)
++      flatcon_->Disable();
++    else
++      flatcon_->NewFrame();
++  }
++
+   return 0;
+ }
+ 
+diff --git a/compositor/CompositorClassic.h b/compositor/CompositorClassic.h
+index ce11b65df16e1e..a135145d397afa 100644
+--- a/compositor/CompositorClassic.h
++++ b/compositor/CompositorClassic.h
+@@ -40,9 +40,8 @@ class CompositorGeneric : public CompositorBase {
+   CompositorGeneric(DrmDisplayPipeline &pipe, CompositorCallbacks &cbks);
+   ~CompositorGeneric() override;
+ 
+-  void ValidateComposition(FEComposition &comp) override;
+-  auto PresentComposition(FEComposition &comp, AtomicCommitArgs &a_args)
+-      -> int override;
++  void SelectClientLayers(FEComposition &comp) override;
++  auto PresentComposition(FEComposition &comp, AtomicCommitArgs &a_args) -> int override;
+   auto Dump() -> std::string override;
+ 
+  protected:
+@@ -73,6 +72,6 @@ class CompositorClient : public CompositorGeneric {
+                              CompositorCallbacks &cbks)
+       -> std::unique_ptr<CompositorBase>;
+ 
+-  void ValidateComposition(FEComposition &comp) override;
++  void SelectClientLayers(FEComposition &comp) override;
+ };
+ }  // namespace android
+diff --git a/drm/DrmAtomicStateManager.cpp b/drm/DrmAtomicStateManager.cpp
+index b5e4629941673b..45837a7e061a45 100644
+--- a/drm/DrmAtomicStateManager.cpp
++++ b/drm/DrmAtomicStateManager.cpp
+@@ -166,7 +166,9 @@ auto DrmAtomicStateManager::CommitFrame(AtomicCommitArgs &args) -> int {
+   auto err = drmModeAtomicCommit(drm->GetFd(), pset.get(), flags, drm);
+ 
+   if (err != 0) {
+-    ALOGE("Failed to commit pset ret=%d\n", err);
++    if (!args.allow_fail)
++      ALOGE("Failed to commit pset ret=%d\n", err);
++
+     return err;
+   }
+ 
+@@ -253,7 +255,7 @@ auto DrmAtomicStateManager::ExecuteAtomicCommit(AtomicCommitArgs &args) -> int {
+   auto err = CommitFrame(args);
+ 
+   if (!args.test_only) {
+-    if (err != 0) {
++    if (err != 0 && !args.allow_fail) {
+       ALOGE("Composite failed for pipeline %s",
+             pipe_->connector->Get()->GetName().c_str());
+       // Disable the hw used by the last active composition. This allows us to
+diff --git a/drm/DrmAtomicStateManager.h b/drm/DrmAtomicStateManager.h
+index 2ebbdf47c2eca4..55db2203aefc76 100644
+--- a/drm/DrmAtomicStateManager.h
++++ b/drm/DrmAtomicStateManager.h
+@@ -32,6 +32,7 @@ namespace android {
+ struct AtomicCommitArgs {
+   /* inputs. All fields are optional, but at least one has to be specified */
+   bool test_only = false;
++  bool allow_fail = false;
+   std::optional<DrmMode> display_mode;
+   std::optional<bool> active;
+   std::shared_ptr<DrmKmsPlan> composition;
+diff --git a/hwc2_device/HwcDisplay.cpp b/hwc2_device/HwcDisplay.cpp
+index 717806b1e07e3b..a3f906ca51bc35 100644
+--- a/hwc2_device/HwcDisplay.cpp
++++ b/hwc2_device/HwcDisplay.cpp
+@@ -447,13 +447,20 @@ HWC2::Error HwcDisplay::GetReleaseFences(uint32_t *num_elements,
+ /* Find API details at:
+  * https://cs.android.com/android/platform/superproject/+/android-11.0.0_r3:hardware/libhardware/include/hardware/hwcomposer2.h;l=1805
+  */
+-HWC2::Error HwcDisplay::PresentDisplay(int32_t *out_present_fence) {
+-  if (IsInHeadlessMode()) {
+-    *out_present_fence = -1;
+-    return HWC2::Error::None;
++int HwcDisplay::TryPresentDisplayInt(int32_t *out_present_fence,
++                                     bool validated) {
++  if (!validated) {
++    for (auto &fl : fe_layers) {
++      auto &l = ToHwcLayer(*fl.second);
++      if (l.use_client || !l.CanScanout())
++        return -EINVAL;
++    }
+   }
+ 
+-  AtomicCommitArgs a_args{};
++  AtomicCommitArgs a_args{
++      .allow_fail = !validated,
++  };
++
+   uint32_t prev_vperiod_ns = 0;
+   GetDisplayVsyncPeriod(&prev_vperiod_ns);
+ 
+@@ -469,15 +476,13 @@ HWC2::Error HwcDisplay::PresentDisplay(int32_t *out_present_fence) {
+ 
+     configs_.active_config_id = staged_mode_config_id_;
+ 
+-    a_args.display_mode = *staged_mode_;
+-    if (!a_args.test_only) {
+-      mode_update_commited_ = true;
+-    }
++    a_args.display_mode = staged_mode_;
++    mode_update_commited_ = true;
+   }
+ 
+   if (compositor_->PresentComposition(*this, a_args) != 0) {
+     *out_present_fence = -1;
+-    return HWC2::Error::BadLayer;
++    return -EINVAL;
+   }
+ 
+   if (mode_update_commited_) {
+@@ -493,6 +498,30 @@ HWC2::Error HwcDisplay::PresentDisplay(int32_t *out_present_fence) {
+   this->present_fence_ = UniqueFd::Dup(a_args.out_fence.Get());
+   *out_present_fence = a_args.out_fence.Release();
+ 
++  return 0;
++}
++
++HWC2::Error HwcDisplay::PresentDisplay(int32_t *out_present_fence) {
++  if (IsInHeadlessMode()) {
++    *out_present_fence = -1;
++    return HWC2::Error::None;
++  }
++
++  /* Account for SKIP_VALIDATION feature */
++  bool validated = frame_validated_;
++  frame_validated_ = false;
++
++  auto ret = TryPresentDisplayInt(out_present_fence, validated);
++  if (ret) {
++    if (!validated) {
++      ALOGV("PresentDisplay fallback to Validate");
++      return HWC2::Error::NotValidated;
++    } else {
++      ALOGE("Failed to PresentDisplay");
++      return HWC2::Error::BadLayer;
++    }
++  }
++
+   return HWC2::Error::None;
+ }
+ 
+@@ -668,7 +697,7 @@ HWC2::Error HwcDisplay::ValidateDisplay(uint32_t *num_types,
+                                 HWC2::Composition::Client);
+   }
+ 
+-  compositor_->ValidateComposition(*this);
++  compositor_->SelectClientLayers(*this);
+ 
+   for (auto &fl : fe_layers) {
+     auto &l = ToHwcLayer(*fl.second);
+@@ -678,6 +707,8 @@ HWC2::Error HwcDisplay::ValidateDisplay(uint32_t *num_types,
+     }
+   }
+ 
++  frame_validated_ = true;
++
+   return *num_types != 0 ? HWC2::Error::HasChanges : HWC2::Error::None;
+ }
+ 
+@@ -792,7 +823,7 @@ HWC2::Error HwcDisplay::GetDisplayIdentificationData(uint8_t *outPort,
+ }
+ 
+ HWC2::Error HwcDisplay::GetDisplayCapabilities(uint32_t *outNumCapabilities,
+-                                               uint32_t * /*outCapabilities*/) {
++                                               uint32_t */*outCapabilities*/) {
+   if (outNumCapabilities == nullptr) {
+     return HWC2::Error::BadParameter;
+   }
+diff --git a/hwc2_device/HwcDisplay.h b/hwc2_device/HwcDisplay.h
+index 848e4a30e19df8..74bafa772a76f6 100644
+--- a/hwc2_device/HwcDisplay.h
++++ b/hwc2_device/HwcDisplay.h
+@@ -152,6 +152,8 @@ class HwcDisplay : public FEComposition {
+   void Deinit();
+ 
+  private:
++  int TryPresentDisplayInt(int32_t *out_present_fence, bool allow_fail);
++
+   constexpr static size_t MATRIX_SIZE = 16;
+ 
+   HwcDisplayConfigs configs_;
+@@ -173,6 +175,8 @@ class HwcDisplay : public FEComposition {
+   bool vsync_tracking_en_{};
+   int64_t last_vsync_ts_{};
+ 
++  bool frame_validated_{};
++
+   const hwc2_display_t handle_;
+   HWC2::DisplayType type_;
+ 
+diff --git a/hwc2_device/hwc2_device.cpp b/hwc2_device/hwc2_device.cpp
+index db7f0fd3b9840a..08addb5c4091e9 100644
+--- a/hwc2_device/hwc2_device.cpp
++++ b/hwc2_device/hwc2_device.cpp
+@@ -106,8 +106,10 @@ static int HookDevClose(hw_device_t *dev) {
+ }
+ 
+ static void HookDevGetCapabilities(hwc2_device_t * /*dev*/, uint32_t *out_count,
+-                                   int32_t * /*out_capabilities*/) {
+-  *out_count = 0;
++                                   int32_t *out_capabilities) {
++  *out_count = 1;
++  if (out_capabilities != nullptr)
++    out_capabilities[0] = HWC2_CAPABILITY_SKIP_VALIDATE;
+ }
+ 
+ static hwc2_function_pointer_t HookDevGetFunction(struct hwc2_device * /*dev*/,
+-- 
+2.37.2
+

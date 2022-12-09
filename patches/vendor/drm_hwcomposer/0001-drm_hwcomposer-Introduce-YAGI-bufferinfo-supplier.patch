@@ -1,0 +1,508 @@
+From 366189f3d1df3f64ed73b945a853e07db74cd324 Mon Sep 17 00:00:00 2001
+From: Roman Stratiienko <r.stratiienko@gmail.com>
+Date: Sat, 10 Dec 2022 11:01:26 +0200
+Subject: [PATCH 01/15] drm_hwcomposer: Introduce YAGI bufferinfo supplier
+
+YAGI stands for Yet Another Gralloc Interface.
+
+Despite gralloc4 API became standard interface requird by VTS, some of
+existing grallocs in AOSP still does not provide it, and probably won't.
+
+YAGI should help to both keep drm_hwc codebase clean and allow AOSP
+maintainers to advance their bufferinfo supplier independently.
+Also current legacy getters aren't covering all grallocs variant,
+which will be possible with YAGI.
+
+YAGI represents a shared library with 3 symbols:
+ - yagi_init
+ - yagi_destroy
+ - yagi_perform
+
+Selecting YAGI require setting sysprop in device.mk file, e.g.:
+
+    PRODUCT_PROPERTY_OVERRIDES += vendor.hwc.drm.yagi.lib=libyagi_abc.so
+
+YAGI smooth transition is planned to be accomplished in 4 steps:
+1. Merge YAGI support into drm_hwcomposer.
+2. Merge drm_hwcomposer into AOSP.
+3. Replace all AOSP drm_hwc variants with YAGI library.
+4. Remove legacy bufferinfo getters from drm_hwc.
+
+YAGI libraries can be also used with more android graphics components,
+e.g.: mesa3d, codecs, camera HAL, wayland_hwc, etc.
+
+Change-Id: Id9a9b77d49f76725aa01be3e3dee7fd280983b3b
+Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+---
+ .ci/Makefile                            |   1 +
+ Android.bp                              |   3 +-
+ bufferinfo/BufferInfoGetter.cpp         |   6 +-
+ bufferinfo/BufferInfoMapperMetadata.cpp |   6 +-
+ bufferinfo/BufferInfoMapperMetadata.h   |   2 +-
+ bufferinfo/BufferInfoYagi.cpp           | 157 ++++++++++++++++++++++++
+ bufferinfo/BufferInfoYagi.h             |  48 ++++++++
+ bufferinfo/meson.build                  |   1 +
+ bufferinfo/yagi/android_yagi.h          | 135 ++++++++++++++++++++
+ 9 files changed, 353 insertions(+), 6 deletions(-)
+ create mode 100644 bufferinfo/BufferInfoYagi.cpp
+ create mode 100644 bufferinfo/BufferInfoYagi.h
+ create mode 100644 bufferinfo/yagi/android_yagi.h
+
+diff --git a/.ci/Makefile b/.ci/Makefile
+index de5196be0fce4c..8cc764a66fa79a 100644
+--- a/.ci/Makefile
++++ b/.ci/Makefile
+@@ -30,6 +30,7 @@ TIDY_FILES_OVERRIDE := \
+     utils/UniqueFd.h:FINE                               \
+     utils/log.h:FINE                                    \
+     utils/properties.h:FINE                             \
++    bufferinfo/yagi/android_yagi.h:NONE                 \
+ 
+ TIDY_CHECKS_FINE := *                                   \
+     -llvmlibc* -fuchsia-* -altera-*                     \
+diff --git a/Android.bp b/Android.bp
+index 3ad060c667c629..5610b8bb8c3b6a 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -1,4 +1,4 @@
+-// Copyright (C) 2015 The Android Open Source Project
++// Copyright (C) 2015-2022 The Android Open Source Project
+ //
+ // Licensed under the Apache License, Version 2.0 (the "License");
+ // you may not use this file except in compliance with the License.
+@@ -57,6 +57,7 @@ filegroup {
+     srcs: [
+         "bufferinfo/BufferInfoGetter.cpp",
+         "bufferinfo/BufferInfoMapperMetadata.cpp",
++        "bufferinfo/BufferInfoYagi.cpp",
+ 
+         "compositor/DrmKmsPlan.cpp",
+ 
+diff --git a/bufferinfo/BufferInfoGetter.cpp b/bufferinfo/BufferInfoGetter.cpp
+index 726b4eb19d18e1..aebe84a896fa4d 100644
+--- a/bufferinfo/BufferInfoGetter.cpp
++++ b/bufferinfo/BufferInfoGetter.cpp
+@@ -30,6 +30,7 @@
+ 
+ #include <mutex>
+ 
++#include "BufferInfoYagi.h"
+ #include "utils/log.h"
+ #include "utils/properties.h"
+ 
+@@ -38,8 +39,11 @@ namespace android {
+ BufferInfoGetter *BufferInfoGetter::GetInstance() {
+   static std::unique_ptr<BufferInfoGetter> inst;
+   if (!inst) {
++    inst = BufferInfoYagi::CreateInstance();
+ #if __ANDROID_API__ >= 30 && defined(USE_IMAPPER4_METADATA_API)
+-    inst.reset(BufferInfoMapperMetadata::CreateInstance());
++    if (!inst) {
++      inst = BufferInfoMapperMetadata::CreateInstance();
++    }
+     if (!inst) {
+       ALOGW(
+           "Generic buffer getter is not available. Falling back to legacy...");
+diff --git a/bufferinfo/BufferInfoMapperMetadata.cpp b/bufferinfo/BufferInfoMapperMetadata.cpp
+index 823d28a06fb0a2..6151a080406fe6 100644
+--- a/bufferinfo/BufferInfoMapperMetadata.cpp
++++ b/bufferinfo/BufferInfoMapperMetadata.cpp
+@@ -31,12 +31,12 @@
+ 
+ namespace android {
+ 
+-BufferInfoGetter *BufferInfoMapperMetadata::CreateInstance() {
++std::unique_ptr<BufferInfoGetter> BufferInfoMapperMetadata::CreateInstance() {
+   if (GraphicBufferMapper::getInstance().getMapperVersion() <
+       GraphicBufferMapper::GRALLOC_4)
+-    return nullptr;
++    return {};
+ 
+-  return new BufferInfoMapperMetadata();
++  return std::make_unique<BufferInfoMapperMetadata>();
+ }
+ 
+ /* The implementation below makes assumptions on the order and number of file
+diff --git a/bufferinfo/BufferInfoMapperMetadata.h b/bufferinfo/BufferInfoMapperMetadata.h
+index ce66fe5f66c878..d7769c3267abb9 100644
+--- a/bufferinfo/BufferInfoMapperMetadata.h
++++ b/bufferinfo/BufferInfoMapperMetadata.h
+@@ -28,6 +28,6 @@ class BufferInfoMapperMetadata : public BufferInfoGetter {
+ 
+   int GetFds(buffer_handle_t handle, BufferInfo *bo);
+ 
+-  static BufferInfoGetter *CreateInstance();
++  static std::unique_ptr<BufferInfoGetter> CreateInstance();
+ };
+ }  // namespace android
+diff --git a/bufferinfo/BufferInfoYagi.cpp b/bufferinfo/BufferInfoYagi.cpp
+new file mode 100644
+index 00000000000000..1f0c0113d5833a
+--- /dev/null
++++ b/bufferinfo/BufferInfoYagi.cpp
+@@ -0,0 +1,157 @@
++/*
++ * Copyright (C) 2022 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++#define LOG_TAG "hwc-bufferinfo-yagi"
++
++#include "BufferInfoYagi.h"
++
++#include <dlfcn.h>
++
++#include <cerrno>
++
++#include "utils/log.h"
++#include "utils/properties.h"
++
++namespace android {
++
++std::unique_ptr<BufferInfoGetter> BufferInfoYagi::CreateInstance() {
++  char lib_name[PROPERTY_VALUE_MAX];
++  property_get("vendor.hwc.drm.yagi.lib", lib_name, "");
++  if (strlen(lib_name) == 0) {
++    return {};
++  }
++
++  ALOGI("Using YAGI library %s", lib_name);
++
++  auto big = std::unique_ptr<BufferInfoYagi>(new BufferInfoYagi());
++
++  big->dl_handle_ = dlopen(lib_name, RTLD_NOW);
++
++  if (big->dl_handle_ == nullptr) {
++    // NOLINTNEXTLINE(concurrency-mt-unsafe): We aren't using multithread here
++    ALOGE("Failed to dlopen '%s' library: %s", lib_name, dlerror());
++    return {};
++  }
++
++  big->yagi_perform_fn_ = yagi_perform_t(
++      dlsym(big->dl_handle_, kYagiPerformSymName));
++
++  if (big->yagi_perform_fn_ == nullptr) {
++    ALOGE("Failed get symbol %s", kYagiPerformSymName);
++    return {};
++  }
++
++  big->yagi_init_fn_ = yagi_init_t(dlsym(big->dl_handle_, kYagiInitSymName));
++
++  if (big->yagi_init_fn_ == nullptr) {
++    ALOGE("Failed get symbol %s", kYagiInitSymName);
++    return {};
++  }
++
++  big->yagi_destroy_fn_ = yagi_destroy_t(
++      dlsym(big->dl_handle_, kYagiDestroySymName));
++
++  if (big->yagi_destroy_fn_ == nullptr) {
++    ALOGE("Failed get symbol %s", kYagiDestroySymName);
++    return {};
++  }
++
++  big->yagi_ = big->yagi_init_fn_();
++
++  if (big->yagi_ == nullptr) {
++    ALOGE("Failed to init YAGI");
++    return {};
++  }
++
++  auto test_in = (struct yagi_in_data){
++      .cmd_id = YAGI_GET_BUFFER_INFO_V1_CMD_ID,
++      .struct_size = sizeof(struct yagi_handle_in),
++      .test_only = 1,
++  };
++
++  auto test_out = (struct yagi_out_data){
++      .struct_size = sizeof(struct yagi_get_bi_out_v1),
++  };
++
++  auto ret = big->yagi_perform_fn_(big->yagi_, &test_in, &test_out);
++  if (ret != 0) {
++    ALOGE("Failed to probe YAGI_GET_BUFFER_INFO_V1_CMD_ID perform call: %d",
++          ret);
++    return {};
++  }
++
++  ALOGI("YAGI initialized");
++
++  return big;
++}
++
++auto BufferInfoYagi::GetBoInfo(buffer_handle_t handle)
++    -> std::optional<BufferInfo> {
++  if (handle == nullptr) {
++    return {};
++  }
++
++  struct yagi_get_bi_out_v1 ybi = {};
++  ybi.common.struct_size = sizeof(struct yagi_get_bi_out_v1);
++
++  auto get_bi_in = (struct yagi_handle_in){
++      .common =
++          {
++              .cmd_id = YAGI_GET_BUFFER_INFO_V1_CMD_ID,
++              .struct_size = sizeof(struct yagi_handle_in),
++          },
++      .handle = handle,
++  };
++
++  auto ret = yagi_perform_fn_(yagi_, &get_bi_in.common, &ybi.common);
++  if (ret != 0) {
++    /* Some YAGIs may report only HWFB buffers and return -EAGAIN for other,
++     * which is a signal to HWC to compose layer using CLIENT. We should not
++     * print any error in this case.
++     */
++    if (ret != -EAGAIN) {
++      ALOGE("YAGI: Failed to get buffer info");
++    }
++    return {};
++  }
++
++  BufferInfo bi{};
++
++  bi.width = ybi.width;
++  bi.height = ybi.height;
++  bi.format = ybi.drm_format;
++
++  for (int i = 0; i < ybi.num_planes; i++) {
++    bi.pitches[i] = ybi.pitches[i];
++    bi.offsets[i] = ybi.offsets[i];
++    bi.modifiers[i] = ybi.modifiers[i];
++    bi.prime_fds[i] = ybi.prime_fds[i];
++  }
++
++  return bi;
++}
++
++BufferInfoYagi::~BufferInfoYagi() {
++  if (yagi_destroy_fn_ != nullptr && yagi_ != nullptr) {
++    yagi_destroy_fn_(yagi_);
++  }
++
++  if (dl_handle_ != nullptr) {
++    dlclose(dl_handle_);
++  }
++}
++
++}  // namespace android
+diff --git a/bufferinfo/BufferInfoYagi.h b/bufferinfo/BufferInfoYagi.h
+new file mode 100644
+index 00000000000000..2069e416491261
+--- /dev/null
++++ b/bufferinfo/BufferInfoYagi.h
+@@ -0,0 +1,48 @@
++/*
++ * Copyright (C) 2020 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++#pragma once
++
++#include "bufferinfo/BufferInfoGetter.h"
++#include "yagi/android_yagi.h"
++
++namespace android {
++
++class BufferInfoYagi : public BufferInfoGetter {
++ public:
++  ~BufferInfoYagi() override;
++
++  auto GetBoInfo(buffer_handle_t handle) -> std::optional<BufferInfo> override;
++
++  static std::unique_ptr<BufferInfoGetter> CreateInstance();
++
++ private:
++  BufferInfoYagi() = default;
++
++  void *dl_handle_ = nullptr;
++
++  static constexpr auto kYagiPerformSymName = "yagi_perform";
++  yagi_perform_t yagi_perform_fn_{};
++
++  static constexpr auto kYagiInitSymName = "yagi_init";
++  yagi_init_t yagi_init_fn_{};
++
++  static constexpr auto kYagiDestroySymName = "yagi_destroy";
++  yagi_destroy_t yagi_destroy_fn_{};
++
++  struct yagi *yagi_{};
++};
++}  // namespace android
+diff --git a/bufferinfo/meson.build b/bufferinfo/meson.build
+index f53d1b9a781d0e..c9a674418a297e 100644
+--- a/bufferinfo/meson.build
++++ b/bufferinfo/meson.build
+@@ -2,4 +2,5 @@ src_common += files(
+     'legacy/BufferInfoLibdrm.cpp',
+     'BufferInfoGetter.cpp',
+     'BufferInfoMapperMetadata.cpp',
++    'BufferInfoYagi.cpp',
+ )
+diff --git a/bufferinfo/yagi/android_yagi.h b/bufferinfo/yagi/android_yagi.h
+new file mode 100644
+index 00000000000000..615ae681c55327
+--- /dev/null
++++ b/bufferinfo/yagi/android_yagi.h
+@@ -0,0 +1,135 @@
++// Using Linux Kernel formatting for this file
++// clang-format off
++
++/*
++ * Copyright (C) 2022 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++/* Yet Another Gralloc Interface (YAGI), DRM-compatible buffer-info supplier library.
++ * Upstream URL:
++ * https://gitlab.freedesktop.org/drm-hwcomposer/drm-hwcomposer/-/tree/main/bufferinfo/yagi
++ *
++ * Library must expose 3 symbols:
++ * 1. yagi_init
++ * 2. yagi_destroy
++ * 3. yagi_perform
++ * Please find type information below.
++ */
++
++#pragma once
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#include <cutils/native_handle.h>
++#include <stdint.h>
++
++#define Y_BASE						('Y'<<24)
++
++/* --- Start of API perform commands section --- */
++
++/* Version 1: */
++#define YAGI_GET_BUFFER_INFO_V1_CMD_ID 			(1 + Y_BASE)
++#define YAGI_GET_BUFFER_UNIQUE_ID			(2 + Y_BASE)
++#define YAGI_GET_DATA_MUTABLE_BUFFER_USAGE_MASK_CMD_ID	(3 + Y_BASE)
++
++/* Command 1 (YAGI_GET_BUFFER_INFO_V1_CMD_ID) - Get buffer info structure v1
++ * in_data - struct yagi_handle_in
++ * out_data - struct yagi_get_bi_out_v1
++ *
++ * Command 2 (YAGI_GET_BUFFER_UNIQUE_ID) - Get buffer unique ID (optional)
++ * in_data - struct yagi_handle_in
++ * out_data - struct yagi_u64_out
++ *
++ * Command 3 (YAGI_GET_DATA_MUTABLE_BUFFER_USAGE_MASK_CMD_ID)
++ *      Get hal_usage_flag bit mask that represents front buffer (optional)
++ *      Useful for mesa3d front buffer rendering feature.
++ * in_data - struct yagi_in_data
++ * out_data - struct yagi_u64_out
++ *
++ * End of version 1 perform API description
++ */
++
++/* Version 2: TBD */
++
++/* --- End of API perform commands section --- */
++
++
++/* --- Start of perform command-specific structures section --- */
++
++/* Implementation-specific struct, opaque for the client */
++struct yagi;
++
++/* Input common data structure. */
++struct yagi_in_data {
++	/* Command ID. Set by the client. */
++	uint32_t cmd_id;
++	/* Total input structure size. Must be set by the client and checked by the supplier. */
++	uint32_t struct_size;
++	/* Client may set this field to non-zero, asking the supplier to confirm that command
++	 * is supported. In this case supplier must only check in/out sizes and
++	 * return 0 or -ENOTSUP without performing any additional operation.
++	 */
++	uint32_t test_only;
++};
++
++/* Output common data structure. Client must initialize the final structure with zeros. */
++struct yagi_out_data {
++	/* Tatal output structure size. Must be set by the client and checked by the supplier. */
++	int32_t struct_size;
++};
++
++struct yagi_handle_in {
++	struct yagi_in_data common;
++	buffer_handle_t handle;
++};
++
++struct yagi_u64_out {
++	struct yagi_out_data common;
++	uint64_t out;
++};
++
++#define YAGI_PROTECTED_BUFFER_FLAG (1 << 1)
++#define YAGI_MUTABLE_BUFFER_FLAG (1 << 2)
++#define YAGI_MAX_PLANES_V1 4
++struct yagi_get_bi_out_v1 {
++	struct yagi_out_data common;
++	uint32_t width;
++	uint32_t height;
++	uint32_t drm_format; /* DRM_FORMAT_* from drm_fourcc.h */
++	uint32_t pitches[YAGI_MAX_PLANES_V1];
++	uint32_t offsets[YAGI_MAX_PLANES_V1];
++	/* prime_fds should be set for every plane even if it is the same fd/buffer */
++	int prime_fds[YAGI_MAX_PLANES_V1];
++	uint64_t modifiers[YAGI_MAX_PLANES_V1];
++	int num_planes;
++	uint32_t yagi_flags;
++};
++
++/* --- End of perform command-specific structures section --- */
++
++/* Symbol type information: */
++typedef int (*yagi_perform_t)(struct yagi *yagi, struct yagi_in_data *in_data,
++			      struct yagi_out_data *out_data);
++
++typedef struct yagi *(*yagi_init_t)();
++
++typedef void (*yagi_destroy_t)(struct yagi *);
++
++#ifdef __cplusplus
++}
++#endif
++// clang-format on
+-- 
+2.37.2
+

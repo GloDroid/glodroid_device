@@ -1,0 +1,67 @@
+From a93fc5545e41785f4a1b56098fa5e0636cffbae9 Mon Sep 17 00:00:00 2001
+From: Roman Stratiienko <r.stratiienko@gmail.com>
+Date: Sat, 17 Dec 2022 14:52:46 +0200
+Subject: [PATCH 05/15] drm_hwcomposer: GLODROID: Add vscode tasks file
+
+Press ctrl+shift+b to start building.
+
+Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+---
+ .vscode/tasks.json | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 .vscode/tasks.json
+
+diff --git a/.vscode/tasks.json b/.vscode/tasks.json
+new file mode 100644
+index 00000000000000..2012cc84ed4eeb
+--- /dev/null
++++ b/.vscode/tasks.json
+@@ -0,0 +1,45 @@
++{
++    // See https://go.microsoft.com/fwlink/?LinkId=733558
++    // for the documentation about the tasks.json format
++    "version": "2.0.0",
++    "tasks": [
++        {
++            "label": "build",
++            "type": "shell",
++            "problemMatcher": [
++                {
++                    "owner": "drmhwc",
++                    "pattern": [
++                        {
++                            "regexp": "^\/home\/user\/drm_hwcomposer\/(.*?):(\\d+):(\\d*):?\\s+(?:fatal\\s+)?(warning|error):\\s+(.*)$",
++                            "file": 1,
++                            "line": 2,
++                            "column": 3,
++                            "severity": 4,
++                            "message": 5,
++                        },
++                    ]
++                },
++                {
++                    "owner": "drmhwc1",
++                    "pattern": [
++                        {
++                            "regexp": "^(.*?):(\\d+):(\\d*):?\\s+(?:fatal\\s+)?(warning|error):\\s+(.*)$",
++                            "file": 1,
++                            "line": 2,
++                            "column": 3,
++                            "severity": 4,
++                            "message": 5,
++                        }
++                    ]
++                }
++            ],
++            "command": "make ci",
++            // "command": "make bd",
++            "group": {
++                "kind": "build",
++                "isDefault": true
++            }
++        }
++    ]
++}
+-- 
+2.37.2
+
