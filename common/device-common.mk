@@ -123,9 +123,9 @@ PRODUCT_PACKAGES += \
 
 ## Composer HAL for gralloc4 + minigbm gralloc4
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.allocator@4.0-service.minigbm_gbm_mesa \
-    android.hardware.graphics.mapper@4.0-impl.minigbm_gbm_mesa \
-    libgbm_mesa_wrapper \
+    android.hardware.graphics.allocator@4.0-service.minigbm_gd \
+    android.hardware.graphics.mapper@4.0-impl.minigbm_gd \
+    libminigbm_gralloc_gd \
     hwcomposer.drm2 \
 
 PRODUCT_PROPERTY_OVERRIDES += \

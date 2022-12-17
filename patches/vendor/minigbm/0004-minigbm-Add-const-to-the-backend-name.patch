@@ -1,0 +1,32 @@
+From 4f33bcf6fa13f01b949291a7d26e73f563373f53 Mon Sep 17 00:00:00 2001
+From: Roman Stratiienko <r.stratiienko@gmail.com>
+Date: Wed, 23 Jun 2021 17:12:00 +0300
+Subject: [PATCH 04/13] minigbm: Add const to the backend::name
+
+... to avoid compile-time error on C++:
+
+   error: ISO C++11 does not allow conversion from string
+   literal to 'char *' [-Werror,-Wwritable-strings]
+
+Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+Change-Id: I176eb657f72e92d6b5c7c3b25c78c56f776c20ab
+---
+ drv_priv.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drv_priv.h b/drv_priv.h
+index 44077e4..c2a155e 100644
+--- a/drv_priv.h
++++ b/drv_priv.h
+@@ -75,7 +75,7 @@ struct driver {
+ };
+ 
+ struct backend {
+-	char *name;
++	const char *name;
+ 	int (*init)(struct driver *drv);
+ 	void (*close)(struct driver *drv);
+ 	int (*bo_create)(struct bo *bo, uint32_t width, uint32_t height, uint32_t format,
+-- 
+2.37.2
+

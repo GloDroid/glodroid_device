@@ -187,5 +187,9 @@ BOARD_BUILD_AOSPEXT_DRMHWCOMPOSER := true
 BOARD_DRMHWCOMPOSER_SRC_DIR := glodroid/vendor/drm_hwcomposer
 BOARD_DRMHWCOMPOSER_PATCHES_DIRS += device/glodroid/patches/vendor/drm_hwcomposer
 
+BOARD_BUILD_AOSPEXT_MINIGBM := true
+BOARD_MINIGBM_SRC_DIR := glodroid/vendor/minigbm
+BOARD_MINIGBM_PATCHES_DIRS += device/glodroid/patches/vendor/minigbm
+
 # Enable GloDroid-specific build targets
 BOARD_USES_GLODROID_MAKE_TARGETS := true
