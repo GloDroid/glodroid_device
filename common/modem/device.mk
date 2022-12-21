@@ -4,6 +4,12 @@
 #
 # Copyright (C) 2022 Roman Stratiienko (r.stratiienko@gmail.com)
 
+#
+# All components inherited here go to system_ext image (same as GSI system_ext)
+#
+$(call inherit-product, $(SRC_TARGET_DIR)/product/handheld_system_ext.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/telephony.mk)
+
 # dbus-1
 PRODUCT_PACKAGES += \
     dbus-cleanup-sockets dbus-daemon dbus-daemon-launch-helper dbus-launch dbus-monitor dbus-run-session dbus-send dbus-test-tool dbus-update-activation-environment dbus-uuidgen \
@@ -24,8 +30,9 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/modem_manager.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/modem_manager.rc \
-    $(LOCAL_PATH)/android.hardware.radio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.radio.xml \
 
 # Radio HAL
 PRODUCT_PACKAGES += \
     android.hardware.mm-radio-service \
+    android.hardware.mmradio.rc \
+    android.hardware.mmradio.xml \

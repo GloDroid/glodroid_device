@@ -1,0 +1,18 @@
+/dev/block/zram0                                                                u:object_r:swap_block_device:s0
+
+# RPI4: emmc2bus/fe340000.mmc
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/metadata               u:object_r:metadata_block_device:s0
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/super                  u:object_r:super_block_device:s0
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/userdata               u:object_r:userdata_block_device:s0
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/misc                   u:object_r:misc_block_device:s0
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/boot(_[ab])?           u:object_r:boot_block_device:s0
+/dev/block/platform/soc@0/emmc2bus/fe340000\.mmc/by-name/dtbo(_[ab])?           u:object_r:boot_block_device:s0
+
+# RPI4 camera and ISP
+/dev/video0                                                                     u:object_r:camera_device:s0
+/dev/video13                                                                    u:object_r:camera_device:s0
+/dev/video14                                                                    u:object_r:camera_device:s0
+/dev/video15                                                                    u:object_r:camera_device:s0
+/dev/video16                                                                    u:object_r:camera_device:s0
+/dev/media1                                                                     u:object_r:camera_device:s0
+/dev/media2                                                                     u:object_r:camera_device:s0

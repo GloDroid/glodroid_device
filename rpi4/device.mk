@@ -2,42 +2,21 @@
 #
 # Copyright (C) 2020 Roman Stratiienko (r.stratiienko@gmail.com)
 
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-
-$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_system.mk)
-#PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := relaxed
-
-#
-# All components inherited here go to system_ext image (same as GSI system_ext)
-#
-#$(call inherit-product, $(SRC_TARGET_DIR)/product/handheld_system_ext.mk)
-#$(call inherit-product, $(SRC_TARGET_DIR)/product/telephony_system_ext.mk)
-
-#
-# All components inherited here go to product image (same as GSI product)
-#
-$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_product.mk)
-
-# Exclude features that are not available on AOSP devices.
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/aosp_excluded_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/aosp_excluded_hardware.xml
-
 $(call inherit-product, device/glodroid/common/device-common.mk)
-$(call inherit-product, device/glodroid/common/bluetooth/bluetooth.mk)
 
 # Firmware
 PRODUCT_COPY_FILES += \
-        glodroid/kernel-firmware/rpi/brcm/brcmfmac43455-sdio.clm_blob:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43455-sdio.clm_blob \
-        glodroid/kernel-firmware/rpi/brcm/brcmfmac43455-sdio.bin:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43455-sdio.bin \
-        glodroid/kernel-firmware/rpi/brcm/brcmfmac43455-sdio.txt:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43455-sdio.txt \
-        glodroid/kernel-firmware/rpi/brcm/brcmfmac43456-sdio.clm_blob:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43456-sdio.clm_blob \
-        glodroid/kernel-firmware/rpi/brcm/brcmfmac43456-sdio.bin:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43456-sdio.bin \
-        glodroid/kernel-firmware/rpi/brcm/brcmfmac43456-sdio.txt:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43456-sdio.txt \
-        device/glodroid/rpi4/BCM4345C0.hcd:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/BCM4345C0.hcd \
-        device/glodroid/rpi4/BCM4345C5.hcd:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/BCM4345C5.hcd \
+    glodroid/kernel-firmware/rpi/brcm/brcmfmac43455-sdio.clm_blob:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43455-sdio.clm_blob \
+    glodroid/kernel-firmware/rpi/brcm/brcmfmac43455-sdio.bin:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43455-sdio.bin \
+    glodroid/kernel-firmware/rpi/brcm/brcmfmac43455-sdio.txt:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43455-sdio.txt \
+    glodroid/kernel-firmware/rpi/brcm/brcmfmac43456-sdio.clm_blob:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43456-sdio.clm_blob \
+    glodroid/kernel-firmware/rpi/brcm/brcmfmac43456-sdio.bin:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43456-sdio.bin \
+    glodroid/kernel-firmware/rpi/brcm/brcmfmac43456-sdio.txt:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43456-sdio.txt \
+    $(LOCAL_PATH)/BCM4345C0.hcd:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/BCM4345C0.hcd \
+    $(LOCAL_PATH)/BCM4345C5.hcd:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/BCM4345C5.hcd \
 
 PRODUCT_COPY_FILES += \
-    device/glodroid/rpi4/audio.rpi4.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.rpi4.xml \
+    $(LOCAL_PATH)/audio.rpi4.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio.rpi4.xml \
 
 # Disable suspend. During running some VTS device suspends, which sometimed causes kernel to crash in WIFI driver and reboot.
 PRODUCT_COPY_FILES += \

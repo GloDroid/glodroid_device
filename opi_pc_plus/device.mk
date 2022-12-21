@@ -2,9 +2,7 @@
 #
 # Copyright (C) 2021 GloDroid project
 
-$(call inherit-product, device/glodroid/common/lowram/device-common-1gb.mk)
-$(call inherit-product, device/glodroid/common/device-common-sunxi.mk)
-$(call inherit-product, device/glodroid/common/bluetooth/no-bluetooth.mk)
+$(call inherit-product, device/glodroid/common/device-common.mk)
 
 # Out-of-tree modules
 PRODUCT_PACKAGES += \

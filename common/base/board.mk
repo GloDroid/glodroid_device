@@ -57,12 +57,6 @@ BOARD_AVB_PRODUCT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 BOARD_AVB_VENDOR_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 
-# generic wifi
-WPA_SUPPLICANT_VERSION := VER_0_8_X
-BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-BOARD_HOSTAPD_DRIVER := NL80211
-WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
-
 # --- Android images ---
 BOARD_FLASH_BLOCK_SIZE := 512
 
@@ -141,12 +135,6 @@ BOARD_RAMDISK_USE_LZ4 := true
 # SELinux support
 #BOARD_SEPOLICY_DIRS += build/target/board/generic/sepolicy
 
-# TinyHAL (Audio)
-BOARD_USES_TINYHAL_AUDIO := true
-TINYCOMPRESS_TSTAMP_IS_LONG := true
-TINYALSA_NO_ADD_NEW_CTRLS := true
-TINYALSA_NO_CTL_GET_ID := true
-
 BOARD_USES_METADATA_PARTITION := true
 
 BOARD_USES_PRODUCTIMAGE := true
@@ -157,39 +145,10 @@ DEX_PREOPT_DEFAULT := nostripping
 WITH_DEXPREOPT := true
 ART_USE_HSPACE_COMPACT := true
 
-DEVICE_MANIFEST_FILE := device/glodroid/common/manifest.xml
-DEVICE_MATRIX_FILE := device/glodroid/common/compatibility_matrix.xml
+DEVICE_MATRIX_FILE := device/glodroid/common/base/compatibility_matrix.xml
 
 # SELinux support
-BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/sepolicy/vendor
-
-BOARD_USES_GRALLOC_HANDLE := true
-
-# AOSPEXT configuration
-BOARD_BUILD_AOSPEXT_LIBCAMERA := true
-BOARD_LIBCAMERA_SRC_DIR := glodroid/vendor/libcamera
-BOARD_LIBCAMERA_PATCHES_DIRS := device/glodroid/patches/vendor/libcamera
-BOARD_LIBCAMERA_IPAS := raspberrypi
-BOARD_LIBCAMERA_PIPELINES := simple raspberrypi
-
-BOARD_BUILD_AOSPEXT_MESA3D := true
-BOARD_MESA3D_SRC_DIR := glodroid/vendor/mesa3d
-BOARD_MESA3D_GALLIUM_DRIVERS := lima
-BOARD_MESA3D_BUILD_LIBGBM := true
-
-BOARD_BUILD_AOSPEXT_FFMPEG := true
-BOARD_FFMPEG_SRC_DIR := glodroid/vendor/ffmpeg
-
-BOARD_BUILD_AOSPEXT_MMRADIO := true
-BOARD_MMRADIO_SRC_DIR := glodroid/vendor/mm-radio
-
-BOARD_BUILD_AOSPEXT_DRMHWCOMPOSER := true
-BOARD_DRMHWCOMPOSER_SRC_DIR := glodroid/vendor/drm_hwcomposer
-BOARD_DRMHWCOMPOSER_PATCHES_DIRS += device/glodroid/patches/vendor/drm_hwcomposer
-
-BOARD_BUILD_AOSPEXT_MINIGBM := true
-BOARD_MINIGBM_SRC_DIR := glodroid/vendor/minigbm
-BOARD_MINIGBM_PATCHES_DIRS += device/glodroid/patches/vendor/minigbm
+BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/base/sepolicy/vendor
 
 # Enable GloDroid-specific build targets
 BOARD_USES_GLODROID_MAKE_TARGETS := true

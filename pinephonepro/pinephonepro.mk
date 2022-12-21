@@ -4,6 +4,18 @@
 
 $(call inherit-product, device/glodroid/pinephonepro/device.mk)
 
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+TARGET_CPU_ABI2 :=
+TARGET_CPU_VARIANT := cortex-a53
+
+TARGET_2ND_ARCH := arm
+TARGET_2ND_ARCH_VARIANT := armv7-a-neon
+TARGET_2ND_CPU_ABI := armeabi-v7a
+TARGET_2ND_CPU_ABI2 := armeabi
+TARGET_2ND_CPU_VARIANT := cortex-a15
+
 PRODUCT_BOARD_PLATFORM := rockchip
 PRODUCT_NAME := pinephonepro
 PRODUCT_DEVICE := pinephonepro
@@ -31,3 +43,5 @@ KERNEL_SRC       := glodroid/kernel/megous-edge
 KERNEL_DEFCONFIG := $(KERNEL_SRC)/arch/arm64/configs/pinephone_pro_defconfig
 
 KERNEL_DTB_FILE := rockchip/rk3399-pinephone-pro.dtb
+
+GD_LCD_DENSITY := 269

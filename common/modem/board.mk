@@ -1,3 +1,9 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# GloDroid project (https://github.com/GloDroid)
+#
+# Copyright (C) 2022 Roman Stratiienko (r.stratiienko@gmail.com)
+
 BOARD_BUILD_AOSPEXT_DBUS := true
 BOARD_DBUS_SRC_DIR := glodroid/vendor/dbus
 
@@ -20,4 +26,7 @@ BOARD_BUILD_AOSPEXT_MODEMMANAGER := true
 BOARD_MODEMMANAGER_SRC_DIR := glodroid/vendor/modem_manager
 BOARD_MODEMMANAGER_PATCHES_DIRS := device/glodroid/patches/vendor/modemmanager
 
-DEVICE_MANIFEST_FILE += device/glodroid/common/modem_manager/android.hardware.radio.xml
+BOARD_BUILD_AOSPEXT_MMRADIO := true
+BOARD_MMRADIO_SRC_DIR := glodroid/vendor/mm-radio
+
+BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/modem/sepolicy/vendor

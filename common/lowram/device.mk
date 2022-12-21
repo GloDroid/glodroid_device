@@ -1,6 +1,3 @@
-
-GLODROID_LOWRAM := true
-
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heapstartsize=1m \
     dalvik.vm.heapgrowthlimit=48m \
@@ -14,6 +11,3 @@ PRODUCT_PROPERTY_OVERRIDES += ro.config.low_ram=true
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.lowram.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.lowram.rc \
-
-LOCAL_PATH := device/glodroid/common
-include $(LOCAL_PATH)/device-common.mk
