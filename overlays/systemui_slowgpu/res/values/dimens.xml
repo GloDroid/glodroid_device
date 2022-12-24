@@ -1,0 +1,46 @@
+<resources>
+    <dimen name="navigation_handle_radius">0dp</dimen>
+    <dimen name="notification_corner_radius">0dp</dimen>
+    <dimen name="keyguard_shadow_radius">0</dimen>
+    <dimen name="rect_button_radius">0dp</dimen>
+    <dimen name="overflow_dot_radius">0dp</dimen>
+    <dimen name="overlay_button_corner_radius">0dp</dimen>
+    <dimen name="overlay_action_container_corner_radius">0dp</dimen>
+    <dimen name="qs_footer_action_corner_radius">0dp</dimen>
+    <dimen name="qs_corner_radius">0dp</dimen>
+    <dimen name="qs_security_footer_corner_radius">0dp</dimen>
+    <dimen name="borderless_button_radius">0dp</dimen>
+    <dimen name="notification_shadow_radius">0dp</dimen>
+    <dimen name="notification_scrim_corner_radius">0dp</dimen>
+    <dimen name="keyguard_affordance_min_background_radius">0dp</dimen>
+    <dimen name="keyguard_affordance_fixed_radius">0dp</dimen>
+    <dimen name="recents_onboarding_toast_arrow_corner_radius">0dp</dimen>
+    <dimen name="global_actions_corner_radius">0dp</dimen>
+    <dimen name="nav_key_button_shadow_radius">0dp</dimen>
+    <dimen name="smart_reply_button_corner_radius">0dp</dimen>
+    <dimen name="logout_button_corner_radius">0dp</dimen>
+    <dimen name="min_window_blur_radius">0px</dimen>
+    <dimen name="max_window_blur_radius">0px</dimen>
+    <dimen name="ongoing_appops_chip_bg_corner_radius">0dp</dimen>
+    <dimen name="qs_media_album_radius">0dp</dimen>
+    <dimen name="control_corner_radius">0dp</dimen>
+    <dimen name="controls_activity_view_corner_radius">@*android:dimen/config_bottomDialogCornerRadius</dimen>
+    <item name="controls_thumbnail_shadow_radius" type="dimen" format="float">0</item>
+    <dimen name="media_output_dialog_icon_corner_radius">0dp</dimen>
+    <dimen name="media_output_dialog_background_radius">0dp</dimen>
+    <dimen name="media_output_dialog_active_background_radius">0dp</dimen>
+    <dimen name="people_space_widget_radius">0dp</dimen>
+    <dimen name="people_space_image_radius">0dp</dimen>
+    <dimen name="people_space_messages_count_radius">0dp</dimen>
+    <dimen name="accessibility_floating_menu_small_single_radius">0dp</dimen>
+    <dimen name="accessibility_floating_menu_small_multiple_radius">0dp</dimen>
+    <dimen name="accessibility_floating_menu_large_single_radius">0dp</dimen>
+    <dimen name="accessibility_floating_menu_large_multiple_radius">0dp</dimen>
+    <dimen name="accessibility_floating_tooltip_arrow_corner_radius">0dp</dimen>
+    <dimen name="accessibility_floating_tooltip_text_corner_radius">0dp</dimen>
+    <dimen name="card_carousel_dot_unselected_radius">0dp</dimen>
+    <dimen name="card_carousel_dot_selected_radius">0dp</dimen>
+    <dimen name="wallet_empty_state_corner_radius">0dp</dimen>
+    <dimen name="ongoing_call_chip_corner_radius">0dp</dimen>
+    <dimen name="internet_dialog_corner_radius">0dp</dimen>
+</resources>
