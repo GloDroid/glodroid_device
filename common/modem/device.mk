@@ -8,7 +8,7 @@
 # All components inherited here go to system_ext image (same as GSI system_ext)
 #
 $(call inherit-product, $(SRC_TARGET_DIR)/product/handheld_system_ext.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/telephony.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 
 # dbus-1
 PRODUCT_PACKAGES += \
@@ -36,3 +36,7 @@ PRODUCT_PACKAGES += \
     android.hardware.mm-radio-service \
     android.hardware.mmradio.rc \
     android.hardware.mmradio.xml \
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.gsm.xml \
+    frameworks/native/data/etc/android.hardware.telephony.ims.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.ims.xml \
