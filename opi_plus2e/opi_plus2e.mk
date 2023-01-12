@@ -35,6 +35,7 @@ PRODUCT_HAS_EMMC := true
 
 GD_LOWRAM_CONFIG := true
 GD_NO_DEFAULT_BLUETOOTH := true
+GD_NO_DEFAULT_MODEM := true
 
 CRUST_FIRMWARE_DEFCONFIG := orangepi_plus2e_defconfig
 

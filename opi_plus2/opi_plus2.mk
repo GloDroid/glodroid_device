@@ -25,6 +25,7 @@ PRODUCT_HAS_EMMC := true
 
 GD_LOWRAM_CONFIG := true
 GD_NO_DEFAULT_BLUETOOTH := true
+GD_NO_DEFAULT_MODEM := true
 
 UBOOT_DEFCONFIG := orangepi_plus_defconfig
 KERNEL_SRC       := glodroid/kernel/stable
