@@ -25,10 +25,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.lights-service.pinephone \
 
-# Vibrator HAL
-PRODUCT_PACKAGES += \
-    android.hardware.vibrator-service.pinephone \
-
 PRODUCT_PACKAGES += \
     sensors.iio \
     android.hardware.sensors@1.0-impl:64 \

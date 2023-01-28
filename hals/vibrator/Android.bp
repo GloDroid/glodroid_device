@@ -1,5 +1,5 @@
 cc_library_static {
-    name: "libvibratorpinephoneimpl",
+    name: "libvibratorglodroidimpl",
     vendor: true,
     shared_libs: [
         "libbase",
@@ -19,10 +19,10 @@ cc_library_static {
 }
 
 cc_binary {
-    name: "android.hardware.vibrator-service.pinephone",
+    name: "android.hardware.vibrator-service.glodroid",
     relative_install_path: "hw",
-    init_rc: ["vibrator-pinephone.rc"],
-    vintf_fragments: ["vibrator-pinephone.xml"],
+    init_rc: ["vibrator-glodroid.rc"],
+    vintf_fragments: ["vibrator-glodroid.xml"],
     vendor: true,
     shared_libs: [
         "libbase",
@@ -30,7 +30,7 @@ cc_binary {
         "android.hardware.vibrator-V2-ndk",
     ],
     static_libs: [
-        "libvibratorpinephoneimpl",
+        "libvibratorglodroidimpl",
     ],
     srcs: ["main.cpp"],
 }

@@ -3,4 +3,5 @@
 /vendor/bin/hw/android\.hardware\.power-service\.glodroid                       u:object_r:hal_power_default_exec:s0
 /vendor/bin/hw/android\.hardware\.gatekeeper@1\.0-service\.software             u:object_r:hal_gatekeeper_default_exec:s0
 /vendor/bin/hw/android\.hardware\.thermal@2\.0-service.mock                     u:object_r:hal_thermal_default_exec:s0
+/vendor/bin/hw/android\.hardware\.vibrator-service\.glodroid                    u:object_r:hal_vibrator_default_exec:s0
 /(vendor|system/vendor)/bin/hw/android\.hardware\.drm@[0-9]+\.[0-9]+-service\.clearkey    u:object_r:hal_drm_clearkey_exec:s0

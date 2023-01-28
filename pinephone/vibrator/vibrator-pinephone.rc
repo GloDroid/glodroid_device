@@ -1,4 +1,0 @@
-service vendor.vibrator-default /vendor/bin/hw/android.hardware.vibrator-service.pinephone
-    class hal
-    user system
-    group system input

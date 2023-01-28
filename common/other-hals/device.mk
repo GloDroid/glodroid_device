@@ -61,6 +61,10 @@ ifeq ($(GD_NO_DEFAULT_POWER),)
 PRODUCT_PACKAGES += android.hardware.power-service.glodroid
 endif
 
+ifeq ($(GD_NO_DEFAULT_VIBRATOR),)
+PRODUCT_PACKAGES += android.hardware.vibrator-service.glodroid
+endif
+
 ifeq ($(GD_NO_DEFAULT_HEALTH),)
 PRODUCT_PACKAGES += \
     android.hardware.health-service.example \
