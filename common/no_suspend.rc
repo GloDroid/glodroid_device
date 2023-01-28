@@ -1,2 +1,0 @@
-on early-init
-    write /sys/power/wake_lock glodroid_lock

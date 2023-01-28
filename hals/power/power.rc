@@ -1,4 +1,0 @@
-service vendor.power-default /vendor/bin/hw/android.hardware.power-service.glodroid
-    class hal
-    user nobody
-    group system

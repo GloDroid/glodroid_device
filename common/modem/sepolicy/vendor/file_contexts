@@ -1,3 +1,0 @@
-/vendor/bin/dbus-daemon                            u:object_r:hal_radio_default_exec:s0
-/vendor/bin/ModemManager                           u:object_r:hal_radio_default_exec:s0
-/vendor/bin/hw/android\.hardware\.mm-radio-service u:object_r:hal_radio_default_exec:s0

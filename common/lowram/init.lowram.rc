@@ -1,3 +1,0 @@
-on boot
-    write /proc/sys/vm/page-cluster 0
-    write /proc/sys/vm/extra_free_kbytes 32768
