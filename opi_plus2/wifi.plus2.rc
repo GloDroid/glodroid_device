@@ -1,3 +1,0 @@
-on early-init
-    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -d /vendor/lib/modules -a cfg80211
-    insmod /vendor/lib/modules/8189es.ko
