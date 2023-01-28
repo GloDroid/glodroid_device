@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2020 Daniil Petrov (daniil.petrov@globallogic.com)
 
-$(call inherit-product, device/glodroid/common/device-common.mk)
+$(call inherit-product, glodroid/configuration/common/device-common.mk)
 
 PRODUCT_COPY_FILES += \
     glodroid/kernel-firmware/rpi/brcm/brcmfmac43456-sdio.clm_blob:$(TARGET_COPY_OUT_VENDOR)/etc/firmware/brcm/brcmfmac43456-sdio.clm_blob \

@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2020 Daniil Petrov (daniil.petrov@globallogic.com)
 
-$(call inherit-product, device/glodroid/opi4/device.mk)
+$(call inherit-product, glodroid/configuration/opi4/device.mk)
 
 # Architecture
 TARGET_ARCH := arm64

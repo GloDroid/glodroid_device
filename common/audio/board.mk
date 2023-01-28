@@ -10,4 +10,4 @@ TINYCOMPRESS_TSTAMP_IS_LONG := true
 TINYALSA_NO_ADD_NEW_CTRLS := true
 TINYALSA_NO_CTL_GET_ID := true
 
-BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/audio/sepolicy/vendor
+BOARD_VENDOR_SEPOLICY_DIRS       += glodroid/configuration/common/audio/sepolicy/vendor

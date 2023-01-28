@@ -1,6 +1,6 @@
 
 UBOOT_FRAGMENTS += \
-    device/glodroid/platform/common/sunxi/uboot.config
+    glodroid/configuration/platform/common/sunxi/uboot.config
 
 ATF_SRC         := glodroid/bootloader/crust-atf
 

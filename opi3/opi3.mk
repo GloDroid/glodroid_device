@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2020 Roman Stratiienko (r.stratiienko@gmail.com)
 
-$(call inherit-product, device/glodroid/opi3/device.mk)
+$(call inherit-product, glodroid/configuration/opi3/device.mk)
 
 # Architecture
 TARGET_ARCH := arm64
@@ -31,9 +31,9 @@ ATF_PLAT        := sun50i_h6
 CRUST_FIRMWARE_DEFCONFIG := orangepi_3_defconfig
 
 KERNEL_SRC       := glodroid/kernel/megous
-KERNEL_DEFCONFIG := device/glodroid/platform/common/sunxi/sunxi64_defconfig
+KERNEL_DEFCONFIG := glodroid/configuration/platform/common/sunxi/sunxi64_defconfig
 KERNEL_FRAGMENTS := \
-    device/glodroid/platform/common/sunxi/sunxi-common.config \
+    glodroid/configuration/platform/common/sunxi/sunxi-common.config \
     $(LOCAL_PATH)/kernel.config \
 
 KERNEL_DTB_FILE := allwinner/sun50i-h6-orangepi-3.dtb

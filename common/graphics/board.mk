@@ -12,15 +12,15 @@ BOARD_MESA3D_BUILD_LIBGBM := true
 
 BOARD_BUILD_AOSPEXT_DRMHWCOMPOSER := true
 BOARD_DRMHWCOMPOSER_SRC_DIR := glodroid/vendor/drm_hwcomposer
-BOARD_DRMHWCOMPOSER_PATCHES_DIRS += device/glodroid/patches/vendor/drm_hwcomposer
+BOARD_DRMHWCOMPOSER_PATCHES_DIRS += glodroid/configuration/patches/vendor/drm_hwcomposer
 
 BOARD_BUILD_AOSPEXT_MINIGBM := true
 BOARD_MINIGBM_SRC_DIR := glodroid/vendor/minigbm
-BOARD_MINIGBM_PATCHES_DIRS += device/glodroid/patches/vendor/minigbm
+BOARD_MINIGBM_PATCHES_DIRS += glodroid/configuration/patches/vendor/minigbm
 
 DEVICE_MANIFEST_FILE += \
-    device/glodroid/common/graphics/android.hardware.graphics.allocator@4.0.xml \
-    device/glodroid/common/graphics/android.hardware.graphics.mapper@4.0.xml \
-    device/glodroid/common/graphics/android.hardware.graphics.composer@2.4.xml \
+    glodroid/configuration/common/graphics/android.hardware.graphics.allocator@4.0.xml \
+    glodroid/configuration/common/graphics/android.hardware.graphics.mapper@4.0.xml \
+    glodroid/configuration/common/graphics/android.hardware.graphics.composer@2.4.xml \
 
-BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/graphics/sepolicy/vendor
+BOARD_VENDOR_SEPOLICY_DIRS       += glodroid/configuration/common/graphics/sepolicy/vendor

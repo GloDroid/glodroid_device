@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2019 The Android Open-Source Project
 
-include device/glodroid/common/board-common.mk
+include glodroid/configuration/common/board-common.mk
 
 BOARD_MESA3D_GALLIUM_DRIVERS := panfrost
 

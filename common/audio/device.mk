@@ -14,7 +14,7 @@ PRODUCT_PACKAGES += \
     tinyalsa tinymix tinycap tinypcminfo tinyplay \
 
 PRODUCT_COPY_FILES += \
-    device/glodroid/common/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    glodroid/configuration/common/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_audio_policy_configuration_7_0.xml \
     frameworks/av/services/audiopolicy/config/a2dp_in_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_in_audio_policy_configuration_7_0.xml \
     frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml \
@@ -25,5 +25,5 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libeffects/data/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
 
 DEVICE_MANIFEST_FILE += \
-    device/glodroid/common/audio/android.hardware.audio@7.1.xml \
-    device/glodroid/common/audio/android.hardware.audio.effect@7.0.xml \
+    glodroid/configuration/common/audio/android.hardware.audio@7.1.xml \
+    glodroid/configuration/common/audio/android.hardware.audio.effect@7.0.xml \

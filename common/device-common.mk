@@ -54,4 +54,4 @@ ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
     $(call inherit-product, $(LOCAL_PATH)/device-common-sunxi.mk)
 endif
 
-PRODUCT_SOONG_NAMESPACES += device/glodroid
+PRODUCT_SOONG_NAMESPACES += glodroid/configuration

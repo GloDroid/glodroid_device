@@ -114,7 +114,7 @@ TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 # Kernel build rules
 BOARD_INCLUDE_RECOVERY_DTBO := true
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
-BOARD_PREBUILT_DTBIMAGE_DIR := device/glodroid/platform/kernel
+BOARD_PREBUILT_DTBIMAGE_DIR := glodroid/configuration/platform/kernel
 BOARD_BOOT_HEADER_VERSION := 4
 ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
 BOARD_KERNEL_BASE     := 0x40000000
@@ -145,10 +145,10 @@ DEX_PREOPT_DEFAULT := nostripping
 WITH_DEXPREOPT := true
 ART_USE_HSPACE_COMPACT := true
 
-DEVICE_MATRIX_FILE := device/glodroid/common/base/compatibility_matrix.xml
+DEVICE_MATRIX_FILE := glodroid/configuration/common/base/compatibility_matrix.xml
 
 # SELinux support
-BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/base/sepolicy/vendor
+BOARD_VENDOR_SEPOLICY_DIRS       += glodroid/configuration/common/base/sepolicy/vendor
 
 # Enable GloDroid-specific build targets
 BOARD_USES_GLODROID_MAKE_TARGETS := true

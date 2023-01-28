@@ -1,1 +1,1 @@
-BOARD_VENDOR_SEPOLICY_DIRS       += device/glodroid/common/other-hals/sepolicy/vendor
+BOARD_VENDOR_SEPOLICY_DIRS       += glodroid/configuration/common/other-hals/sepolicy/vendor

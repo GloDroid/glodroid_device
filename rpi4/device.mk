@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2020 Roman Stratiienko (r.stratiienko@gmail.com)
 
-$(call inherit-product, device/glodroid/common/device-common.mk)
+$(call inherit-product, glodroid/configuration/common/device-common.mk)
 
 # Firmware
 PRODUCT_COPY_FILES += \
@@ -20,7 +20,7 @@ PRODUCT_COPY_FILES += \
 
 # Disable suspend. During running some VTS device suspends, which sometimed causes kernel to crash in WIFI driver and reboot.
 PRODUCT_COPY_FILES += \
-    device/glodroid/common/no_suspend.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/no_suspend.rpi4.rc \
+    glodroid/configuration/common/no_suspend.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/no_suspend.rpi4.rc \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/power.rpi4.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/power.rpi4.rc \

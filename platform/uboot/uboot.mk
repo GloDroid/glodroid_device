@@ -50,7 +50,7 @@ UMAKE := \
     O=$(AOSP_TOP_ABS)/$(UBOOT_OUT) \
     -j$(NUMPROC)
 
-UBOOT_FRAGMENTS	+= device/glodroid/platform/common/uboot.config
+UBOOT_FRAGMENTS	+= glodroid/configuration/platform/common/uboot.config
 UBOOT_FRAGMENT_EMMC := $(UBOOT_OUT)/uboot-emmc.config
 UBOOT_FRAGMENT_SD := $(UBOOT_OUT)/uboot-sd.config
 
@@ -58,19 +58,19 @@ UBOOT_FRAGMENT_SD := $(UBOOT_OUT)/uboot-sd.config
 ifeq ($(PRODUCT_BOARD_PLATFORM),sunxi)
 SYSFS_MMC0_PATH ?= soc/1c0f000.mmc
 SYSFS_MMC1_PATH ?= soc/1c11000.mmc
-UBOOT_FRAGMENTS	+= device/glodroid/platform/common/sunxi/uboot.config
+UBOOT_FRAGMENTS	+= glodroid/configuration/platform/common/sunxi/uboot.config
 UBOOT_BINARY := $(UBOOT_OUT)/u-boot-sunxi-with-spl.bin
 endif
 
 ifeq ($(PRODUCT_BOARD_PLATFORM),broadcom)
-UBOOT_FRAGMENTS	+= device/glodroid/platform/common/broadcom/uboot.config
+UBOOT_FRAGMENTS	+= glodroid/configuration/platform/common/broadcom/uboot.config
 UBOOT_BINARY := $(UBOOT_OUT)/u-boot.bin
 RPI_FIRMWARE_DIR := glodroid/bootloader/raspberry-fw
 endif
 
 ifeq ($(PRODUCT_BOARD_PLATFORM),rockchip)
-UBOOT_FRAGMENTS += device/glodroid/platform/common/rockchip/uboot.config
-UBOOT_FRAGMENT_ROCKCHIP_EMMC := device/glodroid/platform/common/rockchip/uboot-emmc.config
+UBOOT_FRAGMENTS += glodroid/configuration/platform/common/rockchip/uboot.config
+UBOOT_FRAGMENT_ROCKCHIP_EMMC := glodroid/configuration/platform/common/rockchip/uboot-emmc.config
 UBOOT_BINARY := $(UBOOT_OUT)/u-boot-dtb.bin
 UBOOT_IDBLOADER := $(UBOOT_OUT)/idbloader_externel.img
 UBOOT_TRUST := $(UBOOT_OUT)/trust.img
