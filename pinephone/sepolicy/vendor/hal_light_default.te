@@ -1,2 +1,0 @@
-#============= hal_light_default ==============
-allow hal_light_default sysfs:file { open write };

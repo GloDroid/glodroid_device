@@ -1,2 +1,0 @@
-on early-init
-    write /sys/class/modem-power/modem-power/device/powered 1
