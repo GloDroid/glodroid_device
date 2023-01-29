@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2020 Roman Stratiienko (r.stratiienko@gmail.com)
 
-$(call inherit-product, glodroid/configuration/opi3/device.mk)
+$(call inherit-product, $(LOCAL_PATH)/device.mk)
 
 # Architecture
 TARGET_ARCH := arm64
