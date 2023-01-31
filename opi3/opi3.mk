@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
-# Copyright (C) 2020 Roman Stratiienko (r.stratiienko@gmail.com)
+# Copyright (C) 2020-2023 Roman Stratiienko (r.stratiienko@gmail.com)
 
 $(call inherit-product, $(LOCAL_PATH)/device.mk)
 
@@ -28,7 +28,8 @@ PRODUCT_HAS_EMMC := true
 UBOOT_DEFCONFIG := orangepi_3_defconfig
 ATF_PLAT        := sun50i_h6
 
-CRUST_FIRMWARE_DEFCONFIG := orangepi_3_defconfig
+# Due to some issues crust firmware doesn't properly handle reset command, disable it for now.
+# CRUST_FIRMWARE_DEFCONFIG := orangepi_3_defconfig
 
 KERNEL_SRC       := glodroid/kernel/megous
 KERNEL_DEFCONFIG := glodroid/configuration/platform/common/sunxi/sunxi64_defconfig

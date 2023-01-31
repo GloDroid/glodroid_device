@@ -1,0 +1,38 @@
+From 0cc6a1329095e447a9c55393bc6f7be8a7a1cee1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+Date: Sun, 22 Nov 2020 19:03:17 +0100
+Subject: [PATCH 10/12] clk: sunxi-ng: h6: force GPU PLL to 756MHz
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Clément Péron <peron.clem@gmail.com>
+[RomanS: Rebased with trivial conflict resolution + fix genmask macro usage]
+Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+---
+ drivers/clk/sunxi-ng/ccu-sun50i-h6.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+index c0800da2fa3d7..5424cd8898940 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
++++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+@@ -1240,6 +1240,15 @@ static int sun50i_h6_ccu_probe(struct platform_device *pdev)
+ 	val |= BIT(24);
+ 	writel(val, reg + SUN50I_H6_HDMI_CEC_CLK_REG);
+ 
++	/*
++	 * Enforce n = 62 m = 1 p = 0 for GPU PLL = 756MHz
++	 */
++
++	val = readl(reg + SUN50I_H6_PLL_GPU_REG);
++	val &= ~GENMASK(15, 0);
++	val |= (62 << 8) | BIT(1);
++	writel(val, reg + SUN50I_H6_PLL_GPU_REG);
++
+ 	return devm_sunxi_ccu_probe(&pdev->dev, reg, &sun50i_h6_ccu_desc);
+ }
+ 
+-- 
+2.37.2
+

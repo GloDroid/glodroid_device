@@ -1,0 +1,42 @@
+From aa86b1b1cbd02d16e970d8f51ab9cc52a812260b Mon Sep 17 00:00:00 2001
+From: Roman Stratiienko <r.stratiienko@gmail.com>
+Date: Wed, 15 Jun 2022 20:34:37 +0300
+Subject: [PATCH 11/12] ccu-sun50i-h6: Bump-up DDR0 PLL to 1800MHz
+
+It fixes UI glitches when DE3.0 requests wide bandwidth for UI plane
+to downscale 1920x1080 RGBA8888 buffer while other layers has buffers
+as well. Unfortunalely I have no idea how should it fit into <=800MHz
+of MAX LPDDR3 memory frequency, but I see no glitches so far on my opi3.
+
+Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+---
+ drivers/clk/sunxi-ng/ccu-sun50i-h6.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+index 5424cd8898940..2ddf0a0da526f 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
++++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+@@ -1249,6 +1249,19 @@ static int sun50i_h6_ccu_probe(struct platform_device *pdev)
+ 	val |= (62 << 8) | BIT(1);
+ 	writel(val, reg + SUN50I_H6_PLL_GPU_REG);
+ 
++	/*
++	 * Set DDR0 PLL to 1800MHz.
++	 * It fixes UI glitches when DE3.0 requests wide bandwidth for UI plane
++	 * to downscale 1920x1080 RGBA8888 buffer while other layers has buffers as well.
++	 * Unfortunalely I have no idea how should it fit into <=800MHz of MAX LPDDR3
++	 * memory frequency, but I see no glitches so far on my opi3.
++	 */
++
++	val = readl(reg + SUN50I_H6_PLL_DDR0_REG);
++	val &= ~GENMASK(15, 0);
++	val |= 74 << 8;
++	writel(val, reg + SUN50I_H6_PLL_DDR0_REG);
++
+ 	return devm_sunxi_ccu_probe(&pdev->dev, reg, &sun50i_h6_ccu_desc);
+ }
+ 
+-- 
+2.37.2
+
